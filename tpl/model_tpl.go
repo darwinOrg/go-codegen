@@ -46,7 +46,6 @@ type {{.GoTable}}DetailVo struct {
 	{{- if ne .Comment ""}} remark:"{{.Comment}}"{{end}}###
 	{{end}}
 }
-
 `
 
 func init() {

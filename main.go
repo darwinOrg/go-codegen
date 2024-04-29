@@ -3,7 +3,10 @@ package main
 import (
 	"flag"
 	"fmt"
+	_ "github.com/darwinOrg/daog-ext"
 	"github.com/darwinOrg/go-codegen/compile"
+	_ "github.com/darwinOrg/go-logger"
+	_ "github.com/rolandhe/daog"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -16,7 +19,7 @@ var (
 )
 
 func init() {
-	flag.StringVar(&inputFile, "i", "/Users/mac/ncode/istar/design/sql/job/job_schema.sql", "the create tables file")
+	flag.StringVar(&inputFile, "i", "/Users/cb/ncode/istar/design/sql/job/job_schema.sql", "the create tables file")
 	flag.StringVar(&oPath, "o", "./", "output directory, default is current directory")
 	flag.StringVar(&pkgName, "pkg", "job", "package name for every go file")
 }

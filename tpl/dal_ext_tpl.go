@@ -7,7 +7,6 @@ import (
 	dgerr "github.com/darwinOrg/go-common/enums/error"
 	dglogger "github.com/darwinOrg/go-logger"
 	"github.com/rolandhe/daog"
-	"github.com/rolandhe/daog/ttypes"
 )
 
 var {{.GoTable}}ExtDao = &{{.LowerCamelName}}ExtDao{}
@@ -27,4 +26,35 @@ func (d *{{.LowerCamelName}}ExtDao) GetById(ctx *dgctx.DgContext, tc *daog.Trans
 
 	return {{.LowerCamelName}}, nil
 }
+
+func (d *{{.LowerCamelName}}ExtDao) GetByIds(ctx *dgctx.DgContext, tc *daog.TransContext, ids []int64) ([]*{{.GoTable}}, error) {
+	{{.LowerCamelName}}s, err := {{.GoTable}}Dao.GetByIds(tc, ids)
+	if err != nil {
+		dglogger.Errorf(ctx, "{{.GoTable}}Dao.GetByIds error: %v", err)
+		return nil, dgerr.SYSTEM_ERROR
+	}
+
+	return {{.LowerCamelName}}s, nil
+}
+
+func (d *{{.LowerCamelName}}ExtDao) Insert(ctx *dgctx.DgContext, tc *daog.TransContext, ins *{{.GoTable}}) error {
+	_, err := {{.GoTable}}Dao.Insert(tc, ins)
+	if err != nil {
+		dglogger.Errorf(ctx, "{{.GoTable}}Dao.Insert error: %v", err)
+		return dgerr.SYSTEM_ERROR
+	}
+
+	return nil
+}
+
+func (d *{{.LowerCamelName}}ExtDao) Update(ctx *dgctx.DgContext, tc *daog.TransContext, ins *{{.GoTable}}) error {
+	_, err := {{.GoTable}}Dao.Update(tc, ins)
+	if err != nil {
+		dglogger.Errorf(ctx, "{{.GoTable}}Dao.Update error: %v", err)
+		return dgerr.SYSTEM_ERROR
+	}
+
+	return nil
+}
+
 `
