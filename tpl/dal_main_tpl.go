@@ -1,6 +1,6 @@
 package tpl
 
-var MainTpl = `package {{.Package}}
+var MainTpl = `package dal
 
 import (
     "github.com/rolandhe/daog"
@@ -42,7 +42,7 @@ var {{.GoTable}}Dao daog.QuickDao[{{.GoTable}}] = &struct {
 }
 
 type {{.GoTable}} struct {
-    {{range .Columns}}{{.GoName}} {{.GoType}}
+    {{range .Columns}}{{.GoName}} {{.DbType}}
     {{end}}
 }
 `

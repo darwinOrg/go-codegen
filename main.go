@@ -9,9 +9,11 @@ import (
 	"path/filepath"
 )
 
-var inputFile string
-var oPath string
-var pkgName string
+var (
+	inputFile string
+	oPath     string
+	pkgName   string
+)
 
 func init() {
 	flag.StringVar(&inputFile, "i", "", "the create tables file")

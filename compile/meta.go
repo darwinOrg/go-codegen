@@ -18,9 +18,11 @@ func init() {
 }
 
 type Column struct {
-	GoName string
-	DbName string
-	GoType string
+	GoName    string
+	DbName    string
+	DbType    string
+	ModelType string
+	IsNull    bool
 }
 
 type Meta struct {
@@ -39,13 +41,13 @@ func (meta *Meta) Enter(in ast.Node) (ast.Node, bool) {
 		def := in.(*ast.ColumnDef)
 		c := toColumn(def)
 		if c != nil {
-			if strings.HasPrefix(c.GoType, "ttypes.") {
+			if strings.HasPrefix(c.DbType, "ttypes.") {
 				meta.HasType = true
 			}
 			if isAuto(def) {
 				meta.AutoColumn = c.DbName
 			}
-			if c.GoType == "decimal.Decimal" {
+			if c.DbType == "decimal.Decimal" {
 				meta.HasDecimal = true
 			}
 			meta.Columns = append(meta.Columns, toColumn(def))
@@ -93,17 +95,26 @@ func toColumn(def *ast.ColumnDef) *Column {
 			break
 		}
 	}
+	c.IsNull = isNull
 
-	s := toGoTypeString(def.Tp.GetType(), def.Tp.GetFlag(), isNull)
-	if s == "" {
-		log.Printf("%s不能出类型\n", c.DbName)
+	dbType := toDbTypeString(def.Tp.GetType(), def.Tp.GetFlag(), isNull)
+	if dbType == "" {
+		log.Printf("%s不能推断出数据库类型\n", c.DbName)
 		return nil
 	}
-	c.GoType = s
+	c.DbType = dbType
+
+	modelType := toModelTypeString(def.Tp.GetType(), def.Tp.GetFlag())
+	if modelType == "" {
+		log.Printf("%s不能推断出模型类型\n", c.DbName)
+		return nil
+	}
+	c.ModelType = modelType
+
 	return c
 }
 
-func toGoTypeString(tp byte, flag uint, isNull bool) string {
+func toDbTypeString(tp byte, flag uint, isNull bool) string {
 	switch tp {
 	case mysql.TypeTiny:
 		if mysql.HasUnsignedFlag(flag) {
@@ -208,7 +219,82 @@ func toGoTypeString(tp byte, flag uint, isNull bool) string {
 			return "ttypes.NilableString"
 		}
 		return "string"
+	case mysql.TypeNewDecimal:
+		return "decimal.Decimal"
+	}
 
+	return ""
+}
+
+func toModelTypeString(tp byte, flag uint) string {
+	switch tp {
+	case mysql.TypeTiny:
+		if mysql.HasUnsignedFlag(flag) {
+			return "uint8"
+		}
+		return "int8"
+	case mysql.TypeShort:
+		if mysql.HasUnsignedFlag(flag) {
+			return "uint16"
+		}
+		return "int16"
+	case mysql.TypeLong:
+		if mysql.HasUnsignedFlag(flag) {
+			return "uint32"
+		}
+		return "int32"
+	case mysql.TypeFloat:
+		return "float32"
+	case mysql.TypeDouble:
+		return "float64"
+	case mysql.TypeTimestamp:
+		return "string"
+	case mysql.TypeDate:
+		return "string"
+	case mysql.TypeDatetime:
+		return "string"
+	case mysql.TypeNewDate:
+		return "string"
+	case mysql.TypeInt24:
+		if mysql.HasUnsignedFlag(flag) {
+			return "uint32"
+		}
+		return "int32"
+	case mysql.TypeLonglong:
+		if mysql.HasUnsignedFlag(flag) {
+			return "uint64"
+		}
+		return "int64"
+	case mysql.TypeVarchar:
+		return "string"
+	case mysql.TypeJSON:
+		return "string"
+	case mysql.TypeBit:
+		return "bool"
+	case mysql.TypeVarString:
+		return "string"
+	case mysql.TypeString:
+		return "string"
+	case mysql.TypeTinyBlob:
+		if mysql.HasBinaryFlag(flag) {
+			return "[]byte"
+		}
+		return "string"
+	case mysql.TypeMediumBlob:
+		if mysql.HasBinaryFlag(flag) {
+			return "[]byte"
+		}
+		return "string"
+	case mysql.TypeLongBlob:
+		if mysql.HasBinaryFlag(flag) {
+			return "[]byte"
+		}
+		return "string"
+	case mysql.TypeBlob:
+		if mysql.HasBinaryFlag(flag) {
+			return "[]byte"
+		}
+		return "string"
 	case mysql.TypeNewDecimal:
 		return "decimal.Decimal"
 	}
