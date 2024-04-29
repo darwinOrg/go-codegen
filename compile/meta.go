@@ -14,7 +14,8 @@ import (
 var keywordsMap = map[string]int{}
 
 var (
-	ignoreModifyModelFieldNames = []string{"status", "state", "company_id", "created_by", "created_at", "modified_by", "modified_at", "mask", "test", "vsn", "org_id", "op_id"}
+	ignoreQueryModelFieldNames  = []string{"company_id", "mask", "test", "vsn", "org_id", "op_id"}
+	ignoreModifyModelFieldNames = append(ignoreQueryModelFieldNames, "status", "state", "created_by", "created_at", "modified_by", "modified_at")
 	ignoreCreateModelFieldNames = append(ignoreModifyModelFieldNames, "id")
 )
 
@@ -26,25 +27,28 @@ func init() {
 }
 
 type Column struct {
-	GoName    string
-	DbName    string
-	DbType    string
-	JsonName  string
-	ModelType string
-	IsNull    bool
-	Comment   string
+	GoName         string
+	DbName         string
+	DbType         string
+	LowerCamelName string
+	ModelType      string
+	IsNull         bool
+	Comment        string
 }
 
 type Meta struct {
-	Package       string
-	GoTable       string
-	TableName     string
-	Columns       []*Column
-	CreateColumns []*Column
-	ModifyColumns []*Column
-	AutoColumn    string
-	HasType       bool
-	HasDecimal    bool
+	Package        string
+	GoTable        string
+	TableName      string
+	LowerCamelName string
+	Columns        []*Column
+	QueryColumns   []*Column
+	CreateColumns  []*Column
+	ModifyColumns  []*Column
+	AutoColumn     string
+	HasType        bool
+	HasDecimal     bool
+	HasTime        bool
 }
 
 func (meta *Meta) Enter(in ast.Node) (ast.Node, bool) {
@@ -62,13 +66,21 @@ func (meta *Meta) Enter(in ast.Node) (ast.Node, bool) {
 			if c.DbType == "decimal.Decimal" {
 				meta.HasDecimal = true
 			}
+			if c.ModelType == "time.Time" {
+				meta.HasTime = true
+			}
 			meta.Columns = append(meta.Columns, toColumn(def))
 		}
 	case *ast.TableName:
 		name := in.(*ast.TableName)
 		meta.TableName = escapeKeyName(name.Name.O)
-		meta.GoTable = toCamel(name.Name.O)
+		meta.GoTable = strcase.ToCamel(name.Name.O)
+		meta.LowerCamelName = strcase.ToLowerCamel(name.Name.O)
 	}
+
+	meta.QueryColumns = dgcoll.FilterList(meta.Columns, func(c *Column) bool {
+		return !dgcoll.Contains(ignoreQueryModelFieldNames, c.DbName)
+	})
 
 	meta.CreateColumns = dgcoll.FilterList(meta.Columns, func(c *Column) bool {
 		return !dgcoll.Contains(ignoreCreateModelFieldNames, c.DbName)
@@ -105,9 +117,9 @@ func isAuto(def *ast.ColumnDef) bool {
 func toColumn(def *ast.ColumnDef) *Column {
 	c := &Column{
 		DbName: escapeKeyName(def.Name.Name.O),
-		GoName: toCamel(def.Name.Name.O),
+		GoName: strcase.ToCamel(def.Name.Name.O),
 	}
-	c.JsonName = strcase.ToLowerCamel(c.GoName)
+	c.LowerCamelName = strcase.ToLowerCamel(c.GoName)
 
 	for _, op := range def.Options {
 		if op.Tp == ast.ColumnOptionComment {
@@ -276,13 +288,13 @@ func toModelTypeString(tp byte, flag uint) string {
 	case mysql.TypeDouble:
 		return "float64"
 	case mysql.TypeTimestamp:
-		return "string"
+		return "time.Time"
 	case mysql.TypeDate:
-		return "string"
+		return "time.Time"
 	case mysql.TypeDatetime:
-		return "string"
+		return "time.Time"
 	case mysql.TypeNewDate:
-		return "string"
+		return "time.Time"
 	case mysql.TypeInt24:
 		if mysql.HasUnsignedFlag(flag) {
 			return "uint32"
