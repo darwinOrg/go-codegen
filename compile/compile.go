@@ -3,6 +3,7 @@ package compile
 import (
 	"fmt"
 	"github.com/darwinOrg/go-codegen/tpl"
+	"github.com/iancoleman/strcase"
 	"github.com/pingcap/tidb/parser"
 	"github.com/pingcap/tidb/parser/ast"
 	_ "github.com/pingcap/tidb/parser/test_driver"
@@ -50,6 +51,11 @@ func compile(targetPath string, meta *Meta) error {
 		return err
 	}
 
+	err = compileModel(targetPath, meta)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -57,14 +63,27 @@ func compileDAL(targetPath string, meta *Meta) error {
 	dalDir := filepath.Join(targetPath, "dal")
 	_ = os.MkdirAll(dalDir, fs.ModeDir|fs.ModePerm)
 
-	dalMain := filepath.Join(dalDir, meta.GoTable+".go")
-	err := compileFile(dalMain, "dal-main", tpl.MainTpl, meta)
+	dalMain := filepath.Join(dalDir, strcase.ToSnake(meta.GoTable)+".go")
+	err := compileFile(dalMain, "dal-main", tpl.DalMainTpl, meta)
 	if err != nil {
 		return err
 	}
 
-	dalExt := filepath.Join(dalDir, meta.GoTable+"-ext.go")
-	err = compileFile(dalExt, "dal-ext", tpl.ExtTpl, meta)
+	dalExt := filepath.Join(dalDir, strcase.ToSnake(meta.GoTable)+"-ext.go")
+	err = compileFile(dalExt, "dal-ext", tpl.DalExtTpl, meta)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func compileModel(targetPath string, meta *Meta) error {
+	modelDir := filepath.Join(targetPath, "model")
+	_ = os.MkdirAll(modelDir, fs.ModeDir|fs.ModePerm)
+
+	model := filepath.Join(modelDir, strcase.ToSnake(meta.GoTable)+"_model.go")
+	err := compileFile(model, "model", tpl.ModelTpl, meta)
 	if err != nil {
 		return err
 	}

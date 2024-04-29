@@ -16,9 +16,9 @@ var (
 )
 
 func init() {
-	flag.StringVar(&inputFile, "i", "", "the create tables file")
+	flag.StringVar(&inputFile, "i", "/Users/mac/ncode/istar/design/sql/job/job_schema.sql", "the create tables file")
 	flag.StringVar(&oPath, "o", "./", "output directory, default is current directory")
-	flag.StringVar(&pkgName, "pkg", "", "package name for every go file")
+	flag.StringVar(&pkgName, "pkg", "job", "package name for every go file")
 }
 
 func main() {

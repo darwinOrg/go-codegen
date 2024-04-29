@@ -2,13 +2,21 @@ package compile
 
 import (
 	"fmt"
+	dgcoll "github.com/darwinOrg/go-common/collection"
+	"github.com/iancoleman/strcase"
 	"github.com/pingcap/tidb/parser/ast"
 	"github.com/pingcap/tidb/parser/mysql"
+	"github.com/pingcap/tidb/parser/test_driver"
 	"log"
 	"strings"
 )
 
 var keywordsMap = map[string]int{}
+
+var (
+	ignoreModifyModelFieldNames = []string{"status", "state", "company_id", "created_by", "created_at", "modified_by", "modified_at", "mask", "test", "vsn", "org_id", "op_id"}
+	ignoreCreateModelFieldNames = append(ignoreModifyModelFieldNames, "id")
+)
 
 func init() {
 	keywordsMap["case"] = 1
@@ -21,18 +29,22 @@ type Column struct {
 	GoName    string
 	DbName    string
 	DbType    string
+	JsonName  string
 	ModelType string
 	IsNull    bool
+	Comment   string
 }
 
 type Meta struct {
-	Package    string
-	GoTable    string
-	TableName  string
-	Columns    []*Column
-	AutoColumn string
-	HasType    bool
-	HasDecimal bool
+	Package       string
+	GoTable       string
+	TableName     string
+	Columns       []*Column
+	CreateColumns []*Column
+	ModifyColumns []*Column
+	AutoColumn    string
+	HasType       bool
+	HasDecimal    bool
 }
 
 func (meta *Meta) Enter(in ast.Node) (ast.Node, bool) {
@@ -57,6 +69,14 @@ func (meta *Meta) Enter(in ast.Node) (ast.Node, bool) {
 		meta.TableName = escapeKeyName(name.Name.O)
 		meta.GoTable = toCamel(name.Name.O)
 	}
+
+	meta.CreateColumns = dgcoll.FilterList(meta.Columns, func(c *Column) bool {
+		return !dgcoll.Contains(ignoreCreateModelFieldNames, c.DbName)
+	})
+
+	meta.ModifyColumns = dgcoll.FilterList(meta.Columns, func(c *Column) bool {
+		return !dgcoll.Contains(ignoreModifyModelFieldNames, c.DbName)
+	})
 
 	return in, false
 }
@@ -86,6 +106,14 @@ func toColumn(def *ast.ColumnDef) *Column {
 	c := &Column{
 		DbName: escapeKeyName(def.Name.Name.O),
 		GoName: toCamel(def.Name.Name.O),
+	}
+	c.JsonName = strcase.ToLowerCamel(c.GoName)
+
+	for _, op := range def.Options {
+		if op.Tp == ast.ColumnOptionComment {
+			c.Comment = op.Expr.(*test_driver.ValueExpr).Datum.GetString()
+			break
+		}
 	}
 
 	isNull := true

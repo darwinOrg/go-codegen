@@ -1,6 +1,6 @@
 package tpl
 
-var MainTpl = `package dal
+var DalMainTpl = `package dal
 
 import (
     "github.com/rolandhe/daog"
