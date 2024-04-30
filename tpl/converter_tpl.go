@@ -30,6 +30,11 @@ func (c *{{.LowerCamelName}}Converter) ModifyModel2Entity(req *model.Modify{{.Go
 	return {{.LowerCamelName}}
 }
 
+func (c *{{.LowerCamelName}}Converter) FillEntityWithModifyModel(entity *dal.{{.GoTable}}, req *model.Modify{{.GoTable}}Req) {
+	{{range .ModifyColumns}}entity.{{.GoName}} = req.{{.GoName}}
+	{{end}}
+}
+
 func (c *{{.LowerCamelName}}Converter) Entity2ListModel(entity *dal.{{.GoTable}}) *model.{{.GoTable}}ListResp {
 	listVo := &model.{{.GoTable}}ListResp{
 		{{range .QueryColumns}}{{.GoName}}: entity.{{.GoName}},
