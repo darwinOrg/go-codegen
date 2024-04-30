@@ -39,6 +39,12 @@ func (s *{{.LowerCamelName}}Service) Modify(ctx *dgctx.DgContext, req *model.Mod
 	})
 }
 
+func (s *{{.LowerCamelName}}Service) DeleteById(ctx *dgctx.DgContext, id int64) error {
+	return daogext.Write(ctx, func(tc *daog.TransContext) error {
+		return dal.{{.GoTable}}ExtDao.DeleteById(ctx, tc, id)
+	})
+}
+
 func (s *{{.LowerCamelName}}Service) Page(ctx *dgctx.DgContext, req *model.Query{{.GoTable}}Req) (*page.PageList[model.{{.GoTable}}ListResp], error) {
 	return daogext.ReadonlyWithResult(ctx, func(tc *daog.TransContext) (*page.PageList[model.{{.GoTable}}ListResp], error) {
 		pl, err := dal.{{.GoTable}}ExtDao.Page(ctx, tc, req)

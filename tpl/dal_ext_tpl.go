@@ -60,6 +60,19 @@ func (d *{{.LowerCamelName}}ExtDao) Modify(ctx *dgctx.DgContext, tc *daog.TransC
 	return nil
 }
 
+func (d *{{.LowerCamelName}}ExtDao) DeleteById(ctx *dgctx.DgContext, tc *daog.TransContext, id int64) error {
+	count, err := {{$.GoTable}}Dao.DeleteById(tc, id)
+	if err != nil {
+		dglogger.Errorf(ctx, "{{.GoTable}}Dao.DeleteById error: %v", err)
+		return dgerr.SYSTEM_ERROR
+	}
+	if count == 0 {
+		return dgerr.RECORD_NOT_EXISTS
+	}
+
+	return nil
+}
+
 func (d *{{.LowerCamelName}}ExtDao) Page(ctx *dgctx.DgContext, tc *daog.TransContext, req *model.Query{{.GoTable}}Req) (*page.PageList[{{.GoTable}}], error) {
 	matcher := d.BuildMatcher(req)
 	

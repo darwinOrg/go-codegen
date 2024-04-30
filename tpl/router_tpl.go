@@ -29,6 +29,13 @@ func Bind{{.GoTable}}Router(rg *gin.RouterGroup) {
 		BizHandler:   handler.{{.GoTable}}Handler.Modify,
 	})
 
+	wrapper.Post(&wrapper.RequestHolder[cm.IdReq, *result.Result[*result.Void]]{
+		Remark:       "{{.TableComment}} - 删除",
+		RouterGroup:  g,
+		RelativePath: "delete",
+		BizHandler:   handler.{{.GoTable}}Handler.DeleteById,
+	})
+
 	wrapper.Post(&wrapper.RequestHolder[model.Query{{.GoTable}}Req, *result.Result[*page.PageList[model.{{.GoTable}}ListResp]]]{
 		Remark:       "{{.TableComment}} - 分页查询",
 		RouterGroup:  g,

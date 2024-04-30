@@ -32,6 +32,14 @@ func (h *{{.LowerCamelName}}Handler) Modify(ctx *dgctx.DgContext, req *model.Mod
 	return result.SimpleSuccess()
 }
 
+func (h *{{.LowerCamelName}}Handler) DeleteById(ctx *dgctx.DgContext, req *cm.IdReq) *result.Result[*result.Void] {
+	err := service.{{.GoTable}}Service.DeleteById(ctx, req.Id)
+	if err != nil {
+		return result.SimpleFailByError(err)
+	}
+	return result.SimpleSuccess()
+}
+
 func (h *{{.LowerCamelName}}Handler) Page(ctx *dgctx.DgContext, req *model.Query{{.GoTable}}Req) *result.Result[*page.PageList[model.{{.GoTable}}ListResp]] {
 	pageList, err := service.{{.GoTable}}Service.Page(ctx, req)
 	if err != nil {
