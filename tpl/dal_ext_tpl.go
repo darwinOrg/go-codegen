@@ -30,7 +30,7 @@ func (d *{{.LowerCamelName}}ExtDao) MustGetById(ctx *dgctx.DgContext, tc *daog.T
 }
 
 func (d *{{.LowerCamelName}}ExtDao) Page(ctx *dgctx.DgContext, tc *daog.TransContext, req *model.Query{{.GoTable}}Req) (*page.PageList[{{.GoTable}}], error) {
-	matcher := d.buildMatcher(req)
+	matcher := d.BuildMatcher(req)
 	
 	count, err := {{.GoTable}}Dao.Count(tc, matcher)
 	if err != nil {
@@ -54,7 +54,7 @@ func (d *{{.LowerCamelName}}ExtDao) Page(ctx *dgctx.DgContext, tc *daog.TransCon
 }
 
 func (d *{{.LowerCamelName}}ExtDao) List(ctx *dgctx.DgContext, tc *daog.TransContext, req *model.Query{{.GoTable}}Req) ([]*{{.GoTable}}, error) {
-	matcher := d.buildMatcher(req)
+	matcher := d.BuildMatcher(req)
 
 	{{.LowerCamelName}}List, err := {{.GoTable}}Dao.QueryListMatcher(tc, matcher, daog.NewDescOrder({{$.GoTable}}Fields.CreatedAt))
 	if err != nil {
@@ -65,7 +65,7 @@ func (d *{{.LowerCamelName}}ExtDao) List(ctx *dgctx.DgContext, tc *daog.TransCon
 	return {{.LowerCamelName}}List, nil
 }
 
-func (d *{{.LowerCamelName}}ExtDao) buildMatcher(req *model.Query{{.GoTable}}Req) daog.Matcher {
+func (d *{{.LowerCamelName}}ExtDao) BuildMatcher(req *model.Query{{.GoTable}}Req) daog.Matcher {
 	matcher := daog.NewMatcher()
 	{{range $index, $column := .QueryColumns -}}
 	{{- if eq $column.ModelType "string"}}
