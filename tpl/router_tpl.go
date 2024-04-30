@@ -5,7 +5,6 @@ var RouterExtTpl = `package router
 import (
 	"{{.ProjectPath}}/handler"
 	"{{.ProjectPath}}/model"
-	dgctx "github.com/darwinOrg/go-common/context"
 	cm "github.com/darwinOrg/go-common/model"
 	"github.com/darwinOrg/go-common/page"
 	"github.com/darwinOrg/go-web/wrapper"
