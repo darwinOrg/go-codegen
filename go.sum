@@ -4,8 +4,8 @@ github.com/cznic/mathutil v0.0.0-20181122101859-297441e03548 h1:iwZdTE0PVqJCos1v
 github.com/cznic/mathutil v0.0.0-20181122101859-297441e03548/go.mod h1:e6NPNENfs9mPDVNRekM7lKScauxd5kXTr1Mfyig6TDM=
 github.com/darwinOrg/daog-ext v0.0.3 h1:Gqje5eXJ6NH69rdAlCLCp47Mrpe6bzFthe9GbD1JAb8=
 github.com/darwinOrg/daog-ext v0.0.3/go.mod h1:MSUwH/T6J+FnyUnsZfZgK4JxP2ijGYHfTiAJu06cWgE=
-github.com/darwinOrg/go-common v0.1.41 h1:OHalU+wbnRfmabEGJLqRiAJ2i2LwECx2a7qTXjpY154=
-github.com/darwinOrg/go-common v0.1.41/go.mod h1:pItL/4ZV0bU64N2qD9ACpvDlYjeomAbheIzPXKqbb88=
+github.com/darwinOrg/go-common v0.1.42 h1:uXHQ2Rbo/BxaP8nRTqOVTwu4azV/oR5xWW8CPvVZURI=
+github.com/darwinOrg/go-common v0.1.42/go.mod h1:pItL/4ZV0bU64N2qD9ACpvDlYjeomAbheIzPXKqbb88=
 github.com/darwinOrg/go-logger v0.0.6 h1:d4n71HquXZV+oKJFEIGrwoidn8e/aqKaXCB/hl+lqng=
 github.com/darwinOrg/go-logger v0.0.6/go.mod h1:9zM9B+2hm8dHADsLYocsdkX2w72Q04i/4zWg9OC3WU0=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
@@ -38,6 +38,8 @@ github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec/go.mod h1:qq
 github.com/rolandhe/daog v0.0.34 h1:lKGwdtDrAzQPuMtNFMLb7pR7WOu6ENiygXhA5oSgdHs=
 github.com/rolandhe/daog v0.0.34/go.mod h1:kCzpAQO1/bYEnOCiIiOSN8286JkINHzdSDTWywtf/Cc=
 github.com/sergi/go-diff v1.1.0/go.mod h1:STckp+ISIX8hZLjrqAeVduY0gWCT9IjLuqbuNXdaHfM=
+github.com/shopspring/decimal v1.4.0 h1:bxl37RwXBklmTi0C79JfXCEBD1cqqHt0bbgBAGFp81k=
+github.com/shopspring/decimal v1.4.0/go.mod h1:gawqmDU56v4yIKSwfBSFip1HdCCXN8/+DMd9qYNcwME=
 github.com/sirupsen/logrus v1.9.3 h1:dueUQJ1C2q9oE3F7wvmSGAaVtTmUizReu6fjN8uqzbQ=
 github.com/sirupsen/logrus v1.9.3/go.mod h1:naHLuLoDiP4jHNo9R0sCBMtWGeIprob74mVsIT4qYEQ=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=

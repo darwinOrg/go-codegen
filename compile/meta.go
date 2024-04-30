@@ -37,7 +37,7 @@ type Column struct {
 }
 
 type Meta struct {
-	Package        string
+	ProjectPath    string
 	GoTable        string
 	TableName      string
 	LowerCamelName string

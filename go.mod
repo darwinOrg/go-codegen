@@ -4,11 +4,12 @@ go 1.20
 
 require (
 	github.com/darwinOrg/daog-ext v0.0.3
-	github.com/darwinOrg/go-common v0.1.41
+	github.com/darwinOrg/go-common v0.1.42
 	github.com/darwinOrg/go-logger v0.0.6
 	github.com/iancoleman/strcase v0.3.0
 	github.com/pingcap/tidb/parser v0.0.0-20231013125129-93a834a6bf8d
 	github.com/rolandhe/daog v0.0.34
+	github.com/shopspring/decimal v1.4.0
 )
 
 require (

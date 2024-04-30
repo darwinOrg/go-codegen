@@ -6,7 +6,8 @@ var ModelTpl = `package model
 
 import (
 	"github.com/darwinOrg/go-common/page"
-	{{if eq .HasTime true}}"time"{{end}}
+	{{if .HasTime}}"time"{{end}}
+	{{if .HasDecimal}}"github.com/shopspring/decimal"{{end}}
 )
 
 type Create{{.GoTable}}Req struct {
@@ -23,6 +24,10 @@ type Modify{{.GoTable}}Req struct {
 	{{- if eq .ModelType "time.Time"}} time_format:"2006-01-02 15:04:05"{{end}}
 	{{- if ne .Comment ""}} remark:"{{.Comment}}"{{end}}###
 	{{end}}
+}
+
+type Delete{{.GoTable}}Req struct {
+    Id  int64 ###json:"id" binding:"required" remark:"id"###
 }
 
 type Query{{.GoTable}}Req struct {

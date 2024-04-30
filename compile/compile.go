@@ -13,7 +13,7 @@ import (
 	"text/template"
 )
 
-func BuildTableMata(sql string, baseRoot string, pkg string) error {
+func BuildTableMata(sql string, projectPath string, outputPath string) error {
 	p := parser.New()
 
 	stmtNodes, _, err := p.Parse(sql, "", "")
@@ -22,9 +22,7 @@ func BuildTableMata(sql string, baseRoot string, pkg string) error {
 		return err
 	}
 
-	targetPath := filepath.Join(baseRoot, pkg)
-
-	err = os.Mkdir(targetPath, fs.ModeDir|fs.ModePerm)
+	err = os.Mkdir(outputPath, fs.ModeDir|fs.ModePerm)
 	if err != nil {
 		fmt.Println(err)
 		return err
@@ -35,9 +33,9 @@ func BuildTableMata(sql string, baseRoot string, pkg string) error {
 		if !ok {
 			continue
 		}
-		meta := &Meta{Package: pkg}
+		meta := &Meta{ProjectPath: projectPath}
 		root.Accept(meta)
-		if compile(targetPath, meta) != nil {
+		if compile(outputPath, meta) != nil {
 			return err
 		}
 	}

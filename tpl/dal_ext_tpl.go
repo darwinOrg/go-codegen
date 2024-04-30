@@ -3,9 +3,11 @@ package tpl
 var DalExtTpl = `package dal
 
 import (
+	"github.com/darwinOrg/go-common/page"
 	dgctx "github.com/darwinOrg/go-common/context"
 	dgerr "github.com/darwinOrg/go-common/enums/error"
 	dglogger "github.com/darwinOrg/go-logger"
+	"{{.ProjectPath}}/model"
 	"github.com/rolandhe/daog"
 )
 
@@ -14,7 +16,7 @@ var {{.GoTable}}ExtDao = &{{.LowerCamelName}}ExtDao{}
 type {{.LowerCamelName}}ExtDao struct {
 }
 
-func (d *{{.LowerCamelName}}ExtDao) GetById(ctx *dgctx.DgContext, tc *daog.TransContext, id int64) (*{{.GoTable}}, error) {
+func (d *{{.LowerCamelName}}ExtDao) MustGetById(ctx *dgctx.DgContext, tc *daog.TransContext, id int64) (*{{.GoTable}}, error) {
 	{{.LowerCamelName}}, err := {{.GoTable}}Dao.GetById(tc, id)
 	if err != nil {
 		dglogger.Errorf(ctx, "{{.GoTable}}Dao.GetById error: %v", err)
@@ -27,34 +29,17 @@ func (d *{{.LowerCamelName}}ExtDao) GetById(ctx *dgctx.DgContext, tc *daog.Trans
 	return {{.LowerCamelName}}, nil
 }
 
-func (d *{{.LowerCamelName}}ExtDao) GetByIds(ctx *dgctx.DgContext, tc *daog.TransContext, ids []int64) ([]*{{.GoTable}}, error) {
-	{{.LowerCamelName}}s, err := {{.GoTable}}Dao.GetByIds(tc, ids)
-	if err != nil {
-		dglogger.Errorf(ctx, "{{.GoTable}}Dao.GetByIds error: %v", err)
-		return nil, dgerr.SYSTEM_ERROR
+func (d *{{.LowerCamelName}}ExtDao) Query(ctx *dgctx.DgContext, tc *daog.TransContext, req *model.Query{{.GoTable}}Req) (*page.PageList[{{.GoTable}}], error) {
+	matcher := daog.NewMatcher()
+	{{range $index, $column := .QueryColumns -}}
+	{{- if eq $column.ModelType "string"}}
+	if req.{{$column.GoName}} != "" {
+		matcher.Eq({{$.GoTable}}Fields.{{$column.GoName}}, req.{{$column.GoName}})
 	}
+	{{- end }}
+	{{- end }}
 
-	return {{.LowerCamelName}}s, nil
-}
-
-func (d *{{.LowerCamelName}}ExtDao) Insert(ctx *dgctx.DgContext, tc *daog.TransContext, ins *{{.GoTable}}) error {
-	_, err := {{.GoTable}}Dao.Insert(tc, ins)
-	if err != nil {
-		dglogger.Errorf(ctx, "{{.GoTable}}Dao.Insert error: %v", err)
-		return dgerr.SYSTEM_ERROR
-	}
-
-	return nil
-}
-
-func (d *{{.LowerCamelName}}ExtDao) Update(ctx *dgctx.DgContext, tc *daog.TransContext, ins *{{.GoTable}}) error {
-	_, err := {{.GoTable}}Dao.Update(tc, ins)
-	if err != nil {
-		dglogger.Errorf(ctx, "{{.GoTable}}Dao.Update error: %v", err)
-		return dgerr.SYSTEM_ERROR
-	}
-
-	return nil
+	return nil, nil
 }
 
 `
