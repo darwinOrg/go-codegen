@@ -18,6 +18,19 @@ var {{.GoTable}}ExtDao = &{{.LowerCamelName}}ExtDao{}
 type {{.LowerCamelName}}ExtDao struct {
 }
 
+func (d *{{.LowerCamelName}}ExtDao) MustGetById(ctx *dgctx.DgContext, tc *daog.TransContext, id int64) (*{{.GoTable}}, error) {
+	{{.LowerCamelName}}, err := {{.GoTable}}Dao.GetById(tc, id)
+	if err != nil {
+		dglogger.Errorf(ctx, "{{.GoTable}}Dao.GetById error: %v", err)
+		return nil, dgerr.SYSTEM_ERROR
+	}
+	if {{.LowerCamelName}} == nil {
+		return nil, dgerr.RECORD_NOT_EXISTS
+	}
+
+	return {{.LowerCamelName}}, nil
+}
+
 func (d *{{.LowerCamelName}}ExtDao) Create(ctx *dgctx.DgContext, tc *daog.TransContext, {{.LowerCamelName}} *{{.GoTable}}) (int64, error) {
 	now := ttypes.NormalDatetime(time.Now())
 	{{.LowerCamelName}}.CreatedAt = now
@@ -45,19 +58,6 @@ func (d *{{.LowerCamelName}}ExtDao) Modify(ctx *dgctx.DgContext, tc *daog.TransC
 	}
 
 	return nil
-}
-
-func (d *{{.LowerCamelName}}ExtDao) MustGetById(ctx *dgctx.DgContext, tc *daog.TransContext, id int64) (*{{.GoTable}}, error) {
-	{{.LowerCamelName}}, err := {{.GoTable}}Dao.GetById(tc, id)
-	if err != nil {
-		dglogger.Errorf(ctx, "{{.GoTable}}Dao.GetById error: %v", err)
-		return nil, dgerr.SYSTEM_ERROR
-	}
-	if {{.LowerCamelName}} == nil {
-		return nil, dgerr.RECORD_NOT_EXISTS
-	}
-
-	return {{.LowerCamelName}}, nil
 }
 
 func (d *{{.LowerCamelName}}ExtDao) Page(ctx *dgctx.DgContext, tc *daog.TransContext, req *model.Query{{.GoTable}}Req) (*page.PageList[{{.GoTable}}], error) {
