@@ -3,7 +3,6 @@ package tpl
 var DalExtTpl = `package dal
 
 import (
-	daogext "github.com/darwinOrg/daog-ext"
 	"{{.ProjectPath}}/model"
 	dgctx "github.com/darwinOrg/go-common/context"
 	dgerr "github.com/darwinOrg/go-common/enums/error"
@@ -44,27 +43,25 @@ func (d *{{.LowerCamelName}}ExtDao) Query(ctx *dgctx.DgContext, tc *daog.TransCo
 	{{- end }}
 	{{- end }}
 	
-	return daogext.ReadonlyWithResult(ctx, func(tc *daog.TransContext) (*page.PageList[{{.GoTable}}], error) {
-		count, err := {{.GoTable}}Dao.Count(tc, matcher)
-		if err != nil {
-			dglogger.Errorf(ctx, "{{.GoTable}}Dao.Count error: %v", err)
-			return nil, dgerr.SYSTEM_ERROR
-		}
-		if count == 0 {
-			return page.EmptyPageList[{{.GoTable}}](req.PageNo, req.PageSize), nil
-		}
-		
-		{{.LowerCamelName}}List, err := {{.GoTable}}Dao.QueryPageListMatcher(tc, matcher, daog.NewPager(req.PageSize, req.PageNo), daog.NewDescOrder({{$.GoTable}}Fields.CreatedAt))
-		if err != nil {
-			dglogger.Errorf(ctx, "{{.GoTable}}Dao.QueryListMatcher error: %v", err)
-			return nil, dgerr.SYSTEM_ERROR
-		}
-		if len({{.LowerCamelName}}List) == 0 {
-			return page.EmptyPageList[{{.GoTable}}](req.PageNo, req.PageSize), nil
-		}
-		
-		return page.ListOf(req.PageNo, req.PageSize, int(count), {{.LowerCamelName}}List), nil
-	})
+	count, err := {{.GoTable}}Dao.Count(tc, matcher)
+	if err != nil {
+		dglogger.Errorf(ctx, "{{.GoTable}}Dao.Count error: %v", err)
+		return nil, dgerr.SYSTEM_ERROR
+	}
+	if count == 0 {
+		return page.EmptyPageList[{{.GoTable}}](req.PageNo, req.PageSize), nil
+	}
+	
+	{{.LowerCamelName}}List, err := {{.GoTable}}Dao.QueryPageListMatcher(tc, matcher, daog.NewPager(req.PageSize, req.PageNo), daog.NewDescOrder({{$.GoTable}}Fields.CreatedAt))
+	if err != nil {
+		dglogger.Errorf(ctx, "{{.GoTable}}Dao.QueryListMatcher error: %v", err)
+		return nil, dgerr.SYSTEM_ERROR
+	}
+	if len({{.LowerCamelName}}List) == 0 {
+		return page.EmptyPageList[{{.GoTable}}](req.PageNo, req.PageSize), nil
+	}
+	
+	return page.ListOf(req.PageNo, req.PageSize, int(count), {{.LowerCamelName}}List), nil
 }
 
 `
