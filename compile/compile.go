@@ -2,7 +2,6 @@ package compile
 
 import (
 	"fmt"
-	"github.com/darwinOrg/go-codegen/functions"
 	"github.com/darwinOrg/go-codegen/tpl"
 	"github.com/iancoleman/strcase"
 	"github.com/pingcap/tidb/parser"
@@ -11,12 +10,13 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
+	"strings"
 	"text/template"
 )
 
 // 创建函数映射
 var funcs = template.FuncMap{
-	"contains": functions.Contains,
+	"contains": strings.Contains,
 }
 
 func BuildTableMata(sql string, projectPath string, outputPath string) error {
