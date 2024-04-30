@@ -31,7 +31,7 @@ type Delete{{.GoTable}}Req struct {
 }
 
 type Query{{.GoTable}}Req struct {
-    {{range .CreateColumns}}{{.GoName}} {{.ModelType}} ###json:"{{.LowerCamelName}}" form:"{{.LowerCamelName}}"
+    {{range .QueryColumns}}{{.GoName}} {{.ModelType}} ###json:"{{.LowerCamelName}}" form:"{{.LowerCamelName}}"
 	{{- if eq .ModelType "time.Time"}} time_format:"2006-01-02 15:04:05"{{end}}
 	{{- if ne .Comment ""}} remark:"{{.Comment}}"{{end}}###
 	{{end}}

@@ -2,6 +2,7 @@ package compile
 
 import (
 	"fmt"
+	"github.com/darwinOrg/go-codegen/functions"
 	"github.com/darwinOrg/go-codegen/tpl"
 	"github.com/iancoleman/strcase"
 	"github.com/pingcap/tidb/parser"
@@ -12,6 +13,11 @@ import (
 	"path/filepath"
 	"text/template"
 )
+
+// 创建函数映射
+var funcs = template.FuncMap{
+	"contains": functions.Contains,
+}
 
 func BuildTableMata(sql string, projectPath string, outputPath string) error {
 	p := parser.New()
@@ -96,8 +102,7 @@ func compileFile(fileName string, tplName string, tplText string, meta *Meta) er
 	}
 	defer file.Close()
 
-	t := template.New(tplName)
-	t, err = t.Parse(tplText)
+	t, err := template.New(tplName).Funcs(funcs).Parse(tplText)
 	if err != nil {
 		return err
 	}

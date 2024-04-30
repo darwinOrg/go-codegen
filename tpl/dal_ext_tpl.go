@@ -36,6 +36,10 @@ func (d *{{.LowerCamelName}}ExtDao) Query(ctx *dgctx.DgContext, tc *daog.TransCo
 	if req.{{$column.GoName}} != "" {
 		matcher.Eq({{$.GoTable}}Fields.{{$column.GoName}}, req.{{$column.GoName}})
 	}
+	{{- else if contains $column.ModelType "int"}}
+	if req.{{$column.GoName}} != 0 {
+		matcher.Eq({{$.GoTable}}Fields.{{$column.GoName}}, req.{{$column.GoName}})
+	}
 	{{- end }}
 	{{- end }}
 
