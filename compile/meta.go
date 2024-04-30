@@ -40,7 +40,9 @@ type Meta struct {
 	ProjectPath    string
 	GoTable        string
 	TableName      string
+	TableComment   string
 	LowerCamelName string
+	KebabName      string
 	Columns        []*Column
 	QueryColumns   []*Column
 	CreateColumns  []*Column
@@ -74,8 +76,14 @@ func (meta *Meta) Enter(in ast.Node) (ast.Node, bool) {
 	case *ast.TableName:
 		name := in.(*ast.TableName)
 		meta.TableName = escapeKeyName(name.Name.O)
+		if name.TableInfo != nil {
+			meta.TableComment = name.TableInfo.Comment
+		} else {
+			meta.TableComment = meta.TableName
+		}
 		meta.GoTable = strcase.ToCamel(name.Name.O)
 		meta.LowerCamelName = strcase.ToLowerCamel(name.Name.O)
+		meta.KebabName = strcase.ToKebab(name.Name.O)
 	}
 
 	meta.QueryColumns = dgcoll.FilterList(meta.Columns, func(c *Column) bool {

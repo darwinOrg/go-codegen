@@ -70,6 +70,16 @@ func compile(targetPath string, meta *Meta) error {
 		return err
 	}
 
+	err = compileHandler(targetPath, meta)
+	if err != nil {
+		return err
+	}
+
+	err = compileRouter(targetPath, meta)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -124,6 +134,32 @@ func compileService(targetPath string, meta *Meta) error {
 
 	service := filepath.Join(serviceDir, strcase.ToSnake(meta.GoTable)+"_service.go")
 	err := compileFile(service, "service", tpl.ServiceExtTpl, meta)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func compileHandler(targetPath string, meta *Meta) error {
+	handlerDir := filepath.Join(targetPath, "handler")
+	_ = os.MkdirAll(handlerDir, fs.ModeDir|fs.ModePerm)
+
+	handler := filepath.Join(handlerDir, strcase.ToSnake(meta.GoTable)+"_handler.go")
+	err := compileFile(handler, "handler", tpl.HandlerExtTpl, meta)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func compileRouter(targetPath string, meta *Meta) error {
+	routerDir := filepath.Join(targetPath, "router")
+	_ = os.MkdirAll(routerDir, fs.ModeDir|fs.ModePerm)
+
+	router := filepath.Join(routerDir, strcase.ToSnake(meta.GoTable)+"_router.go")
+	err := compileFile(router, "router", tpl.RouterExtTpl, meta)
 	if err != nil {
 		return err
 	}

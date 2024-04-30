@@ -6,6 +6,7 @@ import (
 	_ "github.com/darwinOrg/daog-ext"
 	"github.com/darwinOrg/go-codegen/compile"
 	_ "github.com/darwinOrg/go-logger"
+	_ "github.com/gin-gonic/gin"
 	_ "github.com/rolandhe/daog"
 	_ "github.com/shopspring/decimal"
 	"os"
