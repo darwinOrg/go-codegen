@@ -9,11 +9,42 @@ import (
 	"github.com/darwinOrg/go-common/page"
 	dglogger "github.com/darwinOrg/go-logger"
 	"github.com/rolandhe/daog"
+	"github.com/rolandhe/daog/ttypes"
+	"time"
 )
 
 var {{.GoTable}}ExtDao = &{{.LowerCamelName}}ExtDao{}
 
 type {{.LowerCamelName}}ExtDao struct {
+}
+
+func (d *{{.LowerCamelName}}ExtDao) Create(ctx *dgctx.DgContext, tc *daog.TransContext, {{.LowerCamelName}} *{{.GoTable}}) (int64, error) {
+	now := ttypes.NormalDatetime(time.Now())
+	{{.LowerCamelName}}.CreatedAt = now
+	{{.LowerCamelName}}.ModifiedAt = now
+	{{.LowerCamelName}}.CreatedBy = ctx.UserId
+	{{.LowerCamelName}}.ModifiedBy = ctx.UserId
+
+	_, err := {{.GoTable}}Dao.Insert(tc, {{.LowerCamelName}})
+	if err != nil {
+		dglogger.Errorf(ctx, "{{.GoTable}}Dao.Insert error: %v", err)
+		return 0, dgerr.SYSTEM_ERROR
+	}
+
+	return {{.LowerCamelName}}.Id, nil
+}
+
+func (d *{{.LowerCamelName}}ExtDao) Modify(ctx *dgctx.DgContext, tc *daog.TransContext, {{.LowerCamelName}} *{{.GoTable}}) error {
+	{{.LowerCamelName}}.ModifiedAt = ttypes.NormalDatetime(time.Now())
+	{{.LowerCamelName}}.ModifiedBy = ctx.UserId
+
+	_, err := {{.GoTable}}Dao.Update(tc, {{.LowerCamelName}})
+	if err != nil {
+		dglogger.Errorf(ctx, "{{.GoTable}}Dao.Update error: %v", err)
+		return dgerr.SYSTEM_ERROR
+	}
+
+	return nil
 }
 
 func (d *{{.LowerCamelName}}ExtDao) MustGetById(ctx *dgctx.DgContext, tc *daog.TransContext, id int64) (*{{.GoTable}}, error) {

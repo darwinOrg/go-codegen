@@ -22,7 +22,9 @@ type {{.LowerCamelName}}Service struct {
 func (s *{{.LowerCamelName}}Service) Create(ctx *dgctx.DgContext, req *model.Create{{.GoTable}}Req) (int64, error) {
 	{{.LowerCamelName}} := converter.{{.GoTable}}Converter.CreateModel2Entity(req)
 
-	return 0, nil
+	return return daogext.Write(ctx, func(tc *daog.TransContext) error {
+		
+	})
 }
 
 `
