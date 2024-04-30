@@ -60,6 +60,16 @@ func compile(targetPath string, meta *Meta) error {
 		return err
 	}
 
+	err = compileConverter(targetPath, meta)
+	if err != nil {
+		return err
+	}
+
+	err = compileService(targetPath, meta)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -88,6 +98,32 @@ func compileModel(targetPath string, meta *Meta) error {
 
 	model := filepath.Join(modelDir, strcase.ToSnake(meta.GoTable)+"_model.go")
 	err := compileFile(model, "model", tpl.ModelTpl, meta)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func compileConverter(targetPath string, meta *Meta) error {
+	converterDir := filepath.Join(targetPath, "converter")
+	_ = os.MkdirAll(converterDir, fs.ModeDir|fs.ModePerm)
+
+	converter := filepath.Join(converterDir, strcase.ToSnake(meta.GoTable)+"_converter.go")
+	err := compileFile(converter, "converter", tpl.ConverterExtTpl, meta)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func compileService(targetPath string, meta *Meta) error {
+	serviceDir := filepath.Join(targetPath, "service")
+	_ = os.MkdirAll(serviceDir, fs.ModeDir|fs.ModePerm)
+
+	service := filepath.Join(serviceDir, strcase.ToSnake(meta.GoTable)+"_service.go")
+	err := compileFile(service, "service", tpl.ServiceExtTpl, meta)
 	if err != nil {
 		return err
 	}

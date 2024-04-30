@@ -67,14 +67,14 @@ func (d *{{.LowerCamelName}}ExtDao) List(ctx *dgctx.DgContext, tc *daog.TransCon
 
 func (d *{{.LowerCamelName}}ExtDao) BuildMatcher(req *model.Query{{.GoTable}}Req) daog.Matcher {
 	matcher := daog.NewMatcher()
-	{{range $index, $column := .QueryColumns -}}
-	{{- if eq $column.ModelType "string"}}
-	if req.{{$column.GoName}} != "" {
-		matcher.Eq({{$.GoTable}}Fields.{{$column.GoName}}, req.{{$column.GoName}})
+	{{range .QueryColumns}}
+	{{- if eq .ModelType "string"}}
+	if req.{{.GoName}} != "" {
+		matcher.Eq({{$.GoTable}}Fields.{{.GoName}}, req.{{.GoName}})
 	}
-	{{- else if contains $column.ModelType "int"}}
-	if req.{{$column.GoName}} != 0 {
-		matcher.Eq({{$.GoTable}}Fields.{{$column.GoName}}, req.{{$column.GoName}})
+	{{- else if contains .ModelType "int"}}
+	if req.{{.GoName}} != 0 {
+		matcher.Eq({{$.GoTable}}Fields.{{.GoName}}, req.{{.GoName}})
 	}
 	{{- end }}
 	{{- end }}

@@ -144,7 +144,7 @@ func toColumn(def *ast.ColumnDef) *Column {
 	}
 	c.DbType = dbType
 
-	modelType := toModelTypeString(def.Tp.GetType(), def.Tp.GetFlag())
+	modelType := toModelTypeString(def.Tp.GetType(), def.Tp.GetFlag(), isNull)
 	if modelType == "" {
 		log.Printf("%s不能推断出模型类型\n", c.DbName)
 		return nil
@@ -266,7 +266,7 @@ func toDbTypeString(tp byte, flag uint, isNull bool) string {
 	return ""
 }
 
-func toModelTypeString(tp byte, flag uint) string {
+func toModelTypeString(tp byte, flag uint, isNull bool) string {
 	switch tp {
 	case mysql.TypeTiny:
 		if mysql.HasUnsignedFlag(flag) {
@@ -288,13 +288,25 @@ func toModelTypeString(tp byte, flag uint) string {
 	case mysql.TypeDouble:
 		return "float64"
 	case mysql.TypeTimestamp:
-		return "time.Time"
+		if isNull {
+			return "ttypes.NilableDatetime"
+		}
+		return "ttypes.NormalDatetime"
 	case mysql.TypeDate:
-		return "time.Time"
+		if isNull {
+			return "ttypes.NilableDate"
+		}
+		return "ttypes.NormalDate"
 	case mysql.TypeDatetime:
-		return "time.Time"
+		if isNull {
+			return "ttypes.NilableDatetime"
+		}
+		return "ttypes.NormalDatetime"
 	case mysql.TypeNewDate:
-		return "time.Time"
+		if isNull {
+			return "ttypes.NilableDate"
+		}
+		return "ttypes.NormalDate"
 	case mysql.TypeInt24:
 		if mysql.HasUnsignedFlag(flag) {
 			return "uint32"
