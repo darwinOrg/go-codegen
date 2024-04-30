@@ -11,7 +11,7 @@ create table group_info
     created_at   datetime       not null,
     modified_by  bigint(20) not null,
     modified_at  datetime       not null
-) ENGINE=innodb CHARACTER SET utf8mb4;
+) ENGINE=innodb CHARACTER SET utf8mb4 comment '组';
 
 create table user_info
 (
@@ -23,4 +23,4 @@ create table user_info
     created_at  datetime     not null,
     modified_by bigint(20) not null,
     modified_at datetime     not null
-) ENGINE=innodb CHARACTER SET utf8mb4;
+) ENGINE=innodb CHARACTER SET utf8mb4 comment '用户';

@@ -41,6 +41,13 @@ func BuildTableMata(sql string, projectPath string, outputPath string) error {
 		}
 		meta := &Meta{ProjectPath: projectPath}
 		root.Accept(meta)
+
+		for _, option := range root.Options {
+			if option.Tp == ast.TableOptionComment && option.StrValue != "" {
+				meta.TableComment = option.StrValue
+			}
+		}
+
 		if compile(outputPath, meta) != nil {
 			return err
 		}
