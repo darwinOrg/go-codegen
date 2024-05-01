@@ -76,28 +76,32 @@ func BuildTableMata(sql string, projectPath string, outputPath string) error {
 			if columnComment == "" {
 				continue
 			}
+			columnComment = strings.ReplaceAll(columnComment, "（", "(")
+			columnComment = strings.ReplaceAll(columnComment, "）", ")")
+			columnComment = strings.ReplaceAll(columnComment, "，", ",")
+			columnComment = strings.ReplaceAll(columnComment, "：", ":")
 
 			matches := enumRegexp.FindStringSubmatch(columnComment)
-
-			if len(matches) > 1 {
-				pairsStr := matches[1]
-				pairParts := strings.Split(pairsStr, ",")
-
-				for _, pairPart := range pairParts {
-					kvs := strings.Split(pairPart, ":")
-
-					if len(kvs) == 2 {
-						key := kvs[0]
-						value := kvs[1]
-
-						meta.EnumMap[column] = append(meta.EnumMap[column], &model.KeyValuePair[string, string]{
-							Key:   key,
-							Value: value,
-						})
-					}
-				}
+			if len(matches) == 0 {
+				continue
 			}
 
+			pairsStr := matches[1]
+			pairParts := strings.Split(pairsStr, ",")
+
+			for _, pairPart := range pairParts {
+				kvs := strings.Split(pairPart, ":")
+
+				if len(kvs) == 2 {
+					key := kvs[0]
+					value := kvs[1]
+
+					meta.EnumMap[column] = append(meta.EnumMap[column], &model.KeyValuePair[string, string]{
+						Key:   key,
+						Value: value,
+					})
+				}
+			}
 		}
 
 		if compile(outputPath, meta) != nil {
