@@ -112,11 +112,11 @@ func (d *{{.LowerCamelName}}ExtDao) List(ctx *dgctx.DgContext, tc *daog.TransCon
 func (d *{{.LowerCamelName}}ExtDao) BuildMatcher(req *model.Query{{.GoTable}}Req) daog.Matcher {
 	matcher := daog.NewMatcher()
 	{{range .QueryColumns}}
-	{{- if eq .ModelType "string"}}
+	{{- if eq .DbType "string"}}
 	if req.{{.GoName}} != "" {
 		matcher.Eq({{$.GoTable}}Fields.{{.GoName}}, req.{{.GoName}})
 	}
-	{{- else if contains .ModelType "int"}}
+	{{- else if contains .DbType "int"}}
 	if req.{{.GoName}} != 0 {
 		matcher.Eq({{$.GoTable}}Fields.{{.GoName}}, req.{{.GoName}})
 	}

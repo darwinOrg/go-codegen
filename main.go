@@ -57,9 +57,13 @@ func main() {
 	if outputPath == "./" {
 		outputPath, _ = os.Getwd()
 	}
-	cmd := exec.Command("go", "fmt", outputPath)
-	err = cmd.Run()
-	if err != nil {
-		fmt.Println(err)
+
+	dirs := []string{"dal", "model", "converter", "service", "handler", "router"}
+	for _, dir := range dirs {
+		cmd := exec.Command("go", "fmt", outputPath+"/"+dir)
+		err = cmd.Run()
+		if err != nil {
+			fmt.Printf("go fmt %s error: %v", dir, err)
+		}
 	}
 }

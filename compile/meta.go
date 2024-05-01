@@ -31,7 +31,6 @@ type Column struct {
 	DbName         string
 	DbType         string
 	LowerCamelName string
-	ModelType      string
 	IsNull         bool
 	Comment        string
 }
@@ -50,7 +49,6 @@ type Meta struct {
 	AutoColumn     string
 	HasType        bool
 	HasDecimal     bool
-	HasTime        bool
 }
 
 func (meta *Meta) Enter(in ast.Node) (ast.Node, bool) {
@@ -59,7 +57,7 @@ func (meta *Meta) Enter(in ast.Node) (ast.Node, bool) {
 		def := in.(*ast.ColumnDef)
 		c := toColumn(def)
 		if c != nil {
-			if strings.HasPrefix(c.DbType, "ttypes.") && !dgcoll.Contains(ignoreCreateModelFieldNames, c.DbName) {
+			if strings.HasPrefix(c.DbType, "ttypes.") {
 				meta.HasType = true
 			}
 			if isAuto(def) {
@@ -67,9 +65,6 @@ func (meta *Meta) Enter(in ast.Node) (ast.Node, bool) {
 			}
 			if c.DbType == "decimal.Decimal" {
 				meta.HasDecimal = true
-			}
-			if c.ModelType == "time.Time" {
-				meta.HasTime = true
 			}
 			meta.Columns = append(meta.Columns, toColumn(def))
 		}
@@ -146,13 +141,6 @@ func toColumn(def *ast.ColumnDef) *Column {
 		return nil
 	}
 	c.DbType = dbType
-
-	modelType := toModelTypeString(def.Tp.GetType(), def.Tp.GetFlag(), isNull)
-	if modelType == "" {
-		log.Printf("%s不能推断出模型类型\n", c.DbName)
-		return nil
-	}
-	c.ModelType = modelType
 
 	return c
 }
@@ -260,94 +248,6 @@ func toDbTypeString(tp byte, flag uint, isNull bool) string {
 		}
 		if isNull {
 			return "ttypes.NilableString"
-		}
-		return "string"
-	case mysql.TypeNewDecimal:
-		return "decimal.Decimal"
-	}
-
-	return ""
-}
-
-func toModelTypeString(tp byte, flag uint, isNull bool) string {
-	switch tp {
-	case mysql.TypeTiny:
-		if mysql.HasUnsignedFlag(flag) {
-			return "uint8"
-		}
-		return "int8"
-	case mysql.TypeShort:
-		if mysql.HasUnsignedFlag(flag) {
-			return "uint16"
-		}
-		return "int16"
-	case mysql.TypeLong:
-		if mysql.HasUnsignedFlag(flag) {
-			return "uint32"
-		}
-		return "int32"
-	case mysql.TypeFloat:
-		return "float32"
-	case mysql.TypeDouble:
-		return "float64"
-	case mysql.TypeTimestamp:
-		if isNull {
-			return "ttypes.NilableDatetime"
-		}
-		return "ttypes.NormalDatetime"
-	case mysql.TypeDate:
-		if isNull {
-			return "ttypes.NilableDate"
-		}
-		return "ttypes.NormalDate"
-	case mysql.TypeDatetime:
-		if isNull {
-			return "ttypes.NilableDatetime"
-		}
-		return "ttypes.NormalDatetime"
-	case mysql.TypeNewDate:
-		if isNull {
-			return "ttypes.NilableDate"
-		}
-		return "ttypes.NormalDate"
-	case mysql.TypeInt24:
-		if mysql.HasUnsignedFlag(flag) {
-			return "uint32"
-		}
-		return "int32"
-	case mysql.TypeLonglong:
-		if mysql.HasUnsignedFlag(flag) {
-			return "uint64"
-		}
-		return "int64"
-	case mysql.TypeVarchar:
-		return "string"
-	case mysql.TypeJSON:
-		return "string"
-	case mysql.TypeBit:
-		return "bool"
-	case mysql.TypeVarString:
-		return "string"
-	case mysql.TypeString:
-		return "string"
-	case mysql.TypeTinyBlob:
-		if mysql.HasBinaryFlag(flag) {
-			return "[]byte"
-		}
-		return "string"
-	case mysql.TypeMediumBlob:
-		if mysql.HasBinaryFlag(flag) {
-			return "[]byte"
-		}
-		return "string"
-	case mysql.TypeLongBlob:
-		if mysql.HasBinaryFlag(flag) {
-			return "[]byte"
-		}
-		return "string"
-	case mysql.TypeBlob:
-		if mysql.HasBinaryFlag(flag) {
-			return "[]byte"
 		}
 		return "string"
 	case mysql.TypeNewDecimal:

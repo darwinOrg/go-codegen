@@ -20,6 +20,7 @@ create table user_info
     mobile      varchar(200) not null comment '手机号',
     age         int          not null comment '年龄',
     status      int          not null comment '状态',
+    sign_out_at datetime     not null comment '注销时间',
     created_by  bigint(20) not null,
     created_at  datetime     not null,
     modified_by bigint(20) not null,
