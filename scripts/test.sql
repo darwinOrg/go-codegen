@@ -19,6 +19,7 @@ create table user_info
     name        varchar(200) not null comment '名称',
     mobile      varchar(200) not null comment '手机号',
     age         int          not null comment '年龄',
+    status      int          not null comment '状态',
     created_by  bigint(20) not null,
     created_at  datetime     not null,
     modified_by bigint(20) not null,

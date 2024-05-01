@@ -6,8 +6,8 @@ var ModelTpl = `package model
 
 import (
 	"github.com/darwinOrg/go-common/page"
-	{{if .HasDecimal}}"github.com/shopspring/decimal"{{end}}
-	{{if .HasType}}"github.com/rolandhe/daog/ttypes"{{end}}
+	{{- if .HasDecimal}}"github.com/shopspring/decimal"{{end}}
+	{{- if .HasType}}"github.com/rolandhe/daog/ttypes"{{end}}
 )
 
 type Create{{.GoTable}}Req struct {
