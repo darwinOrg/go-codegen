@@ -36,19 +36,21 @@ type Column struct {
 }
 
 type Meta struct {
-	ProjectPath    string
-	GoTable        string
-	TableName      string
-	TableComment   string
-	LowerCamelName string
-	KebabName      string
-	Columns        []*Column
-	QueryColumns   []*Column
-	CreateColumns  []*Column
-	ModifyColumns  []*Column
-	AutoColumn     string
-	HasType        bool
-	HasDecimal     bool
+	ProjectPath     string
+	GoTable         string
+	TableName       string
+	TableComment    string
+	LowerCamelName  string
+	KebabName       string
+	Columns         []*Column
+	QueryColumns    []*Column
+	CreateColumns   []*Column
+	ModifyColumns   []*Column
+	AutoColumn      string
+	HasType         bool
+	ModelHasType    bool
+	HasDecimal      bool
+	ModelHasDecimal bool
 }
 
 func (meta *Meta) Enter(in ast.Node) (ast.Node, bool) {
@@ -60,11 +62,17 @@ func (meta *Meta) Enter(in ast.Node) (ast.Node, bool) {
 			if strings.HasPrefix(c.DbType, "ttypes.") {
 				meta.HasType = true
 			}
+			if strings.HasPrefix(c.DbType, "ttypes.") && !dgcoll.Contains(ignoreQueryModelFieldNames, c.DbName) {
+				meta.ModelHasType = true
+			}
 			if isAuto(def) {
 				meta.AutoColumn = c.DbName
 			}
 			if c.DbType == "decimal.Decimal" {
 				meta.HasDecimal = true
+			}
+			if c.DbType == "decimal.Decimal" && !dgcoll.Contains(ignoreQueryModelFieldNames, c.DbName) {
+				meta.ModelHasDecimal = true
 			}
 			meta.Columns = append(meta.Columns, toColumn(def))
 		}
