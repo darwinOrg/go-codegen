@@ -72,7 +72,7 @@ func BuildTableMata(sql string, projectPath string, outputPath string) error {
 		meta.EnumMap = map[*Column][]*model.KeyValuePair[string, string]{}
 
 		for _, column := range meta.Columns {
-			columnComment := column.Comment
+			columnComment := strings.TrimSpace(column.Comment)
 			if columnComment == "" {
 				continue
 			}
@@ -87,14 +87,14 @@ func BuildTableMata(sql string, projectPath string, outputPath string) error {
 			}
 
 			pairsStr := matches[1]
-			pairParts := strings.Split(pairsStr, ",")
+			pairParts := strings.Split(strings.TrimSpace(pairsStr), ",")
 
 			for _, pairPart := range pairParts {
-				kvs := strings.Split(pairPart, ":")
+				kvs := strings.Split(strings.TrimSpace(pairPart), ":")
 
 				if len(kvs) == 2 {
-					key := kvs[0]
-					value := kvs[1]
+					key := strings.TrimSpace(kvs[0])
+					value := strings.TrimSpace(kvs[1])
 
 					meta.EnumMap[column] = append(meta.EnumMap[column], &model.KeyValuePair[string, string]{
 						Key:   key,
