@@ -1,10 +1,10 @@
 package main
 
 import (
+	"dgen/compile"
 	"flag"
 	"fmt"
 	_ "github.com/darwinOrg/daog-ext"
-	"github.com/darwinOrg/go-codegen/compile"
 	_ "github.com/darwinOrg/go-logger"
 	_ "github.com/gin-gonic/gin"
 	_ "github.com/rolandhe/daog"
@@ -14,25 +14,19 @@ import (
 )
 
 var (
-	projectPath string
 	inputFile   string
+	projectPath string
 	outputPath  string
 )
 
 func init() {
-	flag.StringVar(&projectPath, "p", "github.com/darwinOrg/go-codegen/output", "project path for every go file")
 	flag.StringVar(&inputFile, "i", "./scripts/test.sql", "the create tables file")
-	flag.StringVar(&outputPath, "o", "./output", "output directory, default is current directory")
+	flag.StringVar(&projectPath, "p", "dgen/output", "project path for every go file")
+	flag.StringVar(&outputPath, "o", "./output", "output directory")
 }
 
 func main() {
 	flag.Parse()
-
-	if projectPath == "" {
-		fmt.Println("Please input project path")
-		os.Exit(1)
-	}
-	fmt.Println("Using project path: ", projectPath)
 
 	if inputFile == "" {
 		fmt.Println("Please input create tables file")
@@ -45,6 +39,12 @@ func main() {
 		os.Exit(1)
 	}
 	sql := string(data)
+
+	if projectPath == "" {
+		fmt.Println("Please input project path")
+		os.Exit(1)
+	}
+	fmt.Println("Using project path: ", projectPath)
 
 	if outputPath == "./" {
 		fmt.Println("Using current directory as output: ./")

@@ -1,4 +1,4 @@
-module github.com/darwinOrg/go-codegen
+module dgen
 
 go 1.20
 

@@ -1,8 +1,8 @@
 package compile
 
 import (
+	"dgen/tpl"
 	"fmt"
-	"github.com/darwinOrg/go-codegen/tpl"
 	"github.com/iancoleman/strcase"
 	"github.com/pingcap/tidb/parser"
 	"github.com/pingcap/tidb/parser/ast"
