@@ -58,7 +58,7 @@ func main() {
 		outputPath, _ = os.Getwd()
 	}
 
-	dirs := []string{"dal", "model", "converter", "service", "handler", "router"}
+	dirs := []string{"dal", "enum", "model", "converter", "service", "handler", "router"}
 	for _, dir := range dirs {
 		cmd := exec.Command("go", "fmt", outputPath+"/"+dir)
 		err = cmd.Run()

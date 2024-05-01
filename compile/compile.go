@@ -3,6 +3,8 @@ package compile
 import (
 	"dgen/tpl"
 	"fmt"
+	dgcoll "github.com/darwinOrg/go-common/collection"
+	"github.com/darwinOrg/go-common/model"
 	"github.com/iancoleman/strcase"
 	"github.com/pingcap/tidb/parser"
 	"github.com/pingcap/tidb/parser/ast"
@@ -10,14 +12,19 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"text/template"
 )
 
-// 创建函数映射
-var funcs = template.FuncMap{
-	"contains": strings.Contains,
-}
+var (
+	// 创建函数映射
+	funcs = template.FuncMap{
+		"contains": strings.Contains,
+	}
+
+	enumRegexp = regexp.MustCompile(`\(([^)]+)\)`)
+)
 
 func BuildTableMata(sql string, projectPath string, outputPath string) error {
 	p := parser.New()
@@ -48,6 +55,51 @@ func BuildTableMata(sql string, projectPath string, outputPath string) error {
 			}
 		}
 
+		meta.QueryColumns = dgcoll.FilterList(meta.Columns, func(c *Column) bool {
+			return !dgcoll.Contains(ignoreQueryModelFieldNames, c.DbName)
+		})
+
+		meta.ModifyColumns = dgcoll.FilterList(meta.Columns, func(c *Column) bool {
+			return !dgcoll.Contains(ignoreModifyModelFieldNames, c.DbName) &&
+				!strings.Contains(c.DbName, "status") &&
+				!strings.Contains(c.DbName, "state")
+		})
+
+		meta.CreateColumns = dgcoll.FilterList(meta.Columns, func(c *Column) bool {
+			return !dgcoll.Contains(ignoreCreateModelFieldNames, c.DbName)
+		})
+
+		meta.EnumMap = map[*Column][]*model.KeyValuePair[string, string]{}
+
+		for _, column := range meta.Columns {
+			columnComment := column.Comment
+			if columnComment == "" {
+				continue
+			}
+
+			matches := enumRegexp.FindStringSubmatch(columnComment)
+
+			if len(matches) > 1 {
+				pairsStr := matches[1]
+				pairParts := strings.Split(pairsStr, ",")
+
+				for _, pairPart := range pairParts {
+					kvs := strings.Split(pairPart, ":")
+
+					if len(kvs) == 2 {
+						key := kvs[0]
+						value := kvs[1]
+
+						meta.EnumMap[column] = append(meta.EnumMap[column], &model.KeyValuePair[string, string]{
+							Key:   key,
+							Value: value,
+						})
+					}
+				}
+			}
+
+		}
+
 		if compile(outputPath, meta) != nil {
 			return err
 		}
@@ -58,6 +110,11 @@ func BuildTableMata(sql string, projectPath string, outputPath string) error {
 
 func compile(targetPath string, meta *Meta) error {
 	err := compileDAL(targetPath, meta)
+	if err != nil {
+		return err
+	}
+
+	err = compileEnum(targetPath, meta)
 	if err != nil {
 		return err
 	}
@@ -102,6 +159,23 @@ func compileDAL(targetPath string, meta *Meta) error {
 
 	dalExt := filepath.Join(dalDir, strcase.ToSnake(meta.GoTable)+"-ext.go")
 	err = compileFile(dalExt, "dal-ext", tpl.DalExtTpl, meta)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func compileEnum(targetPath string, meta *Meta) error {
+	if len(meta.EnumMap) == 0 {
+		return nil
+	}
+
+	enumDir := filepath.Join(targetPath, "enum")
+	_ = os.MkdirAll(enumDir, fs.ModeDir|fs.ModePerm)
+
+	enum := filepath.Join(enumDir, strcase.ToSnake(meta.GoTable)+"_enum.go")
+	err := compileFile(enum, "enum", tpl.EnumTpl, meta)
 	if err != nil {
 		return err
 	}

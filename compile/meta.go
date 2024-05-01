@@ -3,6 +3,7 @@ package compile
 import (
 	"fmt"
 	dgcoll "github.com/darwinOrg/go-common/collection"
+	"github.com/darwinOrg/go-common/model"
 	"github.com/iancoleman/strcase"
 	"github.com/pingcap/tidb/parser/ast"
 	"github.com/pingcap/tidb/parser/mysql"
@@ -46,6 +47,7 @@ type Meta struct {
 	QueryColumns    []*Column
 	CreateColumns   []*Column
 	ModifyColumns   []*Column
+	EnumMap         map[*Column][]*model.KeyValuePair[string, string]
 	AutoColumn      string
 	HasType         bool
 	ModelHasType    bool
@@ -83,20 +85,6 @@ func (meta *Meta) Enter(in ast.Node) (ast.Node, bool) {
 		meta.LowerCamelName = strcase.ToLowerCamel(name.Name.O)
 		meta.KebabName = strcase.ToKebab(name.Name.O)
 	}
-
-	meta.QueryColumns = dgcoll.FilterList(meta.Columns, func(c *Column) bool {
-		return !dgcoll.Contains(ignoreQueryModelFieldNames, c.DbName)
-	})
-
-	meta.ModifyColumns = dgcoll.FilterList(meta.Columns, func(c *Column) bool {
-		return !dgcoll.Contains(ignoreModifyModelFieldNames, c.DbName) &&
-			!strings.Contains(c.DbName, "status") &&
-			!strings.Contains(c.DbName, "state")
-	})
-
-	meta.CreateColumns = dgcoll.FilterList(meta.Columns, func(c *Column) bool {
-		return !dgcoll.Contains(ignoreCreateModelFieldNames, c.DbName)
-	})
 
 	return in, false
 }
