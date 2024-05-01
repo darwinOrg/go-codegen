@@ -14,7 +14,7 @@ import (
 var keywordsMap = map[string]int{}
 
 var (
-	ignoreQueryModelFieldNames  = []string{"company_id", "mask", "test", "vsn", "org_id", "op_id", "created_by", "created_at", "modified_by", "modified_at"}
+	ignoreQueryModelFieldNames  = []string{"mask", "deleted", "test", "vsn", "op_id", "created_by", "created_at", "modified_by", "modified_at"}
 	ignoreModifyModelFieldNames = append(ignoreQueryModelFieldNames, "status", "state")
 	ignoreCreateModelFieldNames = append(ignoreModifyModelFieldNames, "id")
 )
@@ -88,12 +88,14 @@ func (meta *Meta) Enter(in ast.Node) (ast.Node, bool) {
 		return !dgcoll.Contains(ignoreQueryModelFieldNames, c.DbName)
 	})
 
-	meta.CreateColumns = dgcoll.FilterList(meta.Columns, func(c *Column) bool {
-		return !dgcoll.Contains(ignoreCreateModelFieldNames, c.DbName)
+	meta.ModifyColumns = dgcoll.FilterList(meta.Columns, func(c *Column) bool {
+		return !dgcoll.Contains(ignoreModifyModelFieldNames, c.DbName) &&
+			!strings.Contains(c.DbName, "status") &&
+			!strings.Contains(c.DbName, "state")
 	})
 
-	meta.ModifyColumns = dgcoll.FilterList(meta.Columns, func(c *Column) bool {
-		return !dgcoll.Contains(ignoreModifyModelFieldNames, c.DbName)
+	meta.CreateColumns = dgcoll.FilterList(meta.Columns, func(c *Column) bool {
+		return !dgcoll.Contains(ignoreCreateModelFieldNames, c.DbName)
 	})
 
 	return in, false
