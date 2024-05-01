@@ -9,6 +9,7 @@ import (
 	cm "github.com/darwinOrg/go-common/model"
 	"github.com/darwinOrg/go-common/page"
 	"github.com/darwinOrg/go-common/result"
+	"github.com/gin-gonic/gin"
 )
 
 var {{.GoTable}}Handler = &{{.LowerCamelName}}Handler{}
@@ -16,7 +17,7 @@ var {{.GoTable}}Handler = &{{.LowerCamelName}}Handler{}
 type {{.LowerCamelName}}Handler struct {
 }
 
-func (h *{{.LowerCamelName}}Handler) Create(ctx *dgctx.DgContext, req *model.Create{{.GoTable}}Req) *result.Result[int64] {
+func (h *{{.LowerCamelName}}Handler) Create(_ *gin.Context, ctx *dgctx.DgContext, req *model.Create{{.GoTable}}Req) *result.Result[int64] {
 	{{.LowerCamelName}}Id, err := service.{{.GoTable}}Service.Create(ctx, req)
 	if err != nil {
 		return result.SimpleFail[int64](err.Error())
@@ -24,7 +25,7 @@ func (h *{{.LowerCamelName}}Handler) Create(ctx *dgctx.DgContext, req *model.Cre
 	return result.Success[int64]({{.LowerCamelName}}Id)
 }
 
-func (h *{{.LowerCamelName}}Handler) Modify(ctx *dgctx.DgContext, req *model.Modify{{.GoTable}}Req) *result.Result[*result.Void] {
+func (h *{{.LowerCamelName}}Handler) Modify(_ *gin.Context, ctx *dgctx.DgContext, req *model.Modify{{.GoTable}}Req) *result.Result[*result.Void] {
 	err := service.{{.GoTable}}Service.Modify(ctx, req)
 	if err != nil {
 		return result.SimpleFailByError(err)
@@ -32,7 +33,7 @@ func (h *{{.LowerCamelName}}Handler) Modify(ctx *dgctx.DgContext, req *model.Mod
 	return result.SimpleSuccess()
 }
 
-func (h *{{.LowerCamelName}}Handler) DeleteById(ctx *dgctx.DgContext, req *cm.IdReq) *result.Result[*result.Void] {
+func (h *{{.LowerCamelName}}Handler) DeleteById(_ *gin.Context, ctx *dgctx.DgContext, req *cm.IdReq) *result.Result[*result.Void] {
 	err := service.{{.GoTable}}Service.DeleteById(ctx, req.Id)
 	if err != nil {
 		return result.SimpleFailByError(err)
@@ -40,7 +41,7 @@ func (h *{{.LowerCamelName}}Handler) DeleteById(ctx *dgctx.DgContext, req *cm.Id
 	return result.SimpleSuccess()
 }
 
-func (h *{{.LowerCamelName}}Handler) Page(ctx *dgctx.DgContext, req *model.Query{{.GoTable}}Req) *result.Result[*page.PageList[model.{{.GoTable}}ListResp]] {
+func (h *{{.LowerCamelName}}Handler) Page(_ *gin.Context, ctx *dgctx.DgContext, req *model.Query{{.GoTable}}Req) *result.Result[*page.PageList[model.{{.GoTable}}ListResp]] {
 	pageList, err := service.{{.GoTable}}Service.Page(ctx, req)
 	if err != nil {
 		return result.SimpleFail[*page.PageList[model.{{.GoTable}}ListResp]](err.Error())
@@ -48,7 +49,7 @@ func (h *{{.LowerCamelName}}Handler) Page(ctx *dgctx.DgContext, req *model.Query
 	return result.Success[*page.PageList[model.{{.GoTable}}ListResp]](pageList)
 }
 
-func (h *{{.LowerCamelName}}Handler) List(ctx *dgctx.DgContext, req *model.Query{{.GoTable}}Req) *result.Result[[]*model.{{.GoTable}}ListResp] {
+func (h *{{.LowerCamelName}}Handler) List(_ *gin.Context, ctx *dgctx.DgContext, req *model.Query{{.GoTable}}Req) *result.Result[[]*model.{{.GoTable}}ListResp] {
 	list, err := service.{{.GoTable}}Service.List(ctx, req)
 	if err != nil {
 		return result.SimpleFail[[]*model.{{.GoTable}}ListResp](err.Error())
@@ -56,7 +57,7 @@ func (h *{{.LowerCamelName}}Handler) List(ctx *dgctx.DgContext, req *model.Query
 	return result.Success[[]*model.{{.GoTable}}ListResp](list)
 }
 
-func (h *{{.LowerCamelName}}Handler) Detail(ctx *dgctx.DgContext, req *cm.IdReq) *result.Result[*model.{{.GoTable}}DetailResp] {
+func (h *{{.LowerCamelName}}Handler) Detail(_ *gin.Context, ctx *dgctx.DgContext, req *cm.IdReq) *result.Result[*model.{{.GoTable}}DetailResp] {
 	detail, err := service.{{.GoTable}}Service.Detail(ctx, req.Id)
 	if err != nil {
 		return result.SimpleFail[*model.{{.GoTable}}DetailResp](err.Error())

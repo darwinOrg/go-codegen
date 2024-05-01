@@ -7,8 +7,8 @@ import (
 	"{{.ProjectPath}}/model"
 	cm "github.com/darwinOrg/go-common/model"
 	"github.com/darwinOrg/go-common/page"
-	"github.com/darwinOrg/go-web/wrapper"
 	"github.com/darwinOrg/go-common/result"
+	"github.com/darwinOrg/go-web/wrapper"
 	"github.com/gin-gonic/gin"
 )
 

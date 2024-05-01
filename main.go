@@ -6,6 +6,7 @@ import (
 	"fmt"
 	_ "github.com/darwinOrg/daog-ext"
 	_ "github.com/darwinOrg/go-logger"
+	_ "github.com/darwinOrg/go-web/wrapper"
 	_ "github.com/gin-gonic/gin"
 	_ "github.com/rolandhe/daog"
 	_ "github.com/shopspring/decimal"
