@@ -30,23 +30,23 @@ func (c *{{.LowerCamelName}}Converter) ModifyModel2Entity(req *model.Modify{{.Go
 	return {{.LowerCamelName}}
 }
 
-func (c *{{.LowerCamelName}}Converter) FillEntityWithModifyModel(entity *dal.{{.GoTable}}, req *model.Modify{{.GoTable}}Req) {
-	{{range .ModifyColumns}}entity.{{.GoName}} = req.{{.GoName}}
+func (c *{{.LowerCamelName}}Converter) FillEntityWithModifyModel({{.LowerCamelName}} *dal.{{.GoTable}}, req *model.Modify{{.GoTable}}Req) {
+	{{range .ModifyColumns}}{{$.LowerCamelName}}.{{.GoName}} = req.{{.GoName}}
 	{{end}}
 }
 
-func (c *{{.LowerCamelName}}Converter) Entity2ListModel(entity *dal.{{.GoTable}}) *model.{{.GoTable}}ListResp {
+func (c *{{.LowerCamelName}}Converter) Entity2ListModel({{.LowerCamelName}} *dal.{{.GoTable}}) *model.{{.GoTable}}ListResp {
 	listVo := &model.{{.GoTable}}ListResp{
-		{{range .QueryColumns}}{{.GoName}}: entity.{{.GoName}},
+		{{range .QueryColumns}}{{.GoName}}: {{$.LowerCamelName}}.{{.GoName}},
 		{{end}}
 	}
 
 	return listVo
 }
 
-func (c *{{.LowerCamelName}}Converter) Entity2DetailModel(entity *dal.{{.GoTable}}) *model.{{.GoTable}}DetailResp {
+func (c *{{.LowerCamelName}}Converter) Entity2DetailModel({{.LowerCamelName}} *dal.{{.GoTable}}) *model.{{.GoTable}}DetailResp {
 	detailVo := &model.{{.GoTable}}DetailResp{
-		{{range .QueryColumns}}{{.GoName}}: entity.{{.GoName}},
+		{{range .QueryColumns}}{{.GoName}}: {{$.LowerCamelName}}.{{.GoName}},
 		{{end}}
 	}
 
