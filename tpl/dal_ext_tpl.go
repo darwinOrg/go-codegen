@@ -126,4 +126,8 @@ func (d *{{.LowerCamelName}}ExtDao) BuildMatcher(req *model.Query{{.GoTable}}Req
 	return matcher
 }
 
+func Get{{.GoTable}}Id({{.LowerCamelName}} *{{.GoTable}}) int64 {
+	return {{.LowerCamelName}}.Id
+}
+
 `
