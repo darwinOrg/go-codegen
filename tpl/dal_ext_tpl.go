@@ -32,11 +32,20 @@ func (d *{{.LowerCamelName}}ExtDao) MustGetById(ctx *dgctx.DgContext, tc *daog.T
 }
 
 func (d *{{.LowerCamelName}}ExtDao) Create(ctx *dgctx.DgContext, tc *daog.TransContext, {{.LowerCamelName}} *{{.GoTable}}) (int64, error) {
-	now := ttypes.NormalDatetime(time.Now())
-	{{.LowerCamelName}}.CreatedAt = now
-	{{.LowerCamelName}}.ModifiedAt = now
-	{{.LowerCamelName}}.CreatedBy = ctx.UserId
-	{{.LowerCamelName}}.ModifiedBy = ctx.UserId
+	{{range .Columns}}
+		{{if eq .GoName "CreatedAt"}}
+		{{$.LowerCamelName}}.CreatedAt = ttypes.NormalDatetime(time.Now())
+		{{end}}
+		{{if eq .GoName "CreatedBy"}}
+		{{$.LowerCamelName}}.CreatedBy = ctx.UserId
+		{{end}}
+		{{if eq .GoName "ModifiedAt"}}
+		{{$.LowerCamelName}}.ModifiedAt = ttypes.NormalDatetime(time.Now())
+		{{end}}
+		{{if eq .GoName "ModifiedBy"}}
+		{{$.LowerCamelName}}.ModifiedBy = ctx.UserId
+		{{end}}
+	{{end}}
 
 	_, err := {{.GoTable}}Dao.Insert(tc, {{.LowerCamelName}})
 	if err != nil {
@@ -48,8 +57,14 @@ func (d *{{.LowerCamelName}}ExtDao) Create(ctx *dgctx.DgContext, tc *daog.TransC
 }
 
 func (d *{{.LowerCamelName}}ExtDao) Modify(ctx *dgctx.DgContext, tc *daog.TransContext, {{.LowerCamelName}} *{{.GoTable}}) error {
-	{{.LowerCamelName}}.ModifiedAt = ttypes.NormalDatetime(time.Now())
-	{{.LowerCamelName}}.ModifiedBy = ctx.UserId
+	{{range .Columns}}
+		{{if eq .GoName "ModifiedAt"}}
+		{{$.LowerCamelName}}.ModifiedAt = ttypes.NormalDatetime(time.Now())
+		{{end}}
+		{{if eq .GoName "ModifiedBy"}}
+		{{$.LowerCamelName}}.ModifiedBy = ctx.UserId
+		{{end}}
+	{{end}}
 
 	_, err := {{.GoTable}}Dao.Update(tc, {{.LowerCamelName}})
 	if err != nil {
