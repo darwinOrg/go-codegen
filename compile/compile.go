@@ -161,13 +161,13 @@ func compileDAL(targetPath string, meta *Meta) error {
 	dalDir := filepath.Join(targetPath, "dal")
 	_ = os.MkdirAll(dalDir, fs.ModeDir|fs.ModePerm)
 
-	dalMain := filepath.Join(dalDir, strcase.ToSnake(meta.GoTable)+".go")
+	dalMain := filepath.Join(dalDir, meta.GoTable+".go")
 	err := compileFile(dalMain, "dal-main", tpl.DalMainTpl, meta)
 	if err != nil {
 		return err
 	}
 
-	dalExt := filepath.Join(dalDir, strcase.ToSnake(meta.GoTable)+"-ext.go")
+	dalExt := filepath.Join(dalDir, meta.GoTable+"-ext.go")
 	err = compileFile(dalExt, "dal-ext", tpl.DalExtTpl, meta)
 	if err != nil {
 		return err
