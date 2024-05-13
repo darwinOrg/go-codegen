@@ -5,6 +5,7 @@ var ConverterExtTpl = `package converter
 import (
 	"{{.ProjectPath}}/dal"
 	"{{.ProjectPath}}/model"
+	{{if .HasEnum}}"{{.ProjectPath}}/enum"{{end}}
 )
 
 var {{.GoTable}}Converter = &{{.LowerCamelName}}Converter{}

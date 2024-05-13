@@ -39,6 +39,8 @@ type {{.GoTable}}ListResp struct {
     {{range .QueryColumns}}{{.GoName}} {{.DbType}} ###json:"{{.LowerCamelName}}"
 	{{- if ne .Comment ""}} remark:"{{.Comment}}"{{end}}###
 	{{end}}
+	{{range .QueryColumns}}{{if .HasEnum}}{{.GoName}}Name string ###json:"{{.LowerCamelName}}Name"###{{end}}
+	{{end}}
 }
 
 type {{.GoTable}}DetailResp struct {

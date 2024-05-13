@@ -95,6 +95,8 @@ func BuildTableMata(sql string, projectPath string, outputPath string) error {
 				if len(kvs) == 2 {
 					key := strings.TrimSpace(kvs[0])
 					value := strings.TrimSpace(kvs[1])
+					meta.HasEnum = true
+					column.HasEnum = true
 
 					meta.EnumMap[column] = append(meta.EnumMap[column], &model.KeyValuePair[string, string]{
 						Key:   key,
