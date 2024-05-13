@@ -39,13 +39,15 @@ type {{.GoTable}}ListResp struct {
     {{range .QueryColumns}}{{.GoName}} {{.DbType}} ###json:"{{.LowerCamelName}}"
 	{{- if ne .Comment ""}} remark:"{{.Comment}}"{{end}}###
 	{{end}}
-	{{range .QueryColumns}}{{if .HasEnum}}{{.GoName}}Name string ###json:"{{.LowerCamelName}}Name"###{{end}}
+	{{range .QueryColumns}}{{if .HasEnum}}{{.GoName}}Name string ###json:"{{.LowerCamelName}}Name"{{if ne .Comment ""}} title:"{{.EnumName}}名称" remark:"{{.EnumRemark}}"{{end}}###{{end}}
 	{{end}}
 }
 
 type {{.GoTable}}DetailResp struct {
     {{range .QueryColumns}}{{.GoName}} {{.DbType}} ###json:"{{.LowerCamelName}}"
 	{{- if ne .Comment ""}} remark:"{{.Comment}}"{{end}}###
+	{{end}}
+	{{range .QueryColumns}}{{if .HasEnum}}{{.GoName}}Name string ###json:"{{.LowerCamelName}}Name"{{if ne .Comment ""}} title:"{{.EnumName}}名称" remark:"{{.EnumRemark}}"{{end}}###{{end}}
 	{{end}}
 }
 `

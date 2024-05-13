@@ -97,6 +97,10 @@ func BuildTableMata(sql string, projectPath string, outputPath string) error {
 					value := strings.TrimSpace(kvs[1])
 					meta.HasEnum = true
 					column.HasEnum = true
+					enumName := columnComment[:strings.Index(columnComment, "(")]
+					enumRemark := columnComment[strings.Index(columnComment, "(")+1 : len(columnComment)-1]
+					column.EnumName = enumName
+					column.EnumRemark = enumRemark
 
 					meta.EnumMap[column] = append(meta.EnumMap[column], &model.KeyValuePair[string, string]{
 						Key:   key,

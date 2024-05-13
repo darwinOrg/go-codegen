@@ -40,6 +40,8 @@ func (c *{{.LowerCamelName}}Converter) Entity2ListModel({{.LowerCamelName}} *dal
 	listVo := &model.{{.GoTable}}ListResp{
 		{{range .QueryColumns}}{{.GoName}}: {{$.LowerCamelName}}.{{.GoName}},
 		{{end}}
+		{{range .QueryColumns}}{{if .HasEnum}}{{.GoName}}Name: enum.{{$.GoTable}}{{.GoName}}Map[{{$.LowerCamelName}}.{{.GoName}}],{{end}}
+		{{end}}
 	}
 
 	return listVo
@@ -48,6 +50,8 @@ func (c *{{.LowerCamelName}}Converter) Entity2ListModel({{.LowerCamelName}} *dal
 func (c *{{.LowerCamelName}}Converter) Entity2DetailModel({{.LowerCamelName}} *dal.{{.GoTable}}) *model.{{.GoTable}}DetailResp {
 	detailVo := &model.{{.GoTable}}DetailResp{
 		{{range .QueryColumns}}{{.GoName}}: {{$.LowerCamelName}}.{{.GoName}},
+		{{end}}
+		{{range .QueryColumns}}{{if .HasEnum}}{{.GoName}}Name: enum.{{$.GoTable}}{{.GoName}}Map[{{$.LowerCamelName}}.{{.GoName}}],{{end}}
 		{{end}}
 	}
 

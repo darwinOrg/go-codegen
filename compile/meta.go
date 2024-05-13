@@ -34,6 +34,8 @@ type Column struct {
 	LowerCamelName string
 	IsNull         bool
 	HasEnum        bool
+	EnumName       string
+	EnumRemark     string
 	Comment        string
 }
 
