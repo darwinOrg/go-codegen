@@ -5,6 +5,7 @@ import (
 	"fmt"
 	dgcoll "github.com/darwinOrg/go-common/collection"
 	"github.com/darwinOrg/go-common/model"
+	"github.com/darwinOrg/go-common/utils"
 	"github.com/iancoleman/strcase"
 	"github.com/pingcap/tidb/parser"
 	"github.com/pingcap/tidb/parser/ast"
@@ -35,11 +36,7 @@ func BuildTableMata(sql string, projectPath string, outputPath string) error {
 		return err
 	}
 
-	err = os.Mkdir(outputPath, fs.ModeDir|fs.ModePerm)
-	if err != nil {
-		fmt.Println(err)
-		return err
-	}
+	_ = os.Mkdir(outputPath, fs.ModeDir|fs.ModePerm)
 
 	for _, node := range stmtNodes {
 		root, ok := node.(*ast.CreateTableStmt)
@@ -259,6 +256,10 @@ func compileRouter(targetPath string, meta *Meta) error {
 }
 
 func compileFile(fileName string, tplName string, tplText string, meta *Meta) error {
+	if utils.ExistsFile(fileName) {
+		return nil
+	}
+
 	file, err := os.Create(fileName)
 	if err != nil {
 		return err
