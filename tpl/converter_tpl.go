@@ -14,6 +14,10 @@ type {{.LowerCamelName}}Converter struct {
 }
 
 func (c *{{.LowerCamelName}}Converter) CreateModel2Entity(req *model.Create{{.GoTable}}Req) *dal.{{.GoTable}} {
+	if req == nil {
+		return nil
+	}
+
 	{{.LowerCamelName}} := &dal.{{.GoTable}}{
 		{{range .CreateColumns}}{{.GoName}}: req.{{.GoName}},
 		{{end}}
@@ -23,6 +27,10 @@ func (c *{{.LowerCamelName}}Converter) CreateModel2Entity(req *model.Create{{.Go
 }
 
 func (c *{{.LowerCamelName}}Converter) ModifyModel2Entity(req *model.Modify{{.GoTable}}Req) *dal.{{.GoTable}} {
+	if req == nil {
+		return nil
+	}
+
 	{{.LowerCamelName}} := &dal.{{.GoTable}}{
 		{{range .ModifyColumns}}{{.GoName}}: req.{{.GoName}},
 		{{end}}
@@ -32,11 +40,19 @@ func (c *{{.LowerCamelName}}Converter) ModifyModel2Entity(req *model.Modify{{.Go
 }
 
 func (c *{{.LowerCamelName}}Converter) FillEntityWithModifyModel({{.LowerCamelName}} *dal.{{.GoTable}}, req *model.Modify{{.GoTable}}Req) {
+	if {{.LowerCamelName}} == nil {
+		return nil
+	}
+
 	{{range .ModifyColumns}}{{$.LowerCamelName}}.{{.GoName}} = req.{{.GoName}}
 	{{end}}
 }
 
 func (c *{{.LowerCamelName}}Converter) Entity2ListModel({{.LowerCamelName}} *dal.{{.GoTable}}) *model.{{.GoTable}}ListResp {
+	if {{.LowerCamelName}} == nil {
+		return nil
+	}
+
 	listVo := &model.{{.GoTable}}ListResp{
 		{{range .QueryColumns}}{{.GoName}}: {{$.LowerCamelName}}.{{.GoName}},
 		{{end}}
@@ -48,6 +64,10 @@ func (c *{{.LowerCamelName}}Converter) Entity2ListModel({{.LowerCamelName}} *dal
 }
 
 func (c *{{.LowerCamelName}}Converter) Entity2DetailModel({{.LowerCamelName}} *dal.{{.GoTable}}) *model.{{.GoTable}}DetailResp {
+	if {{.LowerCamelName}} == nil {
+		return nil
+	}
+
 	detailVo := &model.{{.GoTable}}DetailResp{
 		{{range .QueryColumns}}{{.GoName}}: {{$.LowerCamelName}}.{{.GoName}},
 		{{end}}
