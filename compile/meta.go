@@ -33,6 +33,9 @@ type Column struct {
 	DbType         string
 	LowerCamelName string
 	IsNull         bool
+	HasEnum        bool
+	EnumName       string
+	EnumRemark     string
 	Comment        string
 }
 
@@ -50,6 +53,7 @@ type Meta struct {
 	EnumMap         map[*Column][]*model.KeyValuePair[string, string]
 	AutoColumn      string
 	HasType         bool
+	HasEnum         bool
 	ModelHasType    bool
 	HasDecimal      bool
 	ModelHasDecimal bool

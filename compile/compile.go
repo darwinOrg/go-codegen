@@ -5,6 +5,7 @@ import (
 	"fmt"
 	dgcoll "github.com/darwinOrg/go-common/collection"
 	"github.com/darwinOrg/go-common/model"
+	"github.com/darwinOrg/go-common/utils"
 	"github.com/iancoleman/strcase"
 	"github.com/pingcap/tidb/parser"
 	"github.com/pingcap/tidb/parser/ast"
@@ -35,11 +36,7 @@ func BuildTableMata(sql string, projectPath string, outputPath string) error {
 		return err
 	}
 
-	err = os.Mkdir(outputPath, fs.ModeDir|fs.ModePerm)
-	if err != nil {
-		fmt.Println(err)
-		return err
-	}
+	_ = os.Mkdir(outputPath, fs.ModeDir|fs.ModePerm)
 
 	for _, node := range stmtNodes {
 		root, ok := node.(*ast.CreateTableStmt)
@@ -95,6 +92,12 @@ func BuildTableMata(sql string, projectPath string, outputPath string) error {
 				if len(kvs) == 2 {
 					key := strings.TrimSpace(kvs[0])
 					value := strings.TrimSpace(kvs[1])
+					meta.HasEnum = true
+					column.HasEnum = true
+					enumName := columnComment[:strings.Index(columnComment, "(")]
+					enumRemark := columnComment[strings.Index(columnComment, "(")+1 : len(columnComment)-1]
+					column.EnumName = enumName
+					column.EnumRemark = enumRemark
 
 					meta.EnumMap[column] = append(meta.EnumMap[column], &model.KeyValuePair[string, string]{
 						Key:   key,
@@ -155,13 +158,13 @@ func compileDAL(targetPath string, meta *Meta) error {
 	dalDir := filepath.Join(targetPath, "dal")
 	_ = os.MkdirAll(dalDir, fs.ModeDir|fs.ModePerm)
 
-	dalMain := filepath.Join(dalDir, strcase.ToSnake(meta.GoTable)+".go")
+	dalMain := filepath.Join(dalDir, meta.GoTable+".go")
 	err := compileFile(dalMain, "dal-main", tpl.DalMainTpl, meta)
 	if err != nil {
 		return err
 	}
 
-	dalExt := filepath.Join(dalDir, strcase.ToSnake(meta.GoTable)+"-ext.go")
+	dalExt := filepath.Join(dalDir, meta.GoTable+"-ext.go")
 	err = compileFile(dalExt, "dal-ext", tpl.DalExtTpl, meta)
 	if err != nil {
 		return err
@@ -253,6 +256,10 @@ func compileRouter(targetPath string, meta *Meta) error {
 }
 
 func compileFile(fileName string, tplName string, tplText string, meta *Meta) error {
+	if utils.ExistsFile(fileName) {
+		return nil
+	}
+
 	file, err := os.Create(fileName)
 	if err != nil {
 		return err
