@@ -1,0 +1,127 @@
+{
+  "typeMappers": [
+    {
+      "dbDataTypes": [
+        "tinyint"
+      ],
+      "unsignedModelDataType": "uint8",
+      "modelDataType": "int8"
+    },
+    {
+      "dbDataTypes": [
+        "smallint"
+      ],
+      "unsignedModelDataType": "uint16",
+      "modelDataType": "int16"
+    },
+    {
+      "dbDataTypes": [
+        "int",
+        "mediumint"
+      ],
+      "unsignedModelDataType": "uint32",
+      "modelDataType": "int32"
+    },
+    {
+      "dbDataTypes": [
+        "bigint"
+      ],
+      "unsignedModelDataType": "uint64",
+      "modelDataType": "int64"
+    },
+    {
+      "dbDataTypes": [
+        "float"
+      ],
+      "modelDataType": "float32"
+    },
+    {
+      "dbDataTypes": [
+        "double",
+        "real"
+      ],
+      "modelDataType": "float64"
+    },
+    {
+      "dbDataTypes": [
+        "decimal",
+        "numeric"
+      ],
+      "modelDataType": "decimal.Decimal"
+    },
+    {
+      "dbDataTypes": [
+        "time",
+        "datetime",
+        "timestamp"
+      ],
+      "nullableModelDataType": "ttypes.NilableDatetime",
+      "modelDataType": "ttypes.NormalDatetime"
+    },
+    {
+      "dbDataTypes": [
+        "date"
+      ],
+      "nullableModelDataType": "ttypes.NilableDate",
+      "modelDataType": "ttypes.NormalDate"
+    },
+    {
+      "dbDataTypes": [
+        "char",
+        "varchar",
+        "json",
+        "text"
+      ],
+      "nullableModelDataType": "ttypes.NilableString",
+      "modelDataType": "string"
+    },
+    {
+      "dbDataTypes": [
+        "boolean",
+        "bool"
+      ],
+      "modelDataType": "bool"
+    },
+    {
+      "dbDataTypes": [
+        "binary",
+        "varbinary"
+      ],
+      "modelDataType": "[]byte"
+    }
+  ],
+  "modelDataTypes": [
+    "string",
+    "int",
+    "bool",
+    "int64",
+    "uint64",
+    "int8",
+    "uint8",
+    "int16",
+    "uint16",
+    "int32",
+    "uint32",
+    "float32",
+    "float64",
+    "ttypes.NormalDatetime",
+    "ttypes.NilableDatetime",
+    "ttypes.NormalDate",
+    "ttypes.NilableDate",
+    "decimal.Decimal",
+    "[]byte"
+  ],
+  "allowRoles": [
+    "超管",
+    "部门管理员",
+    "员工"
+  ],
+  "allowProducts": [
+    "RPA机器人",
+    "AI智能面试",
+    "金牌面试官",
+    "需求沟通助手",
+    "候选人沟通助手",
+    "人才库"
+  ]
+}
