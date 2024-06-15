@@ -1,7 +1,7 @@
 package main
 
 import (
-	"dgen/compile"
+	"dgen/internal"
 	"flag"
 	"fmt"
 	_ "github.com/darwinOrg/daog-ext"
@@ -52,7 +52,7 @@ func main() {
 	} else {
 		fmt.Println("Using output file directory is: ", outputPath)
 	}
-	_ = compile.BuildTableMata(sql, projectPath, outputPath)
+	_ = internal.CompileSql(sql, projectPath, outputPath)
 
 	if outputPath == "./" {
 		outputPath, _ = os.Getwd()

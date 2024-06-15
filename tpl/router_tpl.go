@@ -16,7 +16,7 @@ func Bind{{.GoTable}}Router(rg *gin.RouterGroup) {
 	g := rg.Group("/api/{{.KebabName}}/v1")
 	
 	wrapper.Post(&wrapper.RequestHolder[model.Create{{.GoTable}}Req, *result.Result[int64]]{
-		Remark:       "{{.TableComment}} - 创建",
+		Remark:       "{{.TableComment}} - 新建",
 		RouterGroup:  g,
 		RelativePath: "create",
 		BizHandler:   handler.{{.GoTable}}Handler.Create,
@@ -37,14 +37,14 @@ func Bind{{.GoTable}}Router(rg *gin.RouterGroup) {
 	})
 
 	wrapper.Post(&wrapper.RequestHolder[model.Query{{.GoTable}}Req, *result.Result[*page.PageList[model.{{.GoTable}}ListResp]]]{
-		Remark:       "{{.TableComment}} - 分页查询",
+		Remark:       "{{.TableComment}} - 分页",
 		RouterGroup:  g,
 		RelativePath: "page",
 		BizHandler:   handler.{{.GoTable}}Handler.Page,
 	})
 
 	wrapper.Post(&wrapper.RequestHolder[model.Query{{.GoTable}}Req, *result.Result[[]*model.{{.GoTable}}ListResp]]{
-		Remark:       "{{.TableComment}} - 列表查询",
+		Remark:       "{{.TableComment}} - 列表",
 		RouterGroup:  g,
 		RelativePath: "list",
 		BizHandler:   handler.{{.GoTable}}Handler.List,

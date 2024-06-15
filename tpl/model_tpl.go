@@ -24,10 +24,6 @@ type Modify{{.GoTable}}Req struct {
 	{{end}}
 }
 
-type Delete{{.GoTable}}Req struct {
-    Id  int64 ###json:"id" binding:"required" remark:"id"###
-}
-
 type Query{{.GoTable}}Req struct {
     {{range .QueryColumns}}{{.GoName}} {{.DbType}} ###json:"{{.LowerCamelName}}" form:"{{.LowerCamelName}}"
 	{{- if ne .Comment ""}} remark:"{{.Comment}}"{{end}}###

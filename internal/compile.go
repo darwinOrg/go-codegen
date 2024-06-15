@@ -1,4 +1,4 @@
-package compile
+package internal
 
 import (
 	"dgen/tpl"
@@ -27,24 +27,46 @@ var (
 	enumRegexp = regexp.MustCompile(`\(([^)]+)\)`)
 )
 
-func BuildTableMata(sql string, projectPath string, outputPath string) error {
+func CompileSql(sql string, projectPath string, outputPath string) error {
+	metas, err := BuildTableMetas(sql)
+	if err != nil {
+		return err
+	}
+	if len(metas) == 0 {
+		return nil
+	}
+
+	_ = os.Mkdir(outputPath, fs.ModeDir|fs.ModePerm)
+
+	for _, meta := range metas {
+		meta.ProjectPath = projectPath
+		if compile(outputPath, meta) != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func BuildTableMetas(sql string) ([]*Meta, error) {
 	p := parser.New()
 
 	stmtNodes, _, err := p.Parse(sql, "", "")
 	if err != nil {
 		fmt.Println(err)
-		return err
+		return nil, err
 	}
 
-	_ = os.Mkdir(outputPath, fs.ModeDir|fs.ModePerm)
+	var metas []*Meta
 
 	for _, node := range stmtNodes {
 		root, ok := node.(*ast.CreateTableStmt)
 		if !ok {
 			continue
 		}
-		meta := &Meta{ProjectPath: projectPath}
+		meta := &Meta{}
 		root.Accept(meta)
+		metas = append(metas, meta)
 
 		for _, option := range root.Options {
 			if option.Tp == ast.TableOptionComment && option.StrValue != "" {
@@ -106,13 +128,9 @@ func BuildTableMata(sql string, projectPath string, outputPath string) error {
 				}
 			}
 		}
-
-		if compile(outputPath, meta) != nil {
-			return err
-		}
 	}
 
-	return nil
+	return metas, nil
 }
 
 func compile(targetPath string, meta *Meta) error {
