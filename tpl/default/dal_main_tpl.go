@@ -1,4 +1,4 @@
-package tpl
+package _default
 
 var DalMainTpl = `package dal
 

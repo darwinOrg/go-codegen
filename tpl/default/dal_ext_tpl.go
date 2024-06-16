@@ -1,9 +1,9 @@
-package tpl
+package _default
 
 var DalExtTpl = `package dal
 
 import (
-	"{{.ProjectPath}}/model"
+	"{{.PackagePrefix}}/model"
 	dgctx "github.com/darwinOrg/go-common/context"
 	dgerr "github.com/darwinOrg/go-common/enums/error"
 	"github.com/darwinOrg/go-common/page"

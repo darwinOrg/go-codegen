@@ -4,9 +4,9 @@ go 1.20
 
 require (
 	github.com/darwinOrg/daog-ext v0.0.4
-	github.com/darwinOrg/go-common v0.1.47
+	github.com/darwinOrg/go-common v0.1.56
 	github.com/darwinOrg/go-logger v0.0.6
-	github.com/darwinOrg/go-web v0.1.28
+	github.com/darwinOrg/go-web v0.1.31
 	github.com/gin-gonic/gin v1.9.1
 	github.com/iancoleman/strcase v0.3.0
 	github.com/pingcap/tidb/parser v0.0.0-20231013125129-93a834a6bf8d

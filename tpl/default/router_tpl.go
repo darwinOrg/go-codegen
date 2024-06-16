@@ -1,10 +1,10 @@
-package tpl
+package _default
 
 var RouterExtTpl = `package router
 
 import (
-	"{{.ProjectPath}}/handler"
-	"{{.ProjectPath}}/model"
+	"{{.PackagePrefix}}/handler"
+	"{{.PackagePrefix}}/model"
 	cm "github.com/darwinOrg/go-common/model"
 	"github.com/darwinOrg/go-common/page"
 	"github.com/darwinOrg/go-common/result"
@@ -33,7 +33,7 @@ func Bind{{.GoTable}}Router(rg *gin.RouterGroup) {
 		Remark:       "{{.TableComment}} - 删除",
 		RouterGroup:  g,
 		RelativePath: "delete",
-		BizHandler:   handler.{{.GoTable}}Handler.DeleteById,
+		BizHandler:   handler.{{.GoTable}}Handler.Delete,
 	})
 
 	wrapper.Post(&wrapper.RequestHolder[model.Query{{.GoTable}}Req, *result.Result[*page.PageList[model.{{.GoTable}}ListResp]]]{

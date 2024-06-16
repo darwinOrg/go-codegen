@@ -1,12 +1,13 @@
-package tpl
+package _default
 
 var ServiceExtTpl = `package service
 
 import (
 	daogext "github.com/darwinOrg/daog-ext"
-	"{{.ProjectPath}}/converter"
-	"{{.ProjectPath}}/dal"
-	"{{.ProjectPath}}/model"
+	"{{.PackagePrefix}}/converter"
+	"{{.PackagePrefix}}/dal"
+	"{{.PackagePrefix}}/model"
+	cm "github.com/darwinOrg/go-common/model"
 	dgcoll "github.com/darwinOrg/go-common/collection"
 	dgctx "github.com/darwinOrg/go-common/context"
 	"github.com/darwinOrg/go-common/page"
@@ -39,9 +40,9 @@ func (s *{{.LowerCamelName}}Service) Modify(ctx *dgctx.DgContext, req *model.Mod
 	})
 }
 
-func (s *{{.LowerCamelName}}Service) DeleteById(ctx *dgctx.DgContext, id int64) error {
+func (s *{{.LowerCamelName}}Service) Delete(ctx *dgctx.DgContext, req *cm.IdReq) error {
 	return daogext.Write(ctx, func(tc *daog.TransContext) error {
-		return dal.{{.GoTable}}ExtDao.DeleteById(ctx, tc, id)
+		return dal.{{.GoTable}}ExtDao.DeleteById(ctx, tc, req.Id)
 	})
 }
 

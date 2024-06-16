@@ -1,11 +1,11 @@
-package tpl
+package _default
 
 var ConverterExtTpl = `package converter
 
 import (
-	"{{.ProjectPath}}/dal"
-	"{{.ProjectPath}}/model"
-	{{if .HasEnum}}"{{.ProjectPath}}/enum"{{end}}
+	"{{.PackagePrefix}}/dal"
+	"{{.PackagePrefix}}/model"
+	{{if .HasEnum}}"{{.PackagePrefix}}/enum"{{end}}
 )
 
 var {{.GoTable}}Converter = &{{.LowerCamelName}}Converter{}

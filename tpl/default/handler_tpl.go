@@ -1,10 +1,10 @@
-package tpl
+package _default
 
 var HandlerExtTpl = `package handler
 
 import (
-	"{{.ProjectPath}}/model"
-	"{{.ProjectPath}}/service"
+	"{{.PackagePrefix}}/model"
+	"{{.PackagePrefix}}/service"
 	dgctx "github.com/darwinOrg/go-common/context"
 	cm "github.com/darwinOrg/go-common/model"
 	"github.com/darwinOrg/go-common/page"
@@ -33,8 +33,8 @@ func (h *{{.LowerCamelName}}Handler) Modify(_ *gin.Context, ctx *dgctx.DgContext
 	return result.SimpleSuccess()
 }
 
-func (h *{{.LowerCamelName}}Handler) DeleteById(_ *gin.Context, ctx *dgctx.DgContext, req *cm.IdReq) *result.Result[*result.Void] {
-	err := service.{{.GoTable}}Service.DeleteById(ctx, req.Id)
+func (h *{{.LowerCamelName}}Handler) Delete(_ *gin.Context, ctx *dgctx.DgContext, req *cm.IdReq) *result.Result[*result.Void] {
+	err := service.{{.GoTable}}Service.Delete(ctx, req)
 	if err != nil {
 		return result.SimpleFailByError(err)
 	}

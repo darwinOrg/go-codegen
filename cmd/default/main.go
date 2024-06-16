@@ -15,14 +15,14 @@ import (
 )
 
 var (
-	inputFile   string
-	projectPath string
-	outputPath  string
+	inputFile     string
+	packagePrefix string
+	outputPath    string
 )
 
 func init() {
 	flag.StringVar(&inputFile, "i", "./scripts/test.sql", "the create tables file")
-	flag.StringVar(&projectPath, "p", "dgen/output", "project path for every go file")
+	flag.StringVar(&packagePrefix, "p", "dgen/output", "package prefix for every go file")
 	flag.StringVar(&outputPath, "o", "./output", "output directory")
 }
 
@@ -41,18 +41,18 @@ func main() {
 	}
 	sql := string(data)
 
-	if projectPath == "" {
-		fmt.Println("Please input project path")
+	if packagePrefix == "" {
+		fmt.Println("Please input package prefix")
 		os.Exit(1)
 	}
-	fmt.Println("Using project path: ", projectPath)
+	fmt.Println("Using package prefix: ", packagePrefix)
 
 	if outputPath == "./" {
 		fmt.Println("Using current directory as output: ./")
 	} else {
 		fmt.Println("Using output file directory is: ", outputPath)
 	}
-	_ = internal.CompileSql(sql, projectPath, outputPath)
+	_ = internal.ParseSql(sql, packagePrefix, outputPath)
 
 	if outputPath == "./" {
 		outputPath, _ = os.Getwd()
