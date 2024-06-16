@@ -1,0 +1,1778 @@
+{
+  "dbs": [
+    {
+      "sql": "CREATE TABLE `job`\n(\n    `id`               bigint       NOT NULL AUTO_INCREMENT,\n    `code`             varchar(32)           DEFAULT NULL COMMENT \u0027职位编码\u0027,\n    `title`            varchar(128) NOT NULL COMMENT \u0027职位标题\u0027,\n    `description`      text         NOT NULL COMMENT \u0027职位描述\u0027,\n    `status`           varchar(32)  NOT NULL COMMENT \u0027职位状态\u0027,\n    `job_type`         varchar(32)           DEFAULT \u0027\u0027 COMMENT \u0027工作性质\u0027,\n    `recruitment_type` varchar(32)           DEFAULT \u0027\u0027 COMMENT \u0027招聘类型\u0027,\n    `salary_type`      varchar(32)           DEFAULT \u0027\u0027 COMMENT \u0027薪水类型\u0027,\n    `salary_from`      varchar(32)           DEFAULT \u0027\u0027 COMMENT \u0027最低薪水\u0027,\n    `salary_to`        varchar(32)           DEFAULT \u0027\u0027 COMMENT \u0027最高薪水\u0027,\n    `salary_times`     int                   DEFAULT \u002712\u0027 COMMENT \u0027薪水数\u0027,\n    `headcount`        int                   DEFAULT \u00271\u0027 COMMENT \u0027招聘人数\u0027,\n    `experience_from`  varchar(32)           DEFAULT \u0027\u0027 COMMENT \u0027最低工作年限\u0027,\n    `experience_to`    varchar(32)           DEFAULT \u0027\u0027 COMMENT \u0027最高工作年限\u0027,\n    `education_from`   varchar(32)           DEFAULT \u0027\u0027 COMMENT \u0027最低学历\u0027,\n    `education_to`     varchar(32)           DEFAULT \u0027\u0027 COMMENT \u0027最高学历\u0027,\n    `office_province`  varchar(32)           DEFAULT \u0027\u0027 COMMENT \u0027办公地点-省\u0027,\n    `office_city`      varchar(32)           DEFAULT \u0027\u0027 COMMENT \u0027办公地点-市\u0027,\n    `office_district`  varchar(32)           DEFAULT \u0027\u0027 COMMENT \u0027办公地点-区/县\u0027,\n    `office_street`    varchar(128)          DEFAULT \u0027\u0027 COMMENT \u0027办公地点-街道\u0027,\n    `office_address`   varchar(256)          DEFAULT \u0027\u0027 COMMENT \u0027办公室详细地址\u0027,\n    `office_pos_x`     double(50, 6)         DEFAULT \u00270.000000\u0027 COMMENT \u0027办公室X坐标\u0027,\n    `office_pos_y`     double(50, 6)         DEFAULT \u00270.000000\u0027 COMMENT \u0027办公室Y坐标\u0027,\n    `workplaces`       json                  DEFAULT NULL COMMENT \u0027工作地点\u0027,\n    `category`         varchar(32)           DEFAULT \u0027\u0027 COMMENT \u0027分类\u0027,\n    `keywords`         json                  DEFAULT NULL COMMENT \u0027职位关键词\u0027,\n    `welfare`          json                  DEFAULT NULL COMMENT \u0027福利\u0027,\n    `skills`           json                  DEFAULT NULL COMMENT \u0027技能点\u0027,\n    `snippets`         json                  DEFAULT NULL COMMENT \u0027内容片段集\u0027,\n    `exams`            json                  DEFAULT NULL COMMENT \u0027试卷集\u0027,\n    `direct_interview` json                  DEFAULT NULL COMMENT \u0027直面\u0027,\n    `evaluators`       json                  DEFAULT NULL COMMENT \u0027面试评估人数组\u0027,\n    `ext`              json                  DEFAULT NULL COMMENT \u0027扩展字段\u0027,\n    `published_by`     bigint       NOT NULL COMMENT \u0027发布人\u0027,\n    `published_at`     timestamp(3) NULL     DEFAULT NULL COMMENT \u0027发布时间\u0027,\n    `platform`         int                   DEFAULT \u00271\u0027 COMMENT \u0027创建来源\u0027,\n    `source`           int                   DEFAULT \u00271\u0027 COMMENT \u0027来源渠道\u0027,\n    `synced_channels`  json                  DEFAULT NULL COMMENT \u0027同步的其他渠道\u0027,\n    `opened`           int                   DEFAULT \u00270\u0027 COMMENT \u0027面试间开启状态（0：关闭，1：已开启）\u0027,\n    `opened_at`        timestamp(3) NULL     DEFAULT NULL COMMENT \u0027面试间开启时间\u0027,\n    `refer_id`         bigint                DEFAULT \u00270\u0027 COMMENT \u0027引用最新快照id\u0027,\n    `org_id`           bigint                DEFAULT \u00270\u0027,\n    `company_id`       bigint                DEFAULT \u00270\u0027,\n    `created_by`       bigint       NOT NULL DEFAULT \u00270\u0027,\n    `created_at`       timestamp(3) NULL     DEFAULT CURRENT_TIMESTAMP(3),\n    `modified_by`      bigint       NOT NULL DEFAULT \u00270\u0027,\n    `modified_at`      timestamp(3) NULL     DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),\n    `mask`             tinyint               DEFAULT \u00270\u0027,\n    `test`             tinyint               DEFAULT \u00270\u0027,\n    `vsn`              bigint                DEFAULT \u00270\u0027,\n    `op_id`            bigint                DEFAULT \u00270\u0027 COMMENT \u0027附身id\u0027,\n    PRIMARY KEY (`id`),\n    KEY `idx_code` (`code`)\n) ENGINE \u003d InnoDB\n  DEFAULT CHARSET \u003d utf8mb4\n  COLLATE \u003d utf8mb4_0900_ai_ci COMMENT \u003d\u0027职位\u0027;",
+      "name": "job",
+      "models": [
+        {
+          "dbFieldName": "id",
+          "modelFieldName": "Id",
+          "dbDataType": "bigint",
+          "modelDataType": "int64",
+          "nullable": false,
+          "defaultValue": "",
+          "enumerable": false,
+          "remark": ""
+        },
+        {
+          "dbFieldName": "code",
+          "modelFieldName": "Code",
+          "dbDataType": "varchar",
+          "modelDataType": "ttypes.NilableString",
+          "nullable": true,
+          "defaultValue": "NULL",
+          "enumerable": false,
+          "remark": "职位编码"
+        },
+        {
+          "dbFieldName": "title",
+          "modelFieldName": "Title",
+          "dbDataType": "varchar",
+          "modelDataType": "string",
+          "nullable": false,
+          "defaultValue": "",
+          "enumerable": false,
+          "remark": "职位标题"
+        },
+        {
+          "dbFieldName": "description",
+          "modelFieldName": "Description",
+          "dbDataType": "text",
+          "modelDataType": "string",
+          "nullable": false,
+          "defaultValue": "",
+          "enumerable": false,
+          "remark": "职位描述"
+        },
+        {
+          "dbFieldName": "status",
+          "modelFieldName": "Status",
+          "dbDataType": "varchar",
+          "modelDataType": "string",
+          "nullable": false,
+          "defaultValue": "",
+          "enumerable": false,
+          "remark": "职位状态"
+        },
+        {
+          "dbFieldName": "job_type",
+          "modelFieldName": "JobType",
+          "dbDataType": "varchar",
+          "modelDataType": "ttypes.NilableString",
+          "nullable": true,
+          "defaultValue": "",
+          "enumerable": false,
+          "remark": "工作性质"
+        },
+        {
+          "dbFieldName": "recruitment_type",
+          "modelFieldName": "RecruitmentType",
+          "dbDataType": "varchar",
+          "modelDataType": "ttypes.NilableString",
+          "nullable": true,
+          "defaultValue": "",
+          "enumerable": false,
+          "remark": "招聘类型"
+        },
+        {
+          "dbFieldName": "salary_type",
+          "modelFieldName": "SalaryType",
+          "dbDataType": "varchar",
+          "modelDataType": "ttypes.NilableString",
+          "nullable": true,
+          "defaultValue": "",
+          "enumerable": false,
+          "remark": "薪水类型"
+        },
+        {
+          "dbFieldName": "salary_from",
+          "modelFieldName": "SalaryFrom",
+          "dbDataType": "varchar",
+          "modelDataType": "ttypes.NilableString",
+          "nullable": true,
+          "defaultValue": "",
+          "enumerable": false,
+          "remark": "最低薪水"
+        },
+        {
+          "dbFieldName": "salary_to",
+          "modelFieldName": "SalaryTo",
+          "dbDataType": "varchar",
+          "modelDataType": "ttypes.NilableString",
+          "nullable": true,
+          "defaultValue": "",
+          "enumerable": false,
+          "remark": "最高薪水"
+        },
+        {
+          "dbFieldName": "salary_times",
+          "modelFieldName": "SalaryTimes",
+          "dbDataType": "int",
+          "modelDataType": "int32",
+          "nullable": true,
+          "defaultValue": "12",
+          "enumerable": false,
+          "remark": "薪水数"
+        },
+        {
+          "dbFieldName": "headcount",
+          "modelFieldName": "Headcount",
+          "dbDataType": "int",
+          "modelDataType": "int32",
+          "nullable": true,
+          "defaultValue": "1",
+          "enumerable": false,
+          "remark": "招聘人数"
+        },
+        {
+          "dbFieldName": "experience_from",
+          "modelFieldName": "ExperienceFrom",
+          "dbDataType": "varchar",
+          "modelDataType": "ttypes.NilableString",
+          "nullable": true,
+          "defaultValue": "",
+          "enumerable": false,
+          "remark": "最低工作年限"
+        },
+        {
+          "dbFieldName": "experience_to",
+          "modelFieldName": "ExperienceTo",
+          "dbDataType": "varchar",
+          "modelDataType": "ttypes.NilableString",
+          "nullable": true,
+          "defaultValue": "",
+          "enumerable": false,
+          "remark": "最高工作年限"
+        },
+        {
+          "dbFieldName": "education_from",
+          "modelFieldName": "EducationFrom",
+          "dbDataType": "varchar",
+          "modelDataType": "ttypes.NilableString",
+          "nullable": true,
+          "defaultValue": "",
+          "enumerable": false,
+          "remark": "最低学历"
+        },
+        {
+          "dbFieldName": "education_to",
+          "modelFieldName": "EducationTo",
+          "dbDataType": "varchar",
+          "modelDataType": "ttypes.NilableString",
+          "nullable": true,
+          "defaultValue": "",
+          "enumerable": false,
+          "remark": "最高学历"
+        },
+        {
+          "dbFieldName": "office_province",
+          "modelFieldName": "OfficeProvince",
+          "dbDataType": "varchar",
+          "modelDataType": "ttypes.NilableString",
+          "nullable": true,
+          "defaultValue": "",
+          "enumerable": false,
+          "remark": "办公地点-省"
+        },
+        {
+          "dbFieldName": "office_city",
+          "modelFieldName": "OfficeCity",
+          "dbDataType": "varchar",
+          "modelDataType": "ttypes.NilableString",
+          "nullable": true,
+          "defaultValue": "",
+          "enumerable": false,
+          "remark": "办公地点-市"
+        },
+        {
+          "dbFieldName": "office_district",
+          "modelFieldName": "OfficeDistrict",
+          "dbDataType": "varchar",
+          "modelDataType": "ttypes.NilableString",
+          "nullable": true,
+          "defaultValue": "",
+          "enumerable": false,
+          "remark": "办公地点-区/县"
+        },
+        {
+          "dbFieldName": "office_street",
+          "modelFieldName": "OfficeStreet",
+          "dbDataType": "varchar",
+          "modelDataType": "ttypes.NilableString",
+          "nullable": true,
+          "defaultValue": "",
+          "enumerable": false,
+          "remark": "办公地点-街道"
+        },
+        {
+          "dbFieldName": "office_address",
+          "modelFieldName": "OfficeAddress",
+          "dbDataType": "varchar",
+          "modelDataType": "ttypes.NilableString",
+          "nullable": true,
+          "defaultValue": "",
+          "enumerable": false,
+          "remark": "办公室详细地址"
+        },
+        {
+          "dbFieldName": "office_pos_x",
+          "modelFieldName": "OfficePosX",
+          "dbDataType": "double",
+          "modelDataType": "float64",
+          "nullable": true,
+          "defaultValue": "0.000000",
+          "enumerable": false,
+          "remark": "办公室X坐标"
+        },
+        {
+          "dbFieldName": "office_pos_y",
+          "modelFieldName": "OfficePosY",
+          "dbDataType": "double",
+          "modelDataType": "float64",
+          "nullable": true,
+          "defaultValue": "0.000000",
+          "enumerable": false,
+          "remark": "办公室Y坐标"
+        },
+        {
+          "dbFieldName": "workplaces",
+          "modelFieldName": "Workplaces",
+          "dbDataType": "json",
+          "modelDataType": "ttypes.NilableString",
+          "nullable": true,
+          "defaultValue": "NULL",
+          "enumerable": false,
+          "remark": "工作地点"
+        },
+        {
+          "dbFieldName": "category",
+          "modelFieldName": "Category",
+          "dbDataType": "varchar",
+          "modelDataType": "ttypes.NilableString",
+          "nullable": true,
+          "defaultValue": "",
+          "enumerable": false,
+          "remark": "分类"
+        },
+        {
+          "dbFieldName": "keywords",
+          "modelFieldName": "Keywords",
+          "dbDataType": "json",
+          "modelDataType": "ttypes.NilableString",
+          "nullable": true,
+          "defaultValue": "NULL",
+          "enumerable": false,
+          "remark": "职位关键词"
+        },
+        {
+          "dbFieldName": "welfare",
+          "modelFieldName": "Welfare",
+          "dbDataType": "json",
+          "modelDataType": "ttypes.NilableString",
+          "nullable": true,
+          "defaultValue": "NULL",
+          "enumerable": false,
+          "remark": "福利"
+        },
+        {
+          "dbFieldName": "skills",
+          "modelFieldName": "Skills",
+          "dbDataType": "json",
+          "modelDataType": "ttypes.NilableString",
+          "nullable": true,
+          "defaultValue": "NULL",
+          "enumerable": false,
+          "remark": "技能点"
+        },
+        {
+          "dbFieldName": "snippets",
+          "modelFieldName": "Snippets",
+          "dbDataType": "json",
+          "modelDataType": "ttypes.NilableString",
+          "nullable": true,
+          "defaultValue": "NULL",
+          "enumerable": false,
+          "remark": "内容片段集"
+        },
+        {
+          "dbFieldName": "exams",
+          "modelFieldName": "Exams",
+          "dbDataType": "json",
+          "modelDataType": "ttypes.NilableString",
+          "nullable": true,
+          "defaultValue": "NULL",
+          "enumerable": false,
+          "remark": "试卷集"
+        },
+        {
+          "dbFieldName": "direct_interview",
+          "modelFieldName": "DirectInterview",
+          "dbDataType": "json",
+          "modelDataType": "ttypes.NilableString",
+          "nullable": true,
+          "defaultValue": "NULL",
+          "enumerable": false,
+          "remark": "直面"
+        },
+        {
+          "dbFieldName": "evaluators",
+          "modelFieldName": "Evaluators",
+          "dbDataType": "json",
+          "modelDataType": "ttypes.NilableString",
+          "nullable": true,
+          "defaultValue": "NULL",
+          "enumerable": false,
+          "remark": "面试评估人数组"
+        },
+        {
+          "dbFieldName": "ext",
+          "modelFieldName": "Ext",
+          "dbDataType": "json",
+          "modelDataType": "ttypes.NilableString",
+          "nullable": true,
+          "defaultValue": "NULL",
+          "enumerable": false,
+          "remark": "扩展字段"
+        },
+        {
+          "dbFieldName": "published_by",
+          "modelFieldName": "PublishedBy",
+          "dbDataType": "bigint",
+          "modelDataType": "int64",
+          "nullable": false,
+          "defaultValue": "",
+          "enumerable": false,
+          "remark": "发布人"
+        },
+        {
+          "dbFieldName": "published_at",
+          "modelFieldName": "PublishedAt",
+          "dbDataType": "timestamp",
+          "modelDataType": "ttypes.NilableDatetime",
+          "nullable": true,
+          "defaultValue": "NULL",
+          "enumerable": false,
+          "remark": "发布时间"
+        },
+        {
+          "dbFieldName": "platform",
+          "modelFieldName": "Platform",
+          "dbDataType": "int",
+          "modelDataType": "int32",
+          "nullable": true,
+          "defaultValue": "1",
+          "enumerable": false,
+          "remark": "创建来源"
+        },
+        {
+          "dbFieldName": "source",
+          "modelFieldName": "Source",
+          "dbDataType": "int",
+          "modelDataType": "int32",
+          "nullable": true,
+          "defaultValue": "1",
+          "enumerable": false,
+          "remark": "来源渠道"
+        },
+        {
+          "dbFieldName": "synced_channels",
+          "modelFieldName": "SyncedChannels",
+          "dbDataType": "json",
+          "modelDataType": "ttypes.NilableString",
+          "nullable": true,
+          "defaultValue": "NULL",
+          "enumerable": false,
+          "remark": "同步的其他渠道"
+        },
+        {
+          "dbFieldName": "opened",
+          "modelFieldName": "Opened",
+          "dbDataType": "int",
+          "modelDataType": "int32",
+          "nullable": true,
+          "defaultValue": "0",
+          "enumerable": true,
+          "remark": "面试间开启状态（0：关闭，1：已开启）"
+        },
+        {
+          "dbFieldName": "opened_at",
+          "modelFieldName": "OpenedAt",
+          "dbDataType": "timestamp",
+          "modelDataType": "ttypes.NilableDatetime",
+          "nullable": true,
+          "defaultValue": "NULL",
+          "enumerable": false,
+          "remark": "面试间开启时间"
+        },
+        {
+          "dbFieldName": "refer_id",
+          "modelFieldName": "ReferId",
+          "dbDataType": "bigint",
+          "modelDataType": "int64",
+          "nullable": true,
+          "defaultValue": "0",
+          "enumerable": false,
+          "remark": "引用最新快照id"
+        },
+        {
+          "dbFieldName": "org_id",
+          "modelFieldName": "OrgId",
+          "dbDataType": "bigint",
+          "modelDataType": "int64",
+          "nullable": true,
+          "defaultValue": "0",
+          "enumerable": false,
+          "remark": ""
+        },
+        {
+          "dbFieldName": "company_id",
+          "modelFieldName": "CompanyId",
+          "dbDataType": "bigint",
+          "modelDataType": "int64",
+          "nullable": true,
+          "defaultValue": "0",
+          "enumerable": false,
+          "remark": ""
+        },
+        {
+          "dbFieldName": "created_by",
+          "modelFieldName": "CreatedBy",
+          "dbDataType": "bigint",
+          "modelDataType": "int64",
+          "nullable": false,
+          "defaultValue": "0",
+          "enumerable": false,
+          "remark": ""
+        },
+        {
+          "dbFieldName": "created_at",
+          "modelFieldName": "CreatedAt",
+          "dbDataType": "timestamp",
+          "modelDataType": "ttypes.NilableDatetime",
+          "nullable": true,
+          "defaultValue": "CURRENT_TIMESTAMP",
+          "enumerable": false,
+          "remark": ""
+        },
+        {
+          "dbFieldName": "modified_by",
+          "modelFieldName": "ModifiedBy",
+          "dbDataType": "bigint",
+          "modelDataType": "int64",
+          "nullable": false,
+          "defaultValue": "0",
+          "enumerable": false,
+          "remark": ""
+        },
+        {
+          "dbFieldName": "modified_at",
+          "modelFieldName": "ModifiedAt",
+          "dbDataType": "timestamp",
+          "modelDataType": "ttypes.NilableDatetime",
+          "nullable": true,
+          "defaultValue": "CURRENT_TIMESTAMP",
+          "enumerable": false,
+          "remark": ""
+        },
+        {
+          "dbFieldName": "mask",
+          "modelFieldName": "Mask",
+          "dbDataType": "tinyint",
+          "modelDataType": "int8",
+          "nullable": true,
+          "defaultValue": "0",
+          "enumerable": false,
+          "remark": ""
+        },
+        {
+          "dbFieldName": "test",
+          "modelFieldName": "Test",
+          "dbDataType": "tinyint",
+          "modelDataType": "int8",
+          "nullable": true,
+          "defaultValue": "0",
+          "enumerable": false,
+          "remark": ""
+        },
+        {
+          "dbFieldName": "vsn",
+          "modelFieldName": "Vsn",
+          "dbDataType": "bigint",
+          "modelDataType": "int64",
+          "nullable": true,
+          "defaultValue": "0",
+          "enumerable": false,
+          "remark": ""
+        },
+        {
+          "dbFieldName": "op_id",
+          "modelFieldName": "OpId",
+          "dbDataType": "bigint",
+          "modelDataType": "int64",
+          "nullable": true,
+          "defaultValue": "0",
+          "enumerable": false,
+          "remark": "附身id"
+        }
+      ]
+    }
+  ],
+  "enums": [
+    {
+      "name": "JobOpened",
+      "models": [
+        {
+          "code": "JobOpened_0",
+          "value": "0",
+          "name": "关闭"
+        },
+        {
+          "code": "JobOpened_1",
+          "value": "1",
+          "name": "已开启"
+        }
+      ],
+      "dataType": "int32"
+    }
+  ],
+  "requests": [
+    {
+      "name": "CreateJobReq",
+      "models": [
+        {
+          "fieldName": "Code",
+          "dataType": "ttypes.NilableString",
+          "nullable": true,
+          "remark": "职位编码"
+        },
+        {
+          "fieldName": "Title",
+          "dataType": "string",
+          "remark": "职位标题"
+        },
+        {
+          "fieldName": "Description",
+          "dataType": "string",
+          "remark": "职位描述"
+        },
+        {
+          "fieldName": "JobType",
+          "dataType": "ttypes.NilableString",
+          "nullable": true,
+          "remark": "工作性质"
+        },
+        {
+          "fieldName": "RecruitmentType",
+          "dataType": "ttypes.NilableString",
+          "nullable": true,
+          "remark": "招聘类型"
+        },
+        {
+          "fieldName": "SalaryType",
+          "dataType": "ttypes.NilableString",
+          "nullable": true,
+          "remark": "薪水类型"
+        },
+        {
+          "fieldName": "SalaryFrom",
+          "dataType": "ttypes.NilableString",
+          "nullable": true,
+          "remark": "最低薪水"
+        },
+        {
+          "fieldName": "SalaryTo",
+          "dataType": "ttypes.NilableString",
+          "nullable": true,
+          "remark": "最高薪水"
+        },
+        {
+          "fieldName": "SalaryTimes",
+          "dataType": "int32",
+          "nullable": true,
+          "remark": "薪水数"
+        },
+        {
+          "fieldName": "Headcount",
+          "dataType": "int32",
+          "nullable": true,
+          "remark": "招聘人数"
+        },
+        {
+          "fieldName": "ExperienceFrom",
+          "dataType": "ttypes.NilableString",
+          "nullable": true,
+          "remark": "最低工作年限"
+        },
+        {
+          "fieldName": "ExperienceTo",
+          "dataType": "ttypes.NilableString",
+          "nullable": true,
+          "remark": "最高工作年限"
+        },
+        {
+          "fieldName": "EducationFrom",
+          "dataType": "ttypes.NilableString",
+          "nullable": true,
+          "remark": "最低学历"
+        },
+        {
+          "fieldName": "EducationTo",
+          "dataType": "ttypes.NilableString",
+          "nullable": true,
+          "remark": "最高学历"
+        },
+        {
+          "fieldName": "OfficeProvince",
+          "dataType": "ttypes.NilableString",
+          "nullable": true,
+          "remark": "办公地点-省"
+        },
+        {
+          "fieldName": "OfficeCity",
+          "dataType": "ttypes.NilableString",
+          "nullable": true,
+          "remark": "办公地点-市"
+        },
+        {
+          "fieldName": "OfficeDistrict",
+          "dataType": "ttypes.NilableString",
+          "nullable": true,
+          "remark": "办公地点-区/县"
+        },
+        {
+          "fieldName": "OfficeStreet",
+          "dataType": "ttypes.NilableString",
+          "nullable": true,
+          "remark": "办公地点-街道"
+        },
+        {
+          "fieldName": "OfficeAddress",
+          "dataType": "ttypes.NilableString",
+          "nullable": true,
+          "remark": "办公室详细地址"
+        },
+        {
+          "fieldName": "OfficePosX",
+          "dataType": "float64",
+          "nullable": true,
+          "remark": "办公室X坐标"
+        },
+        {
+          "fieldName": "OfficePosY",
+          "dataType": "float64",
+          "nullable": true,
+          "remark": "办公室Y坐标"
+        },
+        {
+          "fieldName": "Workplaces",
+          "dataType": "ttypes.NilableString",
+          "nullable": true,
+          "remark": "工作地点"
+        },
+        {
+          "fieldName": "Category",
+          "dataType": "ttypes.NilableString",
+          "nullable": true,
+          "remark": "分类"
+        },
+        {
+          "fieldName": "Keywords",
+          "dataType": "ttypes.NilableString",
+          "nullable": true,
+          "remark": "职位关键词"
+        },
+        {
+          "fieldName": "Welfare",
+          "dataType": "ttypes.NilableString",
+          "nullable": true,
+          "remark": "福利"
+        },
+        {
+          "fieldName": "Skills",
+          "dataType": "ttypes.NilableString",
+          "nullable": true,
+          "remark": "技能点"
+        },
+        {
+          "fieldName": "Snippets",
+          "dataType": "ttypes.NilableString",
+          "nullable": true,
+          "remark": "内容片段集"
+        },
+        {
+          "fieldName": "Exams",
+          "dataType": "ttypes.NilableString",
+          "nullable": true,
+          "remark": "试卷集"
+        },
+        {
+          "fieldName": "DirectInterview",
+          "dataType": "ttypes.NilableString",
+          "nullable": true,
+          "remark": "直面"
+        },
+        {
+          "fieldName": "Evaluators",
+          "dataType": "ttypes.NilableString",
+          "nullable": true,
+          "remark": "面试评估人数组"
+        },
+        {
+          "fieldName": "Ext",
+          "dataType": "ttypes.NilableString",
+          "nullable": true,
+          "remark": "扩展字段"
+        },
+        {
+          "fieldName": "PublishedBy",
+          "dataType": "int64",
+          "remark": "发布人"
+        },
+        {
+          "fieldName": "PublishedAt",
+          "dataType": "ttypes.NilableDatetime",
+          "nullable": true,
+          "remark": "发布时间"
+        },
+        {
+          "fieldName": "Platform",
+          "dataType": "int32",
+          "nullable": true,
+          "remark": "创建来源"
+        },
+        {
+          "fieldName": "Source",
+          "dataType": "int32",
+          "nullable": true,
+          "remark": "来源渠道"
+        },
+        {
+          "fieldName": "SyncedChannels",
+          "dataType": "ttypes.NilableString",
+          "nullable": true,
+          "remark": "同步的其他渠道"
+        },
+        {
+          "fieldName": "Opened",
+          "dataType": "int32",
+          "nullable": true,
+          "enumModel": "JobOpened",
+          "remark": "面试间开启状态（0：关闭，1：已开启）"
+        },
+        {
+          "fieldName": "OpenedAt",
+          "dataType": "ttypes.NilableDatetime",
+          "nullable": true,
+          "remark": "面试间开启时间"
+        },
+        {
+          "fieldName": "ReferId",
+          "dataType": "int64",
+          "nullable": true,
+          "remark": "引用最新快照id"
+        },
+        {
+          "fieldName": "OrgId",
+          "dataType": "int64",
+          "nullable": true
+        },
+        {
+          "fieldName": "CompanyId",
+          "dataType": "int64",
+          "nullable": true
+        }
+      ],
+      "extendName": ""
+    },
+    {
+      "name": "ModifyJobReq",
+      "models": [
+        {
+          "fieldName": "Id",
+          "dataType": "int64"
+        },
+        {
+          "fieldName": "Code",
+          "dataType": "ttypes.NilableString",
+          "nullable": true,
+          "remark": "职位编码"
+        },
+        {
+          "fieldName": "Title",
+          "dataType": "string",
+          "remark": "职位标题"
+        },
+        {
+          "fieldName": "Description",
+          "dataType": "string",
+          "remark": "职位描述"
+        },
+        {
+          "fieldName": "JobType",
+          "dataType": "ttypes.NilableString",
+          "nullable": true,
+          "remark": "工作性质"
+        },
+        {
+          "fieldName": "RecruitmentType",
+          "dataType": "ttypes.NilableString",
+          "nullable": true,
+          "remark": "招聘类型"
+        },
+        {
+          "fieldName": "SalaryType",
+          "dataType": "ttypes.NilableString",
+          "nullable": true,
+          "remark": "薪水类型"
+        },
+        {
+          "fieldName": "SalaryFrom",
+          "dataType": "ttypes.NilableString",
+          "nullable": true,
+          "remark": "最低薪水"
+        },
+        {
+          "fieldName": "SalaryTo",
+          "dataType": "ttypes.NilableString",
+          "nullable": true,
+          "remark": "最高薪水"
+        },
+        {
+          "fieldName": "SalaryTimes",
+          "dataType": "int32",
+          "nullable": true,
+          "remark": "薪水数"
+        },
+        {
+          "fieldName": "Headcount",
+          "dataType": "int32",
+          "nullable": true,
+          "remark": "招聘人数"
+        },
+        {
+          "fieldName": "ExperienceFrom",
+          "dataType": "ttypes.NilableString",
+          "nullable": true,
+          "remark": "最低工作年限"
+        },
+        {
+          "fieldName": "ExperienceTo",
+          "dataType": "ttypes.NilableString",
+          "nullable": true,
+          "remark": "最高工作年限"
+        },
+        {
+          "fieldName": "EducationFrom",
+          "dataType": "ttypes.NilableString",
+          "nullable": true,
+          "remark": "最低学历"
+        },
+        {
+          "fieldName": "EducationTo",
+          "dataType": "ttypes.NilableString",
+          "nullable": true,
+          "remark": "最高学历"
+        },
+        {
+          "fieldName": "OfficeProvince",
+          "dataType": "ttypes.NilableString",
+          "nullable": true,
+          "remark": "办公地点-省"
+        },
+        {
+          "fieldName": "OfficeCity",
+          "dataType": "ttypes.NilableString",
+          "nullable": true,
+          "remark": "办公地点-市"
+        },
+        {
+          "fieldName": "OfficeDistrict",
+          "dataType": "ttypes.NilableString",
+          "nullable": true,
+          "remark": "办公地点-区/县"
+        },
+        {
+          "fieldName": "OfficeStreet",
+          "dataType": "ttypes.NilableString",
+          "nullable": true,
+          "remark": "办公地点-街道"
+        },
+        {
+          "fieldName": "OfficeAddress",
+          "dataType": "ttypes.NilableString",
+          "nullable": true,
+          "remark": "办公室详细地址"
+        },
+        {
+          "fieldName": "OfficePosX",
+          "dataType": "float64",
+          "nullable": true,
+          "remark": "办公室X坐标"
+        },
+        {
+          "fieldName": "OfficePosY",
+          "dataType": "float64",
+          "nullable": true,
+          "remark": "办公室Y坐标"
+        },
+        {
+          "fieldName": "Workplaces",
+          "dataType": "ttypes.NilableString",
+          "nullable": true,
+          "remark": "工作地点"
+        },
+        {
+          "fieldName": "Category",
+          "dataType": "ttypes.NilableString",
+          "nullable": true,
+          "remark": "分类"
+        },
+        {
+          "fieldName": "Keywords",
+          "dataType": "ttypes.NilableString",
+          "nullable": true,
+          "remark": "职位关键词"
+        },
+        {
+          "fieldName": "Welfare",
+          "dataType": "ttypes.NilableString",
+          "nullable": true,
+          "remark": "福利"
+        },
+        {
+          "fieldName": "Skills",
+          "dataType": "ttypes.NilableString",
+          "nullable": true,
+          "remark": "技能点"
+        },
+        {
+          "fieldName": "Snippets",
+          "dataType": "ttypes.NilableString",
+          "nullable": true,
+          "remark": "内容片段集"
+        },
+        {
+          "fieldName": "Exams",
+          "dataType": "ttypes.NilableString",
+          "nullable": true,
+          "remark": "试卷集"
+        },
+        {
+          "fieldName": "DirectInterview",
+          "dataType": "ttypes.NilableString",
+          "nullable": true,
+          "remark": "直面"
+        },
+        {
+          "fieldName": "Evaluators",
+          "dataType": "ttypes.NilableString",
+          "nullable": true,
+          "remark": "面试评估人数组"
+        },
+        {
+          "fieldName": "Ext",
+          "dataType": "ttypes.NilableString",
+          "nullable": true,
+          "remark": "扩展字段"
+        },
+        {
+          "fieldName": "PublishedBy",
+          "dataType": "int64",
+          "remark": "发布人"
+        },
+        {
+          "fieldName": "PublishedAt",
+          "dataType": "ttypes.NilableDatetime",
+          "nullable": true,
+          "remark": "发布时间"
+        },
+        {
+          "fieldName": "Platform",
+          "dataType": "int32",
+          "nullable": true,
+          "remark": "创建来源"
+        },
+        {
+          "fieldName": "Source",
+          "dataType": "int32",
+          "nullable": true,
+          "remark": "来源渠道"
+        },
+        {
+          "fieldName": "SyncedChannels",
+          "dataType": "ttypes.NilableString",
+          "nullable": true,
+          "remark": "同步的其他渠道"
+        },
+        {
+          "fieldName": "Opened",
+          "dataType": "int32",
+          "nullable": true,
+          "enumModel": "JobOpened",
+          "remark": "面试间开启状态（0：关闭，1：已开启）"
+        },
+        {
+          "fieldName": "OpenedAt",
+          "dataType": "ttypes.NilableDatetime",
+          "nullable": true,
+          "remark": "面试间开启时间"
+        },
+        {
+          "fieldName": "ReferId",
+          "dataType": "int64",
+          "nullable": true,
+          "remark": "引用最新快照id"
+        },
+        {
+          "fieldName": "OrgId",
+          "dataType": "int64",
+          "nullable": true
+        },
+        {
+          "fieldName": "CompanyId",
+          "dataType": "int64",
+          "nullable": true
+        }
+      ],
+      "extendName": ""
+    },
+    {
+      "name": "QueryJobReq",
+      "models": [
+        {
+          "fieldName": "Id",
+          "dataType": "int64"
+        },
+        {
+          "fieldName": "Code",
+          "dataType": "ttypes.NilableString",
+          "remark": "职位编码"
+        },
+        {
+          "fieldName": "Title",
+          "dataType": "string",
+          "remark": "职位标题"
+        },
+        {
+          "fieldName": "Description",
+          "dataType": "string",
+          "remark": "职位描述"
+        },
+        {
+          "fieldName": "Status",
+          "dataType": "string",
+          "remark": "职位状态"
+        },
+        {
+          "fieldName": "JobType",
+          "dataType": "ttypes.NilableString",
+          "remark": "工作性质"
+        },
+        {
+          "fieldName": "RecruitmentType",
+          "dataType": "ttypes.NilableString",
+          "remark": "招聘类型"
+        },
+        {
+          "fieldName": "SalaryType",
+          "dataType": "ttypes.NilableString",
+          "remark": "薪水类型"
+        },
+        {
+          "fieldName": "SalaryFrom",
+          "dataType": "ttypes.NilableString",
+          "remark": "最低薪水"
+        },
+        {
+          "fieldName": "SalaryTo",
+          "dataType": "ttypes.NilableString",
+          "remark": "最高薪水"
+        },
+        {
+          "fieldName": "SalaryTimes",
+          "dataType": "int32",
+          "remark": "薪水数"
+        },
+        {
+          "fieldName": "Headcount",
+          "dataType": "int32",
+          "remark": "招聘人数"
+        },
+        {
+          "fieldName": "ExperienceFrom",
+          "dataType": "ttypes.NilableString",
+          "remark": "最低工作年限"
+        },
+        {
+          "fieldName": "ExperienceTo",
+          "dataType": "ttypes.NilableString",
+          "remark": "最高工作年限"
+        },
+        {
+          "fieldName": "EducationFrom",
+          "dataType": "ttypes.NilableString",
+          "remark": "最低学历"
+        },
+        {
+          "fieldName": "EducationTo",
+          "dataType": "ttypes.NilableString",
+          "remark": "最高学历"
+        },
+        {
+          "fieldName": "OfficeProvince",
+          "dataType": "ttypes.NilableString",
+          "remark": "办公地点-省"
+        },
+        {
+          "fieldName": "OfficeCity",
+          "dataType": "ttypes.NilableString",
+          "remark": "办公地点-市"
+        },
+        {
+          "fieldName": "OfficeDistrict",
+          "dataType": "ttypes.NilableString",
+          "remark": "办公地点-区/县"
+        },
+        {
+          "fieldName": "OfficeStreet",
+          "dataType": "ttypes.NilableString",
+          "remark": "办公地点-街道"
+        },
+        {
+          "fieldName": "OfficeAddress",
+          "dataType": "ttypes.NilableString",
+          "remark": "办公室详细地址"
+        },
+        {
+          "fieldName": "OfficePosX",
+          "dataType": "float64",
+          "remark": "办公室X坐标"
+        },
+        {
+          "fieldName": "OfficePosY",
+          "dataType": "float64",
+          "remark": "办公室Y坐标"
+        },
+        {
+          "fieldName": "Workplaces",
+          "dataType": "ttypes.NilableString",
+          "remark": "工作地点"
+        },
+        {
+          "fieldName": "Category",
+          "dataType": "ttypes.NilableString",
+          "remark": "分类"
+        },
+        {
+          "fieldName": "Keywords",
+          "dataType": "ttypes.NilableString",
+          "remark": "职位关键词"
+        },
+        {
+          "fieldName": "Welfare",
+          "dataType": "ttypes.NilableString",
+          "remark": "福利"
+        },
+        {
+          "fieldName": "Skills",
+          "dataType": "ttypes.NilableString",
+          "remark": "技能点"
+        },
+        {
+          "fieldName": "Snippets",
+          "dataType": "ttypes.NilableString",
+          "remark": "内容片段集"
+        },
+        {
+          "fieldName": "Exams",
+          "dataType": "ttypes.NilableString",
+          "remark": "试卷集"
+        },
+        {
+          "fieldName": "DirectInterview",
+          "dataType": "ttypes.NilableString",
+          "remark": "直面"
+        },
+        {
+          "fieldName": "Evaluators",
+          "dataType": "ttypes.NilableString",
+          "remark": "面试评估人数组"
+        },
+        {
+          "fieldName": "Ext",
+          "dataType": "ttypes.NilableString",
+          "remark": "扩展字段"
+        },
+        {
+          "fieldName": "PublishedBy",
+          "dataType": "int64",
+          "remark": "发布人"
+        },
+        {
+          "fieldName": "PublishedAt",
+          "dataType": "ttypes.NilableDatetime",
+          "remark": "发布时间"
+        },
+        {
+          "fieldName": "Platform",
+          "dataType": "int32",
+          "remark": "创建来源"
+        },
+        {
+          "fieldName": "Source",
+          "dataType": "int32",
+          "remark": "来源渠道"
+        },
+        {
+          "fieldName": "SyncedChannels",
+          "dataType": "ttypes.NilableString",
+          "remark": "同步的其他渠道"
+        },
+        {
+          "fieldName": "Opened",
+          "dataType": "int32",
+          "remark": "面试间开启状态（0：关闭，1：已开启）"
+        },
+        {
+          "fieldName": "OpenedAt",
+          "dataType": "ttypes.NilableDatetime",
+          "remark": "面试间开启时间"
+        },
+        {
+          "fieldName": "ReferId",
+          "dataType": "int64",
+          "remark": "引用最新快照id"
+        },
+        {
+          "fieldName": "OrgId",
+          "dataType": "int64"
+        },
+        {
+          "fieldName": "CompanyId",
+          "dataType": "int64"
+        }
+      ],
+      "extendName": ""
+    }
+  ],
+  "responses": [
+    {
+      "name": "JobListResp",
+      "models": [
+        {
+          "fieldName": "Id",
+          "dataType": "int64"
+        },
+        {
+          "fieldName": "Code",
+          "dataType": "ttypes.NilableString",
+          "remark": "职位编码"
+        },
+        {
+          "fieldName": "Title",
+          "dataType": "string",
+          "remark": "职位标题"
+        },
+        {
+          "fieldName": "Description",
+          "dataType": "string",
+          "remark": "职位描述"
+        },
+        {
+          "fieldName": "Status",
+          "dataType": "string",
+          "remark": "职位状态"
+        },
+        {
+          "fieldName": "JobType",
+          "dataType": "ttypes.NilableString",
+          "remark": "工作性质"
+        },
+        {
+          "fieldName": "RecruitmentType",
+          "dataType": "ttypes.NilableString",
+          "remark": "招聘类型"
+        },
+        {
+          "fieldName": "SalaryType",
+          "dataType": "ttypes.NilableString",
+          "remark": "薪水类型"
+        },
+        {
+          "fieldName": "SalaryFrom",
+          "dataType": "ttypes.NilableString",
+          "remark": "最低薪水"
+        },
+        {
+          "fieldName": "SalaryTo",
+          "dataType": "ttypes.NilableString",
+          "remark": "最高薪水"
+        },
+        {
+          "fieldName": "SalaryTimes",
+          "dataType": "int32",
+          "remark": "薪水数"
+        },
+        {
+          "fieldName": "Headcount",
+          "dataType": "int32",
+          "remark": "招聘人数"
+        },
+        {
+          "fieldName": "ExperienceFrom",
+          "dataType": "ttypes.NilableString",
+          "remark": "最低工作年限"
+        },
+        {
+          "fieldName": "ExperienceTo",
+          "dataType": "ttypes.NilableString",
+          "remark": "最高工作年限"
+        },
+        {
+          "fieldName": "EducationFrom",
+          "dataType": "ttypes.NilableString",
+          "remark": "最低学历"
+        },
+        {
+          "fieldName": "EducationTo",
+          "dataType": "ttypes.NilableString",
+          "remark": "最高学历"
+        },
+        {
+          "fieldName": "OfficeProvince",
+          "dataType": "ttypes.NilableString",
+          "remark": "办公地点-省"
+        },
+        {
+          "fieldName": "OfficeCity",
+          "dataType": "ttypes.NilableString",
+          "remark": "办公地点-市"
+        },
+        {
+          "fieldName": "OfficeDistrict",
+          "dataType": "ttypes.NilableString",
+          "remark": "办公地点-区/县"
+        },
+        {
+          "fieldName": "OfficeStreet",
+          "dataType": "ttypes.NilableString",
+          "remark": "办公地点-街道"
+        },
+        {
+          "fieldName": "OfficeAddress",
+          "dataType": "ttypes.NilableString",
+          "remark": "办公室详细地址"
+        },
+        {
+          "fieldName": "OfficePosX",
+          "dataType": "float64",
+          "remark": "办公室X坐标"
+        },
+        {
+          "fieldName": "OfficePosY",
+          "dataType": "float64",
+          "remark": "办公室Y坐标"
+        },
+        {
+          "fieldName": "Workplaces",
+          "dataType": "ttypes.NilableString",
+          "remark": "工作地点"
+        },
+        {
+          "fieldName": "Category",
+          "dataType": "ttypes.NilableString",
+          "remark": "分类"
+        },
+        {
+          "fieldName": "Keywords",
+          "dataType": "ttypes.NilableString",
+          "remark": "职位关键词"
+        },
+        {
+          "fieldName": "Welfare",
+          "dataType": "ttypes.NilableString",
+          "remark": "福利"
+        },
+        {
+          "fieldName": "Skills",
+          "dataType": "ttypes.NilableString",
+          "remark": "技能点"
+        },
+        {
+          "fieldName": "Snippets",
+          "dataType": "ttypes.NilableString",
+          "remark": "内容片段集"
+        },
+        {
+          "fieldName": "Exams",
+          "dataType": "ttypes.NilableString",
+          "remark": "试卷集"
+        },
+        {
+          "fieldName": "DirectInterview",
+          "dataType": "ttypes.NilableString",
+          "remark": "直面"
+        },
+        {
+          "fieldName": "Evaluators",
+          "dataType": "ttypes.NilableString",
+          "remark": "面试评估人数组"
+        },
+        {
+          "fieldName": "Ext",
+          "dataType": "ttypes.NilableString",
+          "remark": "扩展字段"
+        },
+        {
+          "fieldName": "PublishedBy",
+          "dataType": "int64",
+          "remark": "发布人"
+        },
+        {
+          "fieldName": "PublishedAt",
+          "dataType": "ttypes.NilableDatetime",
+          "remark": "发布时间"
+        },
+        {
+          "fieldName": "Platform",
+          "dataType": "int32",
+          "remark": "创建来源"
+        },
+        {
+          "fieldName": "Source",
+          "dataType": "int32",
+          "remark": "来源渠道"
+        },
+        {
+          "fieldName": "SyncedChannels",
+          "dataType": "ttypes.NilableString",
+          "remark": "同步的其他渠道"
+        },
+        {
+          "fieldName": "Opened",
+          "dataType": "int32",
+          "remark": "面试间开启状态（0：关闭，1：已开启）"
+        },
+        {
+          "fieldName": "OpenedName",
+          "dataType": "string",
+          "remark": "面试间开启状态名称"
+        },
+        {
+          "fieldName": "OpenedAt",
+          "dataType": "ttypes.NilableDatetime",
+          "remark": "面试间开启时间"
+        },
+        {
+          "fieldName": "ReferId",
+          "dataType": "int64",
+          "remark": "引用最新快照id"
+        },
+        {
+          "fieldName": "OrgId",
+          "dataType": "int64"
+        },
+        {
+          "fieldName": "CompanyId",
+          "dataType": "int64"
+        }
+      ],
+      "extendName": ""
+    },
+    {
+      "name": "JobDetailResp",
+      "models": [
+        {
+          "fieldName": "Id",
+          "dataType": "int64"
+        },
+        {
+          "fieldName": "Code",
+          "dataType": "ttypes.NilableString",
+          "remark": "职位编码"
+        },
+        {
+          "fieldName": "Title",
+          "dataType": "string",
+          "remark": "职位标题"
+        },
+        {
+          "fieldName": "Description",
+          "dataType": "string",
+          "remark": "职位描述"
+        },
+        {
+          "fieldName": "Status",
+          "dataType": "string",
+          "remark": "职位状态"
+        },
+        {
+          "fieldName": "JobType",
+          "dataType": "ttypes.NilableString",
+          "remark": "工作性质"
+        },
+        {
+          "fieldName": "RecruitmentType",
+          "dataType": "ttypes.NilableString",
+          "remark": "招聘类型"
+        },
+        {
+          "fieldName": "SalaryType",
+          "dataType": "ttypes.NilableString",
+          "remark": "薪水类型"
+        },
+        {
+          "fieldName": "SalaryFrom",
+          "dataType": "ttypes.NilableString",
+          "remark": "最低薪水"
+        },
+        {
+          "fieldName": "SalaryTo",
+          "dataType": "ttypes.NilableString",
+          "remark": "最高薪水"
+        },
+        {
+          "fieldName": "SalaryTimes",
+          "dataType": "int32",
+          "remark": "薪水数"
+        },
+        {
+          "fieldName": "Headcount",
+          "dataType": "int32",
+          "remark": "招聘人数"
+        },
+        {
+          "fieldName": "ExperienceFrom",
+          "dataType": "ttypes.NilableString",
+          "remark": "最低工作年限"
+        },
+        {
+          "fieldName": "ExperienceTo",
+          "dataType": "ttypes.NilableString",
+          "remark": "最高工作年限"
+        },
+        {
+          "fieldName": "EducationFrom",
+          "dataType": "ttypes.NilableString",
+          "remark": "最低学历"
+        },
+        {
+          "fieldName": "EducationTo",
+          "dataType": "ttypes.NilableString",
+          "remark": "最高学历"
+        },
+        {
+          "fieldName": "OfficeProvince",
+          "dataType": "ttypes.NilableString",
+          "remark": "办公地点-省"
+        },
+        {
+          "fieldName": "OfficeCity",
+          "dataType": "ttypes.NilableString",
+          "remark": "办公地点-市"
+        },
+        {
+          "fieldName": "OfficeDistrict",
+          "dataType": "ttypes.NilableString",
+          "remark": "办公地点-区/县"
+        },
+        {
+          "fieldName": "OfficeStreet",
+          "dataType": "ttypes.NilableString",
+          "remark": "办公地点-街道"
+        },
+        {
+          "fieldName": "OfficeAddress",
+          "dataType": "ttypes.NilableString",
+          "remark": "办公室详细地址"
+        },
+        {
+          "fieldName": "OfficePosX",
+          "dataType": "float64",
+          "remark": "办公室X坐标"
+        },
+        {
+          "fieldName": "OfficePosY",
+          "dataType": "float64",
+          "remark": "办公室Y坐标"
+        },
+        {
+          "fieldName": "Workplaces",
+          "dataType": "ttypes.NilableString",
+          "remark": "工作地点"
+        },
+        {
+          "fieldName": "Category",
+          "dataType": "ttypes.NilableString",
+          "remark": "分类"
+        },
+        {
+          "fieldName": "Keywords",
+          "dataType": "ttypes.NilableString",
+          "remark": "职位关键词"
+        },
+        {
+          "fieldName": "Welfare",
+          "dataType": "ttypes.NilableString",
+          "remark": "福利"
+        },
+        {
+          "fieldName": "Skills",
+          "dataType": "ttypes.NilableString",
+          "remark": "技能点"
+        },
+        {
+          "fieldName": "Snippets",
+          "dataType": "ttypes.NilableString",
+          "remark": "内容片段集"
+        },
+        {
+          "fieldName": "Exams",
+          "dataType": "ttypes.NilableString",
+          "remark": "试卷集"
+        },
+        {
+          "fieldName": "DirectInterview",
+          "dataType": "ttypes.NilableString",
+          "remark": "直面"
+        },
+        {
+          "fieldName": "Evaluators",
+          "dataType": "ttypes.NilableString",
+          "remark": "面试评估人数组"
+        },
+        {
+          "fieldName": "Ext",
+          "dataType": "ttypes.NilableString",
+          "remark": "扩展字段"
+        },
+        {
+          "fieldName": "PublishedBy",
+          "dataType": "int64",
+          "remark": "发布人"
+        },
+        {
+          "fieldName": "PublishedAt",
+          "dataType": "ttypes.NilableDatetime",
+          "remark": "发布时间"
+        },
+        {
+          "fieldName": "Platform",
+          "dataType": "int32",
+          "remark": "创建来源"
+        },
+        {
+          "fieldName": "Source",
+          "dataType": "int32",
+          "remark": "来源渠道"
+        },
+        {
+          "fieldName": "SyncedChannels",
+          "dataType": "ttypes.NilableString",
+          "remark": "同步的其他渠道"
+        },
+        {
+          "fieldName": "Opened",
+          "dataType": "int32",
+          "remark": "面试间开启状态（0：关闭，1：已开启）"
+        },
+        {
+          "fieldName": "OpenedName",
+          "dataType": "string",
+          "remark": "面试间开启状态名称"
+        },
+        {
+          "fieldName": "OpenedAt",
+          "dataType": "ttypes.NilableDatetime",
+          "remark": "面试间开启时间"
+        },
+        {
+          "fieldName": "ReferId",
+          "dataType": "int64",
+          "remark": "引用最新快照id"
+        },
+        {
+          "fieldName": "OrgId",
+          "dataType": "int64"
+        },
+        {
+          "fieldName": "CompanyId",
+          "dataType": "int64"
+        }
+      ],
+      "extendName": ""
+    }
+  ],
+  "interfaces": [
+    {
+      "group": "Job",
+      "routePrefix": "/api/job/v1",
+      "models": [
+        {
+          "interfaceType": "新建",
+          "relativePath": "/create",
+          "requestModelName": "CreateJobReq",
+          "responseModelName": "int64",
+          "allowRoles": [],
+          "allowProducts": [],
+          "logLevel": "全部",
+          "remark": "职位 - 新建"
+        },
+        {
+          "interfaceType": "修改",
+          "relativePath": "/modify",
+          "requestModelName": "ModifyJobReq",
+          "allowRoles": [],
+          "allowProducts": [],
+          "logLevel": "全部",
+          "remark": "职位 - 修改"
+        },
+        {
+          "interfaceType": "删除",
+          "relativePath": "/delete",
+          "requestModelName": "Id",
+          "allowRoles": [],
+          "allowProducts": [],
+          "logLevel": "全部",
+          "remark": "职位 - 删除"
+        },
+        {
+          "interfaceType": "分页",
+          "relativePath": "/page",
+          "requestModelName": "QueryJobReq",
+          "responseModelName": "JobListResp",
+          "allowRoles": [],
+          "allowProducts": [],
+          "logLevel": "请求参数",
+          "remark": "职位 - 分页"
+        },
+        {
+          "interfaceType": "列表",
+          "relativePath": "/list",
+          "requestModelName": "QueryJobReq",
+          "responseModelName": "JobListResp",
+          "allowRoles": [],
+          "allowProducts": [],
+          "logLevel": "请求参数",
+          "remark": "职位 - 列表"
+        },
+        {
+          "interfaceType": "详情",
+          "relativePath": "/detail",
+          "requestModelName": "Id",
+          "responseModelName": "JobDetailResp",
+          "allowRoles": [],
+          "allowProducts": [],
+          "logLevel": "请求参数",
+          "remark": "职位 - 详情"
+        }
+      ]
+    }
+  ],
+  "export": {
+    "serverOutput": "./output",
+    "clientOutput": "",
+    "packagePrefix": "",
+    "apifoxOutput": ""
+  }
+}

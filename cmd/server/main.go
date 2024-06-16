@@ -14,6 +14,7 @@ import (
 	_ "github.com/shopspring/decimal"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 )
 
@@ -22,7 +23,7 @@ var (
 )
 
 func init() {
-	flag.StringVar(&inputFile, "i", "", "the code generation design file")
+	flag.StringVar(&inputFile, "i", "./scripts/test.cui", "the code generation design file")
 }
 
 func main() {
@@ -119,7 +120,9 @@ func main() {
 		entireModel.Interfaces = []*internal.InterfaceModelData{}
 	}
 
-	internal.ServerGenerator.Generate(entireModel)
+	filenameWithExt := filepath.Base(inputFile)
+	filename := strings.TrimSuffix(filenameWithExt, filepath.Ext(inputFile))
+	internal.ServerParser.Parse(entireModel, filename)
 
 	outputPath := entireModel.Export.ServerOutput
 	if outputPath == "./" {

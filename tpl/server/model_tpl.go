@@ -1,4 +1,4 @@
-package _default
+package _server
 
 import "strings"
 
@@ -23,9 +23,9 @@ type {{.Name}} struct {
 type {{.Name}} struct {
 	{{range .Models}}
 	{{.FieldName}} {{if .IsArray}}[]{{end}}{{if .IsPointer}}*{{end}}{{.DataType}} ###json:"{{.LowerCamelName}}" {{if .IsMediaUrl}}appendUid:"true"{{end}} remark:"{{.Remark}}"###
-	{{if ne .EnumModel ""}}{{.FieldName}}Name string ###json:"{{.LowerCamelName}}Name" title="EnumTitle" remark:"{{.EnumRemark}}"###{{end}}
+	{{if ne .EnumModel ""}}{{.FieldName}}Name string ###json:"{{.LowerCamelName}}Name" title:"{{.EnumTitle}}" remark:"{{.EnumRemark}}"###{{end}}
 	{{end}}
-	{{if ne .ExtendName ""}}{{.ExtendName}}{{end}}
+	{{if ne .ExtendName ""}}*{{.ExtendName}}{{end}}
 }
 `
 
