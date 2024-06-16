@@ -12,21 +12,20 @@ import (
 
 {{range .Requests}}
 type {{.Name}} struct {
-	{{range .Models}}
-	{{.FieldName}} {{if .IsArray}}[]{{end}}{{if .IsPointer}}*{{end}}{{.DataType}} ###json:"{{.LowerCamelName}}" form:"{{.LowerCamelName}}" binding:"{{.VerifyRules}} remark:"{{.Remark}}"###
+	{{range .Models}}{{.FieldName}} {{if .IsArray}}[]{{end}}{{if .IsPointer}}*{{end}}{{.DataType}} ###json:"{{.LowerCamelName}}" form:"{{.LowerCamelName}}"{{if ne .VerifyRules ""}} binding:"{{.VerifyRules}}"{{end}} remark:"{{.Remark}}"###
 	{{end}}
-	{{if ne .ExtendName ""}}{{.ExtendName}}{{end}}
-	{{if .IsPage}}*page.PageParam{{end}}
+	{{if ne .ExtendName ""}}{{.ExtendName}}{{- end -}}
+	{{if .IsPage}}*page.PageParam{{- end -}}
 }
+{{end}}
 
 {{range .Responses}}
 type {{.Name}} struct {
-	{{range .Models}}
-	{{.FieldName}} {{if .IsArray}}[]{{end}}{{if .IsPointer}}*{{end}}{{.DataType}} ###json:"{{.LowerCamelName}}" {{if .IsMediaUrl}}appendUid:"true"{{end}} remark:"{{.Remark}}"###
-	{{if ne .EnumModel ""}}{{.FieldName}}Name string ###json:"{{.LowerCamelName}}Name" title:"{{.EnumTitle}}" remark:"{{.EnumRemark}}"###{{end}}
+	{{range .Models}}{{.FieldName}} {{if .IsArray}}[]{{end}}{{if .IsPointer}}*{{end}}{{.DataType}} ###json:"{{.LowerCamelName}}"{{if .IsMediaUrl}} appendUid:"true"{{end}} {{if ne .EnumRemark ""}}title:"{{.EnumTitle}}" remark:"{{.EnumRemark}}"{{else}}remark:"{{.Remark}}"{{end}}###
 	{{end}}
-	{{if ne .ExtendName ""}}*{{.ExtendName}}{{end}}
+	{{if ne .ExtendName ""}}*{{.ExtendName}}{{- end -}}
 }
+{{end}}
 `
 
 func init() {

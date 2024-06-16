@@ -2,9 +2,11 @@ package main
 
 import (
 	"dgen/internal"
+	"dgen/pkg"
 	"flag"
 	"fmt"
 	_ "github.com/darwinOrg/daog-ext"
+	dgcoll "github.com/darwinOrg/go-common/collection"
 	"github.com/darwinOrg/go-common/utils"
 	_ "github.com/darwinOrg/go-logger"
 	_ "github.com/darwinOrg/go-web/wrapper"
@@ -19,7 +21,21 @@ import (
 )
 
 var (
-	inputFile string
+	inputFile  string
+	productMap = map[string]int{
+		"RPA机器人":  10,
+		"AI智能面试":  11,
+		"金牌面试官":   12,
+		"需求沟通助手":  13,
+		"候选人沟通助手": 14,
+		"人才库":     15,
+	}
+	logLevelMap = map[string]string{
+		"全部":   "wrapper.LOG_LEVEL_ALL",
+		"请求参数": "wrapper.LOG_LEVEL_PARAM",
+		"返回响应": "wrapper.LOG_LEVEL_RETURN",
+		"无":    "wrapper.LOG_LEVEL_NONE",
+	}
 )
 
 func init() {
@@ -63,6 +79,10 @@ func main() {
 				} else if model.DataType == "decimal.Decimal" {
 					entireModel.HasDecimal = true
 				}
+
+				if model.DataType == "Id" {
+					entireModel.HasId = true
+				}
 			}
 		}
 	}
@@ -72,12 +92,12 @@ func main() {
 			for _, model := range response.Models {
 				model.LowerCamelName = strcase.ToLowerCamel(model.FieldName)
 
-				if model.EnumModel != "" {
-					columnComment := model.Remark
-					columnComment = strings.ReplaceAll(columnComment, "（", "(")
-					columnComment = strings.ReplaceAll(columnComment, "）", ")")
-					columnComment = strings.ReplaceAll(columnComment, "，", ",")
-					columnComment = strings.ReplaceAll(columnComment, "：", ":")
+				columnComment := model.Remark
+				columnComment = strings.ReplaceAll(columnComment, "（", "(")
+				columnComment = strings.ReplaceAll(columnComment, "）", ")")
+				columnComment = strings.ReplaceAll(columnComment, "，", ",")
+				columnComment = strings.ReplaceAll(columnComment, "：", ":")
+				if model.EnumModel != "" && pkg.HasEnum(columnComment) {
 					model.EnumTitle = columnComment[:strings.Index(columnComment, "(")]
 					model.EnumRemark = columnComment[strings.Index(columnComment, "(")+1 : len(columnComment)-1]
 				}
@@ -94,15 +114,41 @@ func main() {
 	if len(entireModel.Interfaces) > 0 {
 		for _, inter := range entireModel.Interfaces {
 			for _, model := range inter.Models {
-				if model.InterfaceType == "分页" && model.ResponseModelName != "" {
+				if model.InterfaceType == "分页" && model.RequestModelName != "" {
 					for _, request := range entireModel.Requests {
-						if request.Name == model.ResponseModelName {
+						if request.Name == model.RequestModelName {
 							request.IsPage = true
 							entireModel.HasPage = true
 							break
 						}
 					}
 				}
+
+				if model.ResponseModelName != "Id" {
+					entireModel.HasId = true
+				}
+
+				if model.ResponseModelName != "" {
+					for _, response := range entireModel.Responses {
+						if model.ResponseModelName == response.Name {
+							model.ResponseModelHasPointer = true
+							break
+						}
+					}
+				}
+
+				if len(model.AllowProducts) > 0 {
+					products := dgcoll.MapToList(model.AllowProducts, func(name string) int {
+						return productMap[name]
+					})
+					model.AllowProductsExp = "int[]{" + dgcoll.JoinIntsByComma(products) + "}"
+				}
+
+				if model.LogLevel != "" {
+					model.LogLevelExp = logLevelMap[model.LogLevel]
+				}
+
+				model.MethodNameExp = strcase.ToCamel(model.MethodName)
 			}
 		}
 	}
@@ -120,8 +166,11 @@ func main() {
 		entireModel.Interfaces = []*internal.InterfaceModelData{}
 	}
 
+	entireModel.HasModel = len(entireModel.Requests) > 0 || len(entireModel.Responses) > 0
+
 	filenameWithExt := filepath.Base(inputFile)
 	filename := strings.TrimSuffix(filenameWithExt, filepath.Ext(inputFile))
+	entireModel.UpperCamelName = strcase.ToCamel(filename)
 	internal.ServerParser.Parse(entireModel, filename)
 
 	outputPath := entireModel.Export.ServerOutput

@@ -8,9 +8,12 @@ type EntireModel struct {
 	Interfaces []*InterfaceModelData `json:"interfaces,omitempty"`
 	Export     *ExportConfigData     `json:"export,omitempty"`
 
-	HasDaogType bool `json:"hasDaogType,omitempty"`
-	HasDecimal  bool `json:"hasDecimal,omitempty"`
-	HasPage     bool `json:"hasPage,omitempty"`
+	HasDaogType    bool   `json:"hasDaogType,omitempty"`
+	HasDecimal     bool   `json:"hasDecimal,omitempty"`
+	HasPage        bool   `json:"hasPage,omitempty"`
+	HasId          bool   `json:"hasId,omitempty"`
+	HasModel       bool   `json:"hasModel,omitempty"`
+	UpperCamelName string `json:"upperCamelName,omitempty"`
 }
 
 type DbModel struct {
@@ -87,6 +90,7 @@ type ResponseModelData struct {
 type InterfaceModel struct {
 	InterfaceType     string   `json:"interfaceType,omitempty"`
 	RelativePath      string   `json:"relativePath,omitempty"`
+	MethodName        string   `json:"methodName,omitempty"`
 	RequestModelName  string   `json:"requestModelName,omitempty"`
 	ResponseModelName string   `json:"responseModelName,omitempty"`
 	NonLogin          bool     `json:"nonLogin,omitempty"`
@@ -95,6 +99,11 @@ type InterfaceModel struct {
 	LogLevel          string   `json:"logLevel,omitempty"`
 	NotLogSQL         bool     `json:"notLogSQL,omitempty"`
 	Remark            string   `json:"remark,omitempty"`
+
+	ResponseModelHasPointer bool   `json:"responseModelHasPointer,omitempty"`
+	AllowProductsExp        string `json:"allowProductsExp,omitempty"`
+	LogLevelExp             string `json:"logLevelExp,omitempty"`
+	MethodNameExp           string `json:"methodNameExp,omitempty"`
 }
 
 type InterfaceModelData struct {
