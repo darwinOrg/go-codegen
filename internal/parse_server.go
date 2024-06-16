@@ -19,6 +19,11 @@ func (p *serverParser) Parse(entireModel *EntireModel, mark string) error {
 		return err
 	}
 
+	err = p.parseHandler(entireModel, mark)
+	if err != nil {
+		return err
+	}
+
 	err = p.parseRouter(entireModel, mark)
 	if err != nil {
 		return err
@@ -33,6 +38,19 @@ func (g *serverParser) parseModel(entireModel *EntireModel, mark string) error {
 
 	model := filepath.Join(modelDir, strcase.ToSnake(mark)+"_model.go")
 	err := parseFile(model, "model", _server.ModelTpl, entireModel)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (g *serverParser) parseHandler(entireModel *EntireModel, mark string) error {
+	modelDir := filepath.Join(entireModel.Export.ServerOutput, "handler")
+	_ = os.MkdirAll(modelDir, fs.ModeDir|fs.ModePerm)
+
+	handler := filepath.Join(modelDir, strcase.ToSnake(mark)+"_handler.go")
+	err := parseFile(handler, "handler", _server.HandlerExtTpl, entireModel)
 	if err != nil {
 		return err
 	}

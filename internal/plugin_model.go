@@ -100,6 +100,8 @@ type InterfaceModel struct {
 	NotLogSQL         bool     `json:"notLogSQL,omitempty"`
 	Remark            string   `json:"remark,omitempty"`
 
+	RequestModelNameExp     string `json:"requestModelNameExp,omitempty"`
+	ResponseModelNameExp    string `json:"responseModelNameExp,omitempty"`
 	ResponseModelHasPointer bool   `json:"responseModelHasPointer,omitempty"`
 	AllowProductsExp        string `json:"allowProductsExp,omitempty"`
 	LogLevelExp             string `json:"logLevelExp,omitempty"`
@@ -110,6 +112,9 @@ type InterfaceModelData struct {
 	Group       string            `json:"group,omitempty"`
 	RoutePrefix string            `json:"routePrefix,omitempty"`
 	Models      []*InterfaceModel `json:"models,omitempty"`
+
+	GroupUpperCamel string `json:"groupUpperCamel,omitempty"`
+	GroupLowerCamel string `json:"groupLowerCamel,omitempty"`
 }
 
 type ExportConfigData struct {

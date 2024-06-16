@@ -1717,8 +1717,12 @@
           "requestModelName": "CreateJobReq",
           "responseModelName": "int64",
           "allowRoles": [],
-          "allowProducts": [],
+          "allowProducts": [
+            "AI智能面试",
+            "金牌面试官"
+          ],
           "logLevel": "全部",
+          "nonLogin": true,
           "remark": "职位 - 新建"
         },
         {
@@ -1727,7 +1731,11 @@
           "methodName": "modify",
           "requestModelName": "ModifyJobReq",
           "allowRoles": [],
-          "allowProducts": [],
+          "allowProducts": [
+            "金牌面试官",
+            "需求沟通助手",
+            "候选人沟通助手"
+          ],
           "logLevel": "全部",
           "remark": "职位 - 修改"
         },
@@ -1737,7 +1745,10 @@
           "methodName": "delete",
           "requestModelName": "Id",
           "allowRoles": [],
-          "allowProducts": [],
+          "allowProducts": [
+            "AI智能面试",
+            "人才库"
+          ],
           "logLevel": "全部",
           "remark": "职位 - 删除"
         },
@@ -1748,7 +1759,10 @@
           "requestModelName": "QueryJobReq",
           "responseModelName": "JobListResp",
           "allowRoles": [],
-          "allowProducts": [],
+          "allowProducts": [
+            "需求沟通助手",
+            "候选人沟通助手"
+          ],
           "logLevel": "请求参数",
           "remark": "职位 - 分页"
         },
@@ -1759,7 +1773,9 @@
           "requestModelName": "QueryJobReq",
           "responseModelName": "JobListResp",
           "allowRoles": [],
-          "allowProducts": [],
+          "allowProducts": [
+            "RPA机器人"
+          ],
           "logLevel": "请求参数",
           "remark": "职位 - 列表"
         },
@@ -1770,7 +1786,10 @@
           "requestModelName": "Id",
           "responseModelName": "JobDetailResp",
           "allowRoles": [],
-          "allowProducts": [],
+          "allowProducts": [
+            "需求沟通助手",
+            "候选人沟通助手"
+          ],
           "logLevel": "请求参数",
           "remark": "职位 - 详情"
         }

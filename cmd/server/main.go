@@ -113,6 +113,9 @@ func main() {
 
 	if len(entireModel.Interfaces) > 0 {
 		for _, inter := range entireModel.Interfaces {
+			inter.GroupUpperCamel = strcase.ToCamel(inter.Group)
+			inter.GroupLowerCamel = strcase.ToLowerCamel(inter.Group)
+
 			for _, model := range inter.Models {
 				if model.InterfaceType == "分页" && model.RequestModelName != "" {
 					for _, request := range entireModel.Requests {
@@ -124,24 +127,37 @@ func main() {
 					}
 				}
 
-				if model.ResponseModelName != "Id" {
+				if model.RequestModelName == "Id" {
 					entireModel.HasId = true
+					model.RequestModelNameExp = "cm.IdReq"
+				} else if model.RequestModelName != "" {
+					model.RequestModelNameExp = "model." + model.RequestModelName
+				} else {
+					model.RequestModelNameExp = "result.Void"
 				}
 
 				if model.ResponseModelName != "" {
+					model.ResponseModelNameExp = model.ResponseModelName
 					for _, response := range entireModel.Responses {
 						if model.ResponseModelName == response.Name {
 							model.ResponseModelHasPointer = true
+							if model.InterfaceType == "分页" {
+								model.ResponseModelNameExp = "*page.PageList[model." + model.ResponseModelName + "]"
+							} else {
+								model.ResponseModelNameExp = "*model." + model.ResponseModelName
+							}
 							break
 						}
 					}
+				} else {
+					model.ResponseModelNameExp = "*result.Void"
 				}
 
 				if len(model.AllowProducts) > 0 {
 					products := dgcoll.MapToList(model.AllowProducts, func(name string) int {
 						return productMap[name]
 					})
-					model.AllowProductsExp = "int[]{" + dgcoll.JoinIntsByComma(products) + "}"
+					model.AllowProductsExp = "[]int{" + dgcoll.JoinIntsByComma(products) + "}"
 				}
 
 				if model.LogLevel != "" {
@@ -178,7 +194,7 @@ func main() {
 		outputPath, _ = os.Getwd()
 	}
 
-	dirs := []string{"model"}
+	dirs := []string{"model", "handler", "router"}
 	for _, dir := range dirs {
 		cmd := exec.Command("go", "fmt", outputPath+"/"+dir)
 		err = cmd.Run()
