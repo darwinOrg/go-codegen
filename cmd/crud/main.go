@@ -160,12 +160,11 @@ func main() {
 			RoutePrefix: "/api/" + meta.KebabName + "/v1",
 			Models: []*internal.InterfaceModel{
 				{
-					InterfaceType:     "新建",
-					RelativePath:      "/create",
-					RequestModelName:  "Create" + meta.GoTable + "Req",
-					ResponseModelName: "int64",
-					LogLevel:          "全部",
-					Remark:            meta.TableComment + " - 新建",
+					InterfaceType:    "新建",
+					RelativePath:     "/create",
+					RequestModelName: "Create" + meta.GoTable + "Req",
+					LogLevel:         "全部",
+					Remark:           meta.TableComment + " - 新建",
 				},
 				{
 					InterfaceType:    "修改",
