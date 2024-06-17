@@ -109,7 +109,8 @@
     "ttypes.NormalDate",
     "ttypes.NilableDate",
     "decimal.Decimal",
-    "[]byte"
+    "[]byte",
+    "any"
   ],
   "allowRoles": [
     "",
