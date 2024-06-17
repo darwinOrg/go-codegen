@@ -46,8 +46,11 @@ func main() {
 	flag.Parse()
 
 	if inputFile == "" {
-		fmt.Println("Please input code generation design file")
-		os.Exit(1)
+		if len(os.Args) < 2 {
+			fmt.Println("Please input code generation design file")
+			os.Exit(1)
+		}
+		inputFile = os.Args[1]
 	}
 	data, err := os.ReadFile(inputFile)
 	if err != nil {

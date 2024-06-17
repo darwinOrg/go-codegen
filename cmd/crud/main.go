@@ -28,7 +28,10 @@ func main() {
 	flag.Parse()
 
 	if inputFile == "" {
-		os.Exit(1)
+		if len(os.Args) < 2 {
+			os.Exit(1)
+		}
+		inputFile = os.Args[1]
 	}
 	data, err := os.ReadFile(inputFile)
 	if err != nil {
