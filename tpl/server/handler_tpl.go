@@ -16,18 +16,18 @@ type {{$inter.GroupLowerCamel}}Handler struct {
 }
 {{range .Models}}
 func (h *{{$inter.GroupLowerCamel}}Handler) {{.MethodNameExp}}(_ *gin.Context, ctx *dgctx.DgContext, req *{{.RequestModelNameExp}}) *result.Result[{{.ResponseModelNameExp}}] {
-	{{- if eq .ResponseModelNameExp "*result.Void"}}
-	err := service.{{$inter.Group}}Service.{{.MethodNameExp}}(ctx, req)
-	if err != nil {
-		return result.SimpleFailByError(err)
-	}
-	return result.SimpleSuccess()
-	{{- else}}
+	{{- if ne .ResponseModelName ""}}
 	resp, err := service.{{$inter.Group}}Service.{{.MethodNameExp}}(ctx, req)
 	if err != nil {
 		return result.SimpleFail[{{.ResponseModelNameExp}}](err.Error())
 	}
 	return result.Success[{{.ResponseModelNameExp}}](resp)
+	{{- else}}
+	err := service.{{$inter.Group}}Service.{{.MethodNameExp}}(ctx, req)
+	if err != nil {
+		return result.SimpleFailByError(err)
+	}
+	return result.SimpleSuccess()
 	{{end -}}
 }
 {{end}}

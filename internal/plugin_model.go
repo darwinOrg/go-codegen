@@ -11,6 +11,7 @@ type EntireModel struct {
 	HasDaogType    bool   `json:"hasDaogType,omitempty"`
 	HasDecimal     bool   `json:"hasDecimal,omitempty"`
 	HasPage        bool   `json:"hasPage,omitempty"`
+	HasQuery       bool   `json:"hasQuery,omitempty"`
 	HasId          bool   `json:"hasId,omitempty"`
 	HasModel       bool   `json:"hasModel,omitempty"`
 	UpperCamelName string `json:"upperCamelName,omitempty"`

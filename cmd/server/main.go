@@ -130,11 +130,15 @@ func main() {
 					}
 				}
 
+				if model.InterfaceType == "分页" || model.InterfaceType == "列表" {
+					entireModel.HasQuery = true
+				}
+
 				if model.RequestModelName == "Id" {
 					entireModel.HasId = true
 					model.RequestModelNameExp = "cm.IdReq"
 				} else if model.RequestModelName != "" {
-					model.RequestModelNameExp = "model." + model.RequestModelName
+					model.RequestModelNameExp = "model." + strcase.ToCamel(model.RequestModelName)
 				} else {
 					model.RequestModelNameExp = "result.Void"
 				}
@@ -197,7 +201,7 @@ func main() {
 		outputPath, _ = os.Getwd()
 	}
 
-	dirs := []string{"model", "handler", "router"}
+	dirs := []string{"model", "service", "handler", "router"}
 	for _, dir := range dirs {
 		cmd := exec.Command("go", "fmt", outputPath+"/"+dir)
 		err = cmd.Run()
