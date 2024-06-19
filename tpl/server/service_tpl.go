@@ -68,9 +68,7 @@ func (s *{{$inter.GroupLowerCamel}}Service) {{.MethodNameExp}}(ctx *dgctx.DgCont
 
 		detailModel := converter.{{.DbTableUpperCamel}}Converter.Entity2{{.ResponseModelName}}({{.DbTableLowerCamel}})
 		return detailModel, nil
-	})
-	{{end}}
+	}){{end}}
 }
-{{end}}
-{{end}}
+{{end}}{{end}}
 `
