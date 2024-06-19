@@ -172,6 +172,8 @@ func main() {
 				}
 
 				model.MethodNameExp = strcase.ToCamel(model.MethodName)
+				model.DbTableUpperCamel = strcase.ToCamel(model.DbModelName)
+				model.DbTableLowerCamel = strcase.ToLowerCamel(model.DbModelName)
 			}
 		}
 	}

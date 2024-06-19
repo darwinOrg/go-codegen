@@ -162,6 +162,7 @@ func main() {
 				{
 					InterfaceType:    "新建",
 					RelativePath:     "/create",
+					DbModelName:      meta.TableName,
 					RequestModelName: "Create" + meta.GoTable + "Req",
 					LogLevel:         "全部",
 					Remark:           meta.TableComment + " - 新建",
@@ -169,6 +170,7 @@ func main() {
 				{
 					InterfaceType:    "修改",
 					RelativePath:     "/modify",
+					DbModelName:      meta.TableName,
 					RequestModelName: "Modify" + meta.GoTable + "Req",
 					LogLevel:         "全部",
 					Remark:           meta.TableComment + " - 修改",
@@ -176,6 +178,7 @@ func main() {
 				{
 					InterfaceType:    "删除",
 					RelativePath:     "/delete",
+					DbModelName:      meta.TableName,
 					RequestModelName: "Id",
 					LogLevel:         "全部",
 					Remark:           meta.TableComment + " - 删除",
@@ -183,6 +186,7 @@ func main() {
 				{
 					InterfaceType:     "分页",
 					RelativePath:      "/page",
+					DbModelName:       meta.TableName,
 					RequestModelName:  "Query" + meta.GoTable + "Req",
 					ResponseModelName: meta.GoTable + "ListResp",
 					LogLevel:          "请求参数",
@@ -191,6 +195,7 @@ func main() {
 				{
 					InterfaceType:     "列表",
 					RelativePath:      "/list",
+					DbModelName:       meta.TableName,
 					RequestModelName:  "Query" + meta.GoTable + "Req",
 					ResponseModelName: meta.GoTable + "ListResp",
 					LogLevel:          "请求参数",
@@ -199,6 +204,7 @@ func main() {
 				{
 					InterfaceType:     "详情",
 					RelativePath:      "/detail",
+					DbModelName:       meta.TableName,
 					RequestModelName:  "Id",
 					ResponseModelName: meta.GoTable + "DetailResp",
 					LogLevel:          "请求参数",

@@ -92,6 +92,7 @@ type InterfaceModel struct {
 	InterfaceType     string   `json:"interfaceType,omitempty"`
 	RelativePath      string   `json:"relativePath,omitempty"`
 	MethodName        string   `json:"methodName,omitempty"`
+	DbModelName       string   `json:"dbModelName,omitempty"`
 	RequestModelName  string   `json:"requestModelName,omitempty"`
 	ResponseModelName string   `json:"responseModelName,omitempty"`
 	NonLogin          bool     `json:"nonLogin,omitempty"`
@@ -101,6 +102,8 @@ type InterfaceModel struct {
 	NotLogSQL         bool     `json:"notLogSQL,omitempty"`
 	Remark            string   `json:"remark,omitempty"`
 
+	DbTableUpperCamel       string `json:"dbTableUpperCamel,omitempty"`
+	DbTableLowerCamel       string `json:"dbTableLowerCamel,omitempty"`
 	RequestModelNameExp     string `json:"requestModelNameExp,omitempty"`
 	ResponseModelNameExp    string `json:"responseModelNameExp,omitempty"`
 	ResponseModelHasPointer bool   `json:"responseModelHasPointer,omitempty"`
@@ -112,6 +115,7 @@ type InterfaceModel struct {
 type InterfaceModelData struct {
 	Group       string            `json:"group,omitempty"`
 	RoutePrefix string            `json:"routePrefix,omitempty"`
+	DbTable     string            `json:"dbTable,omitempty"`
 	Models      []*InterfaceModel `json:"models,omitempty"`
 
 	GroupUpperCamel string `json:"groupUpperCamel,omitempty"`

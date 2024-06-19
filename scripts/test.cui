@@ -1714,6 +1714,7 @@
           "interfaceType": "新建",
           "relativePath": "/create",
           "methodName": "create",
+          "dbModelName": "job",
           "requestModelName": "CreateJobReq",
           "responseModelName": "int64",
           "allowRoles": [],
@@ -1722,13 +1723,13 @@
             "金牌面试官"
           ],
           "logLevel": "全部",
-          "nonLogin": true,
           "remark": "职位 - 新建"
         },
         {
           "interfaceType": "修改",
           "relativePath": "/modify",
           "methodName": "modify",
+          "dbModelName": "job",
           "requestModelName": "ModifyJobReq",
           "allowRoles": [],
           "allowProducts": [
@@ -1743,6 +1744,7 @@
           "interfaceType": "删除",
           "relativePath": "/delete",
           "methodName": "delete",
+          "dbModelName": "job",
           "requestModelName": "Id",
           "allowRoles": [],
           "allowProducts": [
@@ -1756,6 +1758,7 @@
           "interfaceType": "分页",
           "relativePath": "/page",
           "methodName": "page",
+          "dbModelName": "job",
           "requestModelName": "QueryJobReq",
           "responseModelName": "JobListResp",
           "allowRoles": [],
@@ -1770,6 +1773,7 @@
           "interfaceType": "列表",
           "relativePath": "/list",
           "methodName": "list",
+          "dbModelName": "job",
           "requestModelName": "QueryJobReq",
           "responseModelName": "JobListResp",
           "allowRoles": [],
@@ -1783,6 +1787,7 @@
           "interfaceType": "详情",
           "relativePath": "/detail",
           "methodName": "detail",
+          "dbModelName": "job",
           "requestModelName": "Id",
           "responseModelName": "JobDetailResp",
           "allowRoles": [],
