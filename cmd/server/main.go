@@ -125,6 +125,7 @@ func main() {
 						if request.Name == model.RequestModelName {
 							request.IsPage = true
 							entireModel.HasPage = true
+							inter.HasPage = true
 							break
 						}
 					}
@@ -132,10 +133,12 @@ func main() {
 
 				if model.InterfaceType == "分页" || model.InterfaceType == "列表" {
 					entireModel.HasQuery = true
+					inter.HasQuery = true
 				}
 
 				if model.RequestModelName == "Id" {
 					entireModel.HasId = true
+					inter.HasId = true
 					model.RequestModelNameExp = "cm.IdReq"
 				} else if model.RequestModelName != "" {
 					model.RequestModelNameExp = "model." + strcase.ToCamel(model.RequestModelName)
@@ -174,6 +177,9 @@ func main() {
 				model.MethodNameExp = strcase.ToCamel(model.MethodName)
 				model.DbTableUpperCamel = strcase.ToCamel(model.DbModelName)
 				model.DbTableLowerCamel = strcase.ToLowerCamel(model.DbModelName)
+
+				inter.HasModel = model.RequestModelName != "" || model.ResponseModelName != ""
+				inter.PackagePrefix = entireModel.Export.PackagePrefix
 			}
 		}
 	}
@@ -192,6 +198,7 @@ func main() {
 	}
 
 	entireModel.HasModel = len(entireModel.Requests) > 0 || len(entireModel.Responses) > 0
+	entireModel.PackagePrefix = entireModel.Export.PackagePrefix
 
 	filenameWithExt := filepath.Base(inputFile)
 	filename := strings.TrimSuffix(filenameWithExt, filepath.Ext(inputFile))

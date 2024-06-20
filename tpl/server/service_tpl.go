@@ -3,22 +3,22 @@ package _server
 var ServiceExtTpl = `package service
 
 import (
-	{{if .HasModel}}"{{.Export.PackagePrefix}}/model"{{end}}
+	"{{.PackagePrefix}}/dal"
+	{{if .HasModel}}"{{.PackagePrefix}}/converter"{{end}}
+	{{if .HasModel}}"{{.PackagePrefix}}/model"{{end}}
 	{{if .HasId}}cm "github.com/darwinOrg/go-common/model"{{end}}
 	{{if .HasPage}}"github.com/darwinOrg/go-common/page"{{end}}
 	{{if .HasQuery}}dgcoll "github.com/darwinOrg/go-common/collection"{{end}}
-	{{if .HasModel}}"{{.Export.PackagePrefix}}/converter"{{end}}
-	"{{.Export.PackagePrefix}}/dal"
 	daogext "github.com/darwinOrg/daog-ext"
 	dgctx "github.com/darwinOrg/go-common/context"
 	"github.com/rolandhe/daog"
 )
-{{range $index, $inter := .Interfaces}}
-var {{$inter.GroupUpperCamel}}Service = &{{$inter.GroupLowerCamel}}Service{}
-type {{$inter.GroupLowerCamel}}Service struct {
+
+var {{.GroupUpperCamel}}Service = &{{.GroupLowerCamel}}Service{}
+type {{.GroupLowerCamel}}Service struct {
 }
 {{range .Models}}
-func (s *{{$inter.GroupLowerCamel}}Service) {{.MethodNameExp}}(ctx *dgctx.DgContext, req *{{.RequestModelNameExp}}) {{if ne .ResponseModelName ""}}({{.ResponseModelNameExp}}, error){{else}}error{{end}} {
+func (s *{{$.GroupLowerCamel}}Service) {{.MethodNameExp}}(ctx *dgctx.DgContext, req *{{.RequestModelNameExp}}) {{if ne .ResponseModelName ""}}({{.ResponseModelNameExp}}, error){{else}}error{{end}} {
 	{{- if eq .InterfaceType "新建"}}
 	{{.DbTableLowerCamel}} := converter.{{.DbTableUpperCamel}}Converter.{{.RequestModelName}}2Entity(req)
 	
@@ -70,5 +70,5 @@ func (s *{{$inter.GroupLowerCamel}}Service) {{.MethodNameExp}}(ctx *dgctx.DgCont
 		return detailModel, nil
 	}){{end}}
 }
-{{end}}{{end}}
+{{end}}
 `

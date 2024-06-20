@@ -8,6 +8,7 @@ type EntireModel struct {
 	Interfaces []*InterfaceModelData `json:"interfaces,omitempty"`
 	Export     *ExportConfigData     `json:"export,omitempty"`
 
+	PackagePrefix  string `json:"packagePrefix,omitempty"`
 	HasDaogType    bool   `json:"hasDaogType,omitempty"`
 	HasDecimal     bool   `json:"hasDecimal,omitempty"`
 	HasPage        bool   `json:"hasPage,omitempty"`
@@ -118,8 +119,13 @@ type InterfaceModelData struct {
 	DbTable     string            `json:"dbTable,omitempty"`
 	Models      []*InterfaceModel `json:"models,omitempty"`
 
+	PackagePrefix   string `json:"packagePrefix,omitempty"`
 	GroupUpperCamel string `json:"groupUpperCamel,omitempty"`
 	GroupLowerCamel string `json:"groupLowerCamel,omitempty"`
+	HasPage         bool   `json:"hasPage,omitempty"`
+	HasQuery        bool   `json:"hasQuery,omitempty"`
+	HasId           bool   `json:"hasId,omitempty"`
+	HasModel        bool   `json:"hasModel,omitempty"`
 }
 
 type ExportConfigData struct {

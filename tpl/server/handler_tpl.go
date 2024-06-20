@@ -3,10 +3,10 @@ package _server
 var HandlerExtTpl = `package handler
 
 import (
-	{{if .HasModel}}"{{.Export.PackagePrefix}}/model"{{end}}
+	{{if .HasModel}}"{{.PackagePrefix}}/model"{{end}}
 	{{if .HasId}}cm "github.com/darwinOrg/go-common/model"{{end}}
 	{{if .HasPage}}"github.com/darwinOrg/go-common/page"{{end}}
-	"{{.Export.PackagePrefix}}/service"
+	"{{.PackagePrefix}}/service"
 	dgctx "github.com/darwinOrg/go-common/context"
 	"github.com/darwinOrg/go-common/result"
 	"github.com/gin-gonic/gin"

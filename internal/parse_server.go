@@ -67,10 +67,12 @@ func (g *serverParser) parseService(entireModel *EntireModel, mark string) error
 	modelDir := filepath.Join(entireModel.Export.ServerOutput, "service")
 	_ = os.MkdirAll(modelDir, fs.ModeDir|fs.ModePerm)
 
-	service := filepath.Join(modelDir, strcase.ToSnake(mark)+"_service.go")
-	err := parseFile(service, "service", _server.ServiceExtTpl, entireModel)
-	if err != nil {
-		return err
+	for _, inter := range entireModel.Interfaces {
+		service := filepath.Join(modelDir, strcase.ToSnake(inter.Group)+"_service.go")
+		err := parseFile(service, "service", _server.ServiceExtTpl, inter)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
