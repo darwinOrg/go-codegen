@@ -45,6 +45,8 @@ type EnumModelData struct {
 	Name     string       `json:"name,omitempty"`
 	Models   []*EnumModel `json:"models,omitempty"`
 	DataType string       `json:"dataType,omitempty"`
+
+	UpperCamelName string `json:"upperCamelName,omitempty"`
 }
 
 type RequestModel struct {

@@ -64,6 +64,12 @@ func main() {
 		os.Exit(1)
 	}
 
+	if len(entireModel.Enums) > 0 {
+		for _, enum := range entireModel.Enums {
+			enum.UpperCamelName = strcase.ToCamel(enum.Name)
+		}
+	}
+
 	if len(entireModel.Requests) > 0 {
 		for _, request := range entireModel.Requests {
 			for _, model := range request.Models {
@@ -210,7 +216,7 @@ func main() {
 		outputPath, _ = os.Getwd()
 	}
 
-	dirs := []string{"model", "service", "handler", "router"}
+	dirs := []string{"enum", "model", "service", "handler", "router"}
 	for _, dir := range dirs {
 		cmd := exec.Command("go", "fmt", outputPath+"/"+dir)
 		err = cmd.Run()
