@@ -1,9 +1,10 @@
 package _default
 
+import "strings"
+
 var DalExtTpl = `package dal
 
 import (
-	"{{.PackagePrefix}}/model"
 	dgctx "github.com/darwinOrg/go-common/context"
 	dgerr "github.com/darwinOrg/go-common/enums/error"
 	"github.com/darwinOrg/go-common/page"
@@ -16,6 +17,13 @@ import (
 var {{.GoTable}}ExtDao = &{{.LowerCamelName}}ExtDao{}
 
 type {{.LowerCamelName}}ExtDao struct {
+}
+
+type Query{{.GoTable}}Param struct {
+    {{range .QueryColumns}}{{.GoName}} {{.DbType}} ###json:"{{.LowerCamelName}}"
+	{{- if ne .Comment ""}} remark:"{{.Comment}}"{{end}}###
+	{{end}}
+	*page.PageParam
 }
 
 func (d *{{.LowerCamelName}}ExtDao) MustGetById(ctx *dgctx.DgContext, tc *daog.TransContext, id int64) (*{{.GoTable}}, error) {
@@ -33,18 +41,10 @@ func (d *{{.LowerCamelName}}ExtDao) MustGetById(ctx *dgctx.DgContext, tc *daog.T
 
 func (d *{{.LowerCamelName}}ExtDao) Create(ctx *dgctx.DgContext, tc *daog.TransContext, {{.LowerCamelName}} *{{.GoTable}}) (int64, error) {
 	{{range .Columns}}
-		{{if eq .GoName "CreatedAt"}}
-		{{$.LowerCamelName}}.CreatedAt = ttypes.NormalDatetime(time.Now())
-		{{end}}
-		{{if eq .GoName "CreatedBy"}}
-		{{$.LowerCamelName}}.CreatedBy = ctx.UserId
-		{{end}}
-		{{if eq .GoName "ModifiedAt"}}
-		{{$.LowerCamelName}}.ModifiedAt = ttypes.NormalDatetime(time.Now())
-		{{end}}
-		{{if eq .GoName "ModifiedBy"}}
-		{{$.LowerCamelName}}.ModifiedBy = ctx.UserId
-		{{end}}
+		{{if eq .GoName "CreatedAt"}}{{$.LowerCamelName}}.CreatedAt = ttypes.NormalDatetime(time.Now()){{end -}}
+		{{if eq .GoName "CreatedBy"}}{{$.LowerCamelName}}.CreatedBy = ctx.UserId{{end -}}
+		{{if eq .GoName "ModifiedAt"}}{{$.LowerCamelName}}.ModifiedAt = ttypes.NormalDatetime(time.Now()){{end -}}
+		{{if eq .GoName "ModifiedBy"}}{{$.LowerCamelName}}.ModifiedBy = ctx.UserId{{end -}}
 	{{end}}
 
 	_, err := {{.GoTable}}Dao.Insert(tc, {{.LowerCamelName}})
@@ -58,12 +58,8 @@ func (d *{{.LowerCamelName}}ExtDao) Create(ctx *dgctx.DgContext, tc *daog.TransC
 
 func (d *{{.LowerCamelName}}ExtDao) Modify(ctx *dgctx.DgContext, tc *daog.TransContext, {{.LowerCamelName}} *{{.GoTable}}) error {
 	{{range .Columns}}
-		{{if eq .GoName "ModifiedAt"}}
-		{{$.LowerCamelName}}.ModifiedAt = ttypes.NormalDatetime(time.Now())
-		{{end}}
-		{{if eq .GoName "ModifiedBy"}}
-		{{$.LowerCamelName}}.ModifiedBy = ctx.UserId
-		{{end}}
+		{{if eq .GoName "ModifiedAt"}}{{$.LowerCamelName}}.ModifiedAt = ttypes.NormalDatetime(time.Now()){{end -}}
+		{{if eq .GoName "ModifiedBy"}}{{$.LowerCamelName}}.ModifiedBy = ctx.UserId{{end -}}
 	{{end}}
 
 	_, err := {{.GoTable}}Dao.Update(tc, {{.LowerCamelName}})
@@ -88,8 +84,8 @@ func (d *{{.LowerCamelName}}ExtDao) DeleteById(ctx *dgctx.DgContext, tc *daog.Tr
 	return nil
 }
 
-func (d *{{.LowerCamelName}}ExtDao) Page(ctx *dgctx.DgContext, tc *daog.TransContext, req *model.Query{{.GoTable}}Req) (*page.PageList[{{.GoTable}}], error) {
-	matcher := d.BuildMatcher(req)
+func (d *{{.LowerCamelName}}ExtDao) Page(ctx *dgctx.DgContext, tc *daog.TransContext, param *Query{{.GoTable}}Param) (*page.PageList[{{.GoTable}}], error) {
+	matcher := d.BuildMatcher(param)
 	
 	count, err := {{.GoTable}}Dao.Count(tc, matcher)
 	if err != nil {
@@ -97,23 +93,23 @@ func (d *{{.LowerCamelName}}ExtDao) Page(ctx *dgctx.DgContext, tc *daog.TransCon
 		return nil, dgerr.SYSTEM_ERROR
 	}
 	if count == 0 {
-		return page.EmptyPageList[{{.GoTable}}](req.PageNo, req.PageSize), nil
+		return page.EmptyPageList[{{.GoTable}}](param.PageNo, param.PageSize), nil
 	}
 	
-	{{.LowerCamelName}}List, err := {{.GoTable}}Dao.QueryPageListMatcher(tc, matcher, daog.NewPager(req.PageSize, req.PageNo), daog.NewDescOrder({{$.GoTable}}Fields.CreatedAt))
+	{{.LowerCamelName}}List, err := {{.GoTable}}Dao.QueryPageListMatcher(tc, matcher, daog.NewPager(param.PageSize, param.PageNo), daog.NewDescOrder({{$.GoTable}}Fields.CreatedAt))
 	if err != nil {
 		dglogger.Errorf(ctx, "{{.GoTable}}Dao.QueryPageListMatcher error: %v", err)
 		return nil, dgerr.SYSTEM_ERROR
 	}
 	if len({{.LowerCamelName}}List) == 0 {
-		return page.EmptyPageList[{{.GoTable}}](req.PageNo, req.PageSize), nil
+		return page.EmptyPageList[{{.GoTable}}](param.PageNo, param.PageSize), nil
 	}
 	
-	return page.ListOf(req.PageNo, req.PageSize, int(count), {{.LowerCamelName}}List), nil
+	return page.ListOf(param.PageNo, param.PageSize, int(count), {{.LowerCamelName}}List), nil
 }
 
-func (d *{{.LowerCamelName}}ExtDao) List(ctx *dgctx.DgContext, tc *daog.TransContext, req *model.Query{{.GoTable}}Req) ([]*{{.GoTable}}, error) {
-	matcher := d.BuildMatcher(req)
+func (d *{{.LowerCamelName}}ExtDao) List(ctx *dgctx.DgContext, tc *daog.TransContext, param *Query{{.GoTable}}Param) ([]*{{.GoTable}}, error) {
+	matcher := d.BuildMatcher(param)
 
 	{{.LowerCamelName}}List, err := {{.GoTable}}Dao.QueryListMatcher(tc, matcher, daog.NewDescOrder({{$.GoTable}}Fields.CreatedAt))
 	if err != nil {
@@ -124,16 +120,16 @@ func (d *{{.LowerCamelName}}ExtDao) List(ctx *dgctx.DgContext, tc *daog.TransCon
 	return {{.LowerCamelName}}List, nil
 }
 
-func (d *{{.LowerCamelName}}ExtDao) BuildMatcher(req *model.Query{{.GoTable}}Req) daog.Matcher {
+func (d *{{.LowerCamelName}}ExtDao) BuildMatcher(param *Query{{.GoTable}}Param) daog.Matcher {
 	matcher := daog.NewMatcher()
 	{{range .QueryColumns}}
 	{{- if eq .DbType "string"}}
-	if req.{{.GoName}} != "" {
-		matcher.Eq({{$.GoTable}}Fields.{{.GoName}}, req.{{.GoName}})
+	if param.{{.GoName}} != "" {
+		matcher.Eq({{$.GoTable}}Fields.{{.GoName}}, param.{{.GoName}})
 	}
 	{{- else if contains .DbType "int"}}
-	if req.{{.GoName}} != 0 {
-		matcher.Eq({{$.GoTable}}Fields.{{.GoName}}, req.{{.GoName}})
+	if param.{{.GoName}} != 0 {
+		matcher.Eq({{$.GoTable}}Fields.{{.GoName}}, param.{{.GoName}})
 	}
 	{{- end }}
 	{{- end }}
@@ -144,5 +140,8 @@ func (d *{{.LowerCamelName}}ExtDao) BuildMatcher(req *model.Query{{.GoTable}}Req
 func Get{{.GoTable}}Id({{.LowerCamelName}} *{{.GoTable}}) int64 {
 	return {{.LowerCamelName}}.Id
 }
-
 `
+
+func init() {
+	DalExtTpl = strings.ReplaceAll(DalExtTpl, "###", "`")
+}

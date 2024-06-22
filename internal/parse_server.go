@@ -1,11 +1,14 @@
 package internal
 
 import (
+	_default "dgen/tpl/default"
 	_server "dgen/tpl/server"
+	dgcoll "github.com/darwinOrg/go-common/collection"
 	"github.com/iancoleman/strcase"
 	"io/fs"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 var ServerParser = &serverParser{}
@@ -14,7 +17,12 @@ type serverParser struct {
 }
 
 func (p *serverParser) Parse(entireModel *EntireModel, mark string) error {
-	err := p.parseEnum(entireModel, mark)
+	err := p.parseDal(entireModel)
+	if err != nil {
+		return err
+	}
+
+	err = p.parseEnum(entireModel, mark)
 	if err != nil {
 		return err
 	}
@@ -24,7 +32,7 @@ func (p *serverParser) Parse(entireModel *EntireModel, mark string) error {
 		return err
 	}
 
-	err = p.parseService(entireModel, mark)
+	err = p.parseService(entireModel)
 	if err != nil {
 		return err
 	}
@@ -37,6 +45,44 @@ func (p *serverParser) Parse(entireModel *EntireModel, mark string) error {
 	err = p.parseRouter(entireModel, mark)
 	if err != nil {
 		return err
+	}
+
+	return nil
+}
+
+func (g *serverParser) parseDal(entireModel *EntireModel) error {
+	if len(entireModel.Dbs) == 0 {
+		return nil
+	}
+
+	sqls := dgcoll.MapToList(entireModel.Dbs, func(db *DbModelData) string { return db.Sql })
+	dbSql := strings.Join(sqls, "\n")
+
+	metas, err := BuildTableMetas(dbSql)
+	if err != nil {
+		return err
+	}
+	if len(metas) == 0 {
+		return nil
+	}
+
+	dalDir := filepath.Join(entireModel.Export.ServerOutput, "dal")
+	_ = os.MkdirAll(dalDir, fs.ModeDir|fs.ModePerm)
+
+	for _, meta := range metas {
+		meta.PackagePrefix = entireModel.Export.PackagePrefix
+
+		dalMain := filepath.Join(dalDir, meta.GoTable+".go")
+		err := parseFile(dalMain, "dal-main", _default.DalMainTpl, meta)
+		if err != nil {
+			return err
+		}
+
+		dalExt := filepath.Join(dalDir, meta.GoTable+"-ext.go")
+		err = parseFile(dalExt, "dal-ext", _default.DalExtTpl, meta)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -68,7 +114,7 @@ func (g *serverParser) parseModel(entireModel *EntireModel, mark string) error {
 	return nil
 }
 
-func (g *serverParser) parseService(entireModel *EntireModel, mark string) error {
+func (g *serverParser) parseService(entireModel *EntireModel) error {
 	serviceDir := filepath.Join(entireModel.Export.ServerOutput, "service")
 	_ = os.MkdirAll(serviceDir, fs.ModeDir|fs.ModePerm)
 
