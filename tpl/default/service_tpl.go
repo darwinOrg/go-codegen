@@ -1,6 +1,6 @@
 package _default
 
-var ServiceExtTpl = `package service
+var ServiceTpl = `package service
 
 import (
 	daogext "github.com/darwinOrg/daog-ext"

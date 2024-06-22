@@ -1,6 +1,6 @@
 package _default
 
-var ConverterExtTpl = `package converter
+var ConverterTpl = `package converter
 
 import (
 	"{{.PackagePrefix}}/dal"

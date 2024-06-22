@@ -1,6 +1,6 @@
 package _server
 
-var ServiceExtTpl = `package service
+var ServiceTpl = `package service
 
 import (
 	"{{.PackagePrefix}}/dal"

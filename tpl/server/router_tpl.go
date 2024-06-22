@@ -1,6 +1,6 @@
 package _server
 
-var RouterExtTpl = `package router
+var RouterTpl = `package router
 
 import (
 	"{{.PackagePrefix}}/handler"

@@ -1,6 +1,6 @@
 package _default
 
-var HandlerExtTpl = `package handler
+var HandlerTpl = `package handler
 
 import (
 	"{{.PackagePrefix}}/model"

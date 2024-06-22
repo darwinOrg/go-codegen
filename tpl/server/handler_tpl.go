@@ -1,6 +1,6 @@
 package _server
 
-var HandlerExtTpl = `package handler
+var HandlerTpl = `package handler
 
 import (
 	{{if .HasModel}}"{{.PackagePrefix}}/model"{{end}}

@@ -4,6 +4,7 @@ import (
 	_default "dgen/tpl/default"
 	_server "dgen/tpl/server"
 	dgcoll "github.com/darwinOrg/go-common/collection"
+	"github.com/darwinOrg/go-common/utils"
 	"github.com/iancoleman/strcase"
 	"io/fs"
 	"os"
@@ -84,6 +85,10 @@ func (g *serverParser) parseDal(entireModel *EntireModel) error {
 		}
 
 		dalExt := filepath.Join(dalDir, meta.GoTable+"-ext.go")
+		if utils.ExistsFile(dalExt) {
+			continue
+		}
+
 		err = parseFile(dalExt, "dal-ext", _default.DalExtTpl, meta)
 		if err != nil {
 			return err
@@ -125,7 +130,11 @@ func (g *serverParser) parseConverter(entireModel *EntireModel) error {
 
 	for _, c := range entireModel.Converters {
 		converter := filepath.Join(converterDir, strcase.ToSnake(c.DbTableUpperCamel)+"_converter.go")
-		err := parseFile(converter, "converter", _server.ConverterExtTpl, c)
+		if utils.ExistsFile(converter) {
+			continue
+		}
+
+		err := parseFile(converter, "converter", _server.ConverterTpl, c)
 		if err != nil {
 			return err
 		}
@@ -140,7 +149,11 @@ func (g *serverParser) parseService(entireModel *EntireModel) error {
 
 	for _, inter := range entireModel.Interfaces {
 		service := filepath.Join(serviceDir, strcase.ToSnake(inter.Group)+"_service.go")
-		err := parseFile(service, "service", _server.ServiceExtTpl, inter)
+		if utils.ExistsFile(service) {
+			continue
+		}
+
+		err := parseFile(service, "service", _server.ServiceTpl, inter)
 		if err != nil {
 			return err
 		}
@@ -154,7 +167,7 @@ func (g *serverParser) parseHandler(entireModel *EntireModel, mark string) error
 	_ = os.MkdirAll(handlerDir, fs.ModeDir|fs.ModePerm)
 
 	handler := filepath.Join(handlerDir, strcase.ToSnake(mark)+"_handler.go")
-	err := parseFile(handler, "handler", _server.HandlerExtTpl, entireModel)
+	err := parseFile(handler, "handler", _server.HandlerTpl, entireModel)
 	if err != nil {
 		return err
 	}
@@ -167,7 +180,7 @@ func (g *serverParser) parseRouter(entireModel *EntireModel, mark string) error 
 	_ = os.MkdirAll(routerDir, fs.ModeDir|fs.ModePerm)
 
 	router := filepath.Join(routerDir, strcase.ToSnake(mark)+"_router.go")
-	err := parseFile(router, "router", _server.RouterExtTpl, entireModel)
+	err := parseFile(router, "router", _server.RouterTpl, entireModel)
 	if err != nil {
 		return err
 	}
