@@ -87,6 +87,7 @@ type ResponseModel struct {
 	LowerCamelName string `json:"lowerCamelName,omitempty"`
 	EnumTitle      string `json:"enumTitle,omitempty"`
 	EnumRemark     string `json:"enumRemark,omitempty"`
+	EnumFieldName  string `json:"enumFieldName,omitempty"`
 }
 
 type ResponseModelData struct {

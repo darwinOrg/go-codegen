@@ -41,17 +41,19 @@ func (s *{{$.GroupLowerCamel}}Service) {{.MethodNameExp}}(ctx *dgctx.DgContext, 
 	})
 	{{- else if eq .InterfaceType "分页"}}
 	return daogext.ReadonlyWithResult(ctx, func(tc *daog.TransContext) {{if ne .ResponseModelName ""}}({{.ResponseModelNameExp}}, error){{else}}error{{end}} {
-		pl, err := dal.{{.DbTableUpperCamel}}ExtDao.Page(ctx, tc, req)
+		queryParam := converter.{{.DbTableUpperCamel}}Converter.{{.RequestModelName}}2Param(req)
+		pl, err := dal.{{.DbTableUpperCamel}}ExtDao.Page(ctx, tc, queryParam)
 		if err != nil {
 			return nil, err
 		}
 
 		listModels := dgcoll.MapToList(pl.List, converter.{{.DbTableUpperCamel}}Converter.Entity2{{.ResponseModelName}})
-		return page.ListOf[model.{{.ResponseModelName}}]](pl.PageNo, pl.PageSize, pl.TotalCount, listModels), nil
+		return page.ListOf(pl.PageNo, pl.PageSize, pl.TotalCount, listModels), nil
 	})
 	{{- else if eq .InterfaceType "列表"}}
 	return daogext.ReadonlyWithResult(ctx, func(tc *daog.TransContext) {{if ne .ResponseModelName ""}}({{.ResponseModelNameExp}}, error){{else}}error{{end}} {
-		list, err := dal.{{.DbTableUpperCamel}}ExtDao.List(ctx, tc, req)
+		queryParam := converter.{{.DbTableUpperCamel}}Converter.{{.RequestModelName}}2Param(req)
+		list, err := dal.{{.DbTableUpperCamel}}ExtDao.List(ctx, tc, queryParam)
 		if err != nil {
 			return nil, err
 		}

@@ -88,7 +88,7 @@ func main() {
 		outputPath, _ = os.Getwd()
 	}
 
-	dirs := []string{"dal", "enum", "model", "service", "handler", "router"}
+	dirs := []string{"dal", "enum", "model", "converter", "service", "handler", "router"}
 	for _, dir := range dirs {
 		cmd := exec.Command("go", "fmt", outputPath+"/"+dir)
 		err = cmd.Run()
@@ -212,6 +212,8 @@ func fillInterfaces(entireModel *internal.EntireModel) {
 						model.ResponseModelHasPointer = true
 						if model.InterfaceType == "分页" {
 							model.ResponseModelNameExp = "*page.PageList[model." + model.ResponseModelName + "]"
+						} else if model.InterfaceType == "列表" {
+							model.ResponseModelNameExp = "[]*model." + model.ResponseModelName
 						} else {
 							model.ResponseModelNameExp = "*model." + model.ResponseModelName
 						}
@@ -252,6 +254,9 @@ func fillConverters(entireModel *internal.EntireModel) {
 	}, func(interfaceModel *internal.InterfaceModel) string {
 		return interfaceModel.DbModelName
 	})
+	if len(dbTableNames) == 0 {
+		return
+	}
 	dbTableName2RequestsMap := dgcoll.Extract2KeySetMap(interfaceModels, func(interfaceModel *internal.InterfaceModel) string {
 		return interfaceModel.DbModelName
 	}, func(interfaceModel *internal.InterfaceModel) *internal.RequestModelData {
@@ -295,8 +300,9 @@ func fillConverters(entireModel *internal.EntireModel) {
 		hasEnum := false
 		for _, response := range responses {
 			for _, responseModel := range response.Models {
-				if responseModel.EnumTitle != "" {
+				if responseModel.EnumModel != "" && strings.HasSuffix(responseModel.FieldName, "Name") {
 					hasEnum = true
+					responseModel.EnumFieldName = strings.TrimSuffix(responseModel.FieldName, "Name")
 					break
 				}
 			}

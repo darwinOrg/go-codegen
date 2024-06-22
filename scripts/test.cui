@@ -1456,6 +1456,7 @@
         {
           "fieldName": "OpenedName",
           "dataType": "string",
+          "enumModel": "JobOpened",
           "remark": "面试间开启状态名称"
         },
         {
