@@ -48,7 +48,8 @@ func (s *{{.LowerCamelName}}Service) Delete(ctx *dgctx.DgContext, req *cm.IdReq)
 
 func (s *{{.LowerCamelName}}Service) Page(ctx *dgctx.DgContext, req *model.Query{{.GoTable}}Req) (*page.PageList[model.{{.GoTable}}ListResp], error) {
 	return daogext.ReadonlyWithResult(ctx, func(tc *daog.TransContext) (*page.PageList[model.{{.GoTable}}ListResp], error) {
-		pl, err := dal.{{.GoTable}}ExtDao.Page(ctx, tc, req)
+		queryParam := converter.{{.GoTable}}Converter.Query2ParamModel(req)
+		pl, err := dal.{{.GoTable}}ExtDao.Page(ctx, tc, queryParam)
 		if err != nil {
 			return nil, err
 		}
@@ -61,7 +62,8 @@ func (s *{{.LowerCamelName}}Service) Page(ctx *dgctx.DgContext, req *model.Query
 
 func (s *{{.LowerCamelName}}Service) List(ctx *dgctx.DgContext, req *model.Query{{.GoTable}}Req) ([]*model.{{.GoTable}}ListResp, error) {
 	return daogext.ReadonlyWithResult(ctx, func(tc *daog.TransContext) ([]*model.{{.GoTable}}ListResp, error) {
-		{{.LowerCamelName}}List, err := dal.{{.GoTable}}ExtDao.List(ctx, tc, req)
+		queryParam := converter.{{.GoTable}}Converter.Query2ParamModel(req)
+		{{.LowerCamelName}}List, err := dal.{{.GoTable}}ExtDao.List(ctx, tc, queryParam)
 		if err != nil {
 			return nil, err
 		}

@@ -78,4 +78,14 @@ func (c *{{.LowerCamelName}}Converter) Entity2DetailModel({{.LowerCamelName}} *d
 	return detailVo
 }
 
+func (c *{{.LowerCamelName}}Converter) Query2ParamModel(req *model.Query{{.GoTable}}Req) *dal.Query{{.GoTable}}Param {
+	{{range .QueryColumns}}{{.GoName}}: {{$.LowerCamelName}}.{{.GoName}},
+		{{end}}
+
+	return &dal.Query{{.GoTable}}Param {
+		{{range .QueryColumns}}{{.GoName}}: req.{{.GoName}},
+		{{end}}
+	}
+}
+
 `
