@@ -124,9 +124,10 @@ type InterfaceModel struct {
 }
 
 type InterfaceModelData struct {
-	Group       string            `json:"group,omitempty"`
-	RoutePrefix string            `json:"routePrefix,omitempty"`
-	Models      []*InterfaceModel `json:"models,omitempty"`
+	Group        string            `json:"group,omitempty"`
+	RoutePrefix  string            `json:"routePrefix,omitempty"`
+	ExportClient bool              `json:"exportClient,omitempty"`
+	Models       []*InterfaceModel `json:"models,omitempty"`
 
 	PackagePrefix   string `json:"packagePrefix,omitempty"`
 	GroupUpperCamel string `json:"groupUpperCamel,omitempty"`
@@ -138,10 +139,11 @@ type InterfaceModelData struct {
 }
 
 type ExportConfigData struct {
-	ServerOutput  string `json:"serverOutput,omitempty"`
-	ClientOutput  string `json:"clientOutput,omitempty"`
-	PackagePrefix string `json:"packagePrefix,omitempty"`
-	ApifoxOutput  string `json:"apifoxOutput,omitempty"`
+	ServerOutput        string `json:"serverOutput,omitempty"`
+	ServerPackagePrefix string `json:"serverPackagePrefix,omitempty"`
+	ClientOutput        string `json:"clientOutput,omitempty"`
+	ClientPackagePrefix string `json:"clientPackagePrefix,omitempty"`
+	ApifoxOutput        string `json:"apifoxOutput,omitempty"`
 }
 
 type ConverterData struct {

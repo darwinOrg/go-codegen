@@ -106,7 +106,11 @@ func (g *serverParser) parseEnum(entireModel *EntireModel, mark string) error {
 	enumDir := filepath.Join(entireModel.Export.ServerOutput, "enum")
 	_ = os.MkdirAll(enumDir, fs.ModeDir|fs.ModePerm)
 
-	enum := filepath.Join(enumDir, strcase.ToSnake(mark)+"_enum.go")
+	enum := filepath.Join(enumDir, mark+"_enum.go")
+	if utils.ExistsFile(enum) {
+		return nil
+	}
+
 	err := parseFile(enum, "enum", _server.EnumTpl, entireModel)
 	if err != nil {
 		return err
@@ -123,7 +127,7 @@ func (g *serverParser) parseModel(entireModel *EntireModel, mark string) error {
 	modelDir := filepath.Join(entireModel.Export.ServerOutput, "model")
 	_ = os.MkdirAll(modelDir, fs.ModeDir|fs.ModePerm)
 
-	model := filepath.Join(modelDir, strcase.ToSnake(mark)+"_model.go")
+	model := filepath.Join(modelDir, mark+"_model.go")
 	err := parseFile(model, "model", _server.ModelTpl, entireModel)
 	if err != nil {
 		return err
@@ -186,7 +190,7 @@ func (g *serverParser) parseHandler(entireModel *EntireModel, mark string) error
 	handlerDir := filepath.Join(entireModel.Export.ServerOutput, "handler")
 	_ = os.MkdirAll(handlerDir, fs.ModeDir|fs.ModePerm)
 
-	handler := filepath.Join(handlerDir, strcase.ToSnake(mark)+"_handler.go")
+	handler := filepath.Join(handlerDir, mark+"_handler.go")
 	err := parseFile(handler, "handler", _server.HandlerTpl, entireModel)
 	if err != nil {
 		return err
@@ -203,7 +207,7 @@ func (g *serverParser) parseRouter(entireModel *EntireModel, mark string) error 
 	routerDir := filepath.Join(entireModel.Export.ServerOutput, "router")
 	_ = os.MkdirAll(routerDir, fs.ModeDir|fs.ModePerm)
 
-	router := filepath.Join(routerDir, strcase.ToSnake(mark)+"_router.go")
+	router := filepath.Join(routerDir, mark+"_router.go")
 	err := parseFile(router, "router", _server.RouterTpl, entireModel)
 	if err != nil {
 		return err

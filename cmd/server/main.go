@@ -85,7 +85,7 @@ func main() {
 
 	fillEntire(entireModel)
 
-	internal.ServerParser.Parse(entireModel, filename)
+	internal.ServerParser.Parse(entireModel, strcase.ToSnake(filename))
 
 	outputPath := entireModel.Export.ServerOutput
 	if outputPath == "./" {

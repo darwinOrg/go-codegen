@@ -3,9 +3,9 @@ package _server
 var ServiceTpl = `package service
 
 import (
-	"{{.PackagePrefix}}/dal"
-	{{if .HasModel}}"{{.PackagePrefix}}/converter"{{end}}
-	{{if .HasModel}}"{{.PackagePrefix}}/model"{{end}}
+	"{{.ServerPackagePrefix}}/dal"
+	{{if .HasModel}}"{{.ServerPackagePrefix}}/converter"{{end}}
+	{{if .HasModel}}"{{.ServerPackagePrefix}}/model"{{end}}
 	{{if .HasId}}cm "github.com/darwinOrg/go-common/model"{{end}}
 	{{if .HasPage}}"github.com/darwinOrg/go-common/page"{{end}}
 	{{if .HasQuery}}dgcoll "github.com/darwinOrg/go-common/collection"{{end}}

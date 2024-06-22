@@ -3,9 +3,9 @@ package _server
 var ConverterTpl = `package converter
 
 import (
-	"{{.PackagePrefix}}/dal"
-	"{{.PackagePrefix}}/model"
-	{{if .HasEnum}}"{{.PackagePrefix}}/enum"{{end}}
+	"{{.ServerPackagePrefix}}/dal"
+	"{{.ServerPackagePrefix}}/model"
+	{{if .HasEnum}}"{{.ServerPackagePrefix}}/enum"{{end}}
 )
 
 var {{.DbTableUpperCamel}}Converter = &{{.DbTableLowerCamel}}Converter{}
