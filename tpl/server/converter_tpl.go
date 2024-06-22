@@ -32,7 +32,7 @@ func (c *{{$.DbTableLowerCamel}}Converter) FillEntityWith{{.UpperCamelName}}({{$
 		return
 	}
 
-	{{range .Models}}{{$.DbTableLowerCamel}}.{{.FieldName}} = req.{{.FieldName}}
+	{{range .Models}}{{if ne .FieldName "Id"}}{{$.DbTableLowerCamel}}.{{.FieldName}} = req.{{.FieldName}}{{end}}
 	{{end}}
 }
 {{else if .IsPageOrList}}
@@ -44,6 +44,7 @@ func (c *{{$.DbTableLowerCamel}}Converter) {{.UpperCamelName}}2Param(req *model.
 	queryParam := &dal.Query{{$.DbTableUpperCamel}}Param {
 		{{range .Models}}{{.FieldName}}: req.{{.FieldName}},
 		{{end}}
+		{{if .IsPage -}}PageParam: req.PageParam,{{end}}
 	}
 
 	return queryParam
