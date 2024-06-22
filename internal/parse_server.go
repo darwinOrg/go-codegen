@@ -99,6 +99,10 @@ func (g *serverParser) parseDal(entireModel *EntireModel) error {
 }
 
 func (g *serverParser) parseEnum(entireModel *EntireModel, mark string) error {
+	if len(entireModel.Enums) == 0 {
+		return nil
+	}
+
 	enumDir := filepath.Join(entireModel.Export.ServerOutput, "enum")
 	_ = os.MkdirAll(enumDir, fs.ModeDir|fs.ModePerm)
 
@@ -112,6 +116,10 @@ func (g *serverParser) parseEnum(entireModel *EntireModel, mark string) error {
 }
 
 func (g *serverParser) parseModel(entireModel *EntireModel, mark string) error {
+	if len(entireModel.Requests) == 0 && len(entireModel.Responses) == 0 {
+		return nil
+	}
+
 	modelDir := filepath.Join(entireModel.Export.ServerOutput, "model")
 	_ = os.MkdirAll(modelDir, fs.ModeDir|fs.ModePerm)
 
@@ -125,6 +133,10 @@ func (g *serverParser) parseModel(entireModel *EntireModel, mark string) error {
 }
 
 func (g *serverParser) parseConverter(entireModel *EntireModel) error {
+	if len(entireModel.Converters) == 0 {
+		return nil
+	}
+
 	converterDir := filepath.Join(entireModel.Export.ServerOutput, "converter")
 	_ = os.MkdirAll(converterDir, fs.ModeDir|fs.ModePerm)
 
@@ -144,6 +156,10 @@ func (g *serverParser) parseConverter(entireModel *EntireModel) error {
 }
 
 func (g *serverParser) parseService(entireModel *EntireModel) error {
+	if len(entireModel.Interfaces) == 0 {
+		return nil
+	}
+
 	serviceDir := filepath.Join(entireModel.Export.ServerOutput, "service")
 	_ = os.MkdirAll(serviceDir, fs.ModeDir|fs.ModePerm)
 
@@ -163,6 +179,10 @@ func (g *serverParser) parseService(entireModel *EntireModel) error {
 }
 
 func (g *serverParser) parseHandler(entireModel *EntireModel, mark string) error {
+	if len(entireModel.Interfaces) == 0 {
+		return nil
+	}
+
 	handlerDir := filepath.Join(entireModel.Export.ServerOutput, "handler")
 	_ = os.MkdirAll(handlerDir, fs.ModeDir|fs.ModePerm)
 
@@ -176,6 +196,10 @@ func (g *serverParser) parseHandler(entireModel *EntireModel, mark string) error
 }
 
 func (g *serverParser) parseRouter(entireModel *EntireModel, mark string) error {
+	if len(entireModel.Interfaces) == 0 {
+		return nil
+	}
+
 	routerDir := filepath.Join(entireModel.Export.ServerOutput, "router")
 	_ = os.MkdirAll(routerDir, fs.ModeDir|fs.ModePerm)
 

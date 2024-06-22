@@ -21,7 +21,7 @@ var (
 )
 
 func init() {
-	flag.StringVar(&inputFile, "i", "./scripts/test.sql", "the create tables file")
+	flag.StringVar(&inputFile, "i", "", "the create tables file")
 }
 
 func main() {

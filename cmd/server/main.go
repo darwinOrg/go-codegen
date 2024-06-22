@@ -39,7 +39,7 @@ var (
 )
 
 func init() {
-	flag.StringVar(&inputFile, "i", "./scripts/test.cui", "the code generation design file")
+	flag.StringVar(&inputFile, "i", "", "the code generation design file")
 }
 
 func main() {
@@ -54,14 +54,21 @@ func main() {
 	}
 	data, err := os.ReadFile(inputFile)
 	if err != nil {
-		fmt.Println("Please input code generation design file")
+		fmt.Printf("Read the code generation design file error: %v", err)
 		os.Exit(1)
 	}
 
 	entireModel, err := utils.ConvertJsonBytesToBean[internal.EntireModel](data)
 	if err != nil {
-		fmt.Println("Please input correct code generation design file")
+		fmt.Printf("Parse the code generation design file error: %v", err)
 		os.Exit(1)
+	}
+
+	filenameWithExt := filepath.Base(inputFile)
+	filename := strings.TrimSuffix(filenameWithExt, filepath.Ext(inputFile))
+	entireModel.UpperCamelName = strcase.ToCamel(filename)
+	if !strings.HasPrefix(entireModel.Export.ServerOutput, "/") {
+		entireModel.Export.ServerOutput = filepath.Join(filepath.Dir(inputFile), entireModel.Export.ServerOutput)
 	}
 
 	fillEnums(entireModel)
@@ -78,9 +85,6 @@ func main() {
 
 	fillEntire(entireModel)
 
-	filenameWithExt := filepath.Base(inputFile)
-	filename := strings.TrimSuffix(filenameWithExt, filepath.Ext(inputFile))
-	entireModel.UpperCamelName = strcase.ToCamel(filename)
 	internal.ServerParser.Parse(entireModel, filename)
 
 	outputPath := entireModel.Export.ServerOutput
@@ -91,10 +95,7 @@ func main() {
 	dirs := []string{"dal", "enum", "model", "converter", "service", "handler", "router"}
 	for _, dir := range dirs {
 		cmd := exec.Command("go", "fmt", outputPath+"/"+dir)
-		err = cmd.Run()
-		if err != nil {
-			fmt.Printf("go fmt %s error: %v", dir, err)
-		}
+		_ = cmd.Run()
 	}
 }
 
