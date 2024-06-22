@@ -8,14 +8,15 @@ type EntireModel struct {
 	Interfaces []*InterfaceModelData `json:"interfaces,omitempty"`
 	Export     *ExportConfigData     `json:"export,omitempty"`
 
-	PackagePrefix  string `json:"packagePrefix,omitempty"`
-	HasDaogType    bool   `json:"hasDaogType,omitempty"`
-	HasDecimal     bool   `json:"hasDecimal,omitempty"`
-	HasPage        bool   `json:"hasPage,omitempty"`
-	HasQuery       bool   `json:"hasQuery,omitempty"`
-	HasId          bool   `json:"hasId,omitempty"`
-	HasModel       bool   `json:"hasModel,omitempty"`
-	UpperCamelName string `json:"upperCamelName,omitempty"`
+	PackagePrefix  string           `json:"packagePrefix,omitempty"`
+	HasDaogType    bool             `json:"hasDaogType,omitempty"`
+	HasDecimal     bool             `json:"hasDecimal,omitempty"`
+	HasPage        bool             `json:"hasPage,omitempty"`
+	HasQuery       bool             `json:"hasQuery,omitempty"`
+	HasId          bool             `json:"hasId,omitempty"`
+	HasModel       bool             `json:"hasModel,omitempty"`
+	UpperCamelName string           `json:"upperCamelName,omitempty"`
+	Converters     []*ConverterData `json:"converters,omitempty"`
 }
 
 type DbModel struct {
@@ -67,7 +68,10 @@ type RequestModelData struct {
 	Models     []*RequestModel `json:"models,omitempty"`
 	ExtendName string          `json:"extendName,omitempty"`
 
-	IsPage bool `json:"isPage,omitempty"`
+	UpperCamelName string `json:"upperCamelName,omitempty"`
+	IsPage         bool   `json:"isPage,omitempty"`
+	IsPageOrList   bool   `json:"isPageOrList,omitempty"`
+	InterfaceType  string `json:"interfaceType,omitempty"`
 }
 
 type ResponseModel struct {
@@ -89,6 +93,9 @@ type ResponseModelData struct {
 	Name       string           `json:"name,omitempty"`
 	Models     []*ResponseModel `json:"models,omitempty"`
 	ExtendName string           `json:"extendName,omitempty"`
+
+	UpperCamelName string `json:"upperCamelName,omitempty"`
+	InterfaceType  string `json:"interfaceType,omitempty"`
 }
 
 type InterfaceModel struct {
@@ -118,7 +125,6 @@ type InterfaceModel struct {
 type InterfaceModelData struct {
 	Group       string            `json:"group,omitempty"`
 	RoutePrefix string            `json:"routePrefix,omitempty"`
-	DbTable     string            `json:"dbTable,omitempty"`
 	Models      []*InterfaceModel `json:"models,omitempty"`
 
 	PackagePrefix   string `json:"packagePrefix,omitempty"`
@@ -135,4 +141,13 @@ type ExportConfigData struct {
 	ClientOutput  string `json:"clientOutput,omitempty"`
 	PackagePrefix string `json:"packagePrefix,omitempty"`
 	ApifoxOutput  string `json:"apifoxOutput,omitempty"`
+}
+
+type ConverterData struct {
+	PackagePrefix     string               `json:"packagePrefix,omitempty"`
+	DbTableUpperCamel string               `json:"dbTableUpperCamel,omitempty"`
+	DbTableLowerCamel string               `json:"dbTableLowerCamel,omitempty"`
+	Requests          []*RequestModelData  `json:"requests,omitempty"`
+	Responses         []*ResponseModelData `json:"responses,omitempty"`
+	HasEnum           bool                 `json:"hasEnum,omitempty"`
 }

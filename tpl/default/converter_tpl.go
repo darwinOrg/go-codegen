@@ -26,19 +26,6 @@ func (c *{{.LowerCamelName}}Converter) CreateModel2Entity(req *model.Create{{.Go
 	return {{.LowerCamelName}}
 }
 
-func (c *{{.LowerCamelName}}Converter) ModifyModel2Entity(req *model.Modify{{.GoTable}}Req) *dal.{{.GoTable}} {
-	if req == nil {
-		return nil
-	}
-
-	{{.LowerCamelName}} := &dal.{{.GoTable}}{
-		{{range .ModifyColumns}}{{.GoName}}: req.{{.GoName}},
-		{{end}}
-	}
-
-	return {{.LowerCamelName}}
-}
-
 func (c *{{.LowerCamelName}}Converter) FillEntityWithModifyModel({{.LowerCamelName}} *dal.{{.GoTable}}, req *model.Modify{{.GoTable}}Req) {
 	if {{.LowerCamelName}} == nil {
 		return nil
@@ -78,10 +65,7 @@ func (c *{{.LowerCamelName}}Converter) Entity2DetailModel({{.LowerCamelName}} *d
 	return detailVo
 }
 
-func (c *{{.LowerCamelName}}Converter) Query2ParamModel(req *model.Query{{.GoTable}}Req) *dal.Query{{.GoTable}}Param {
-	{{range .QueryColumns}}{{.GoName}}: {{$.LowerCamelName}}.{{.GoName}},
-		{{end}}
-
+func (c *{{.LowerCamelName}}Converter) QueryModel2Param(req *model.Query{{.GoTable}}Req) *dal.Query{{.GoTable}}Param {
 	return &dal.Query{{.GoTable}}Param {
 		{{range .QueryColumns}}{{.GoName}}: req.{{.GoName}},
 		{{end}}

@@ -32,6 +32,11 @@ func (p *serverParser) Parse(entireModel *EntireModel, mark string) error {
 		return err
 	}
 
+	err = p.parseConverter(entireModel)
+	if err != nil {
+		return err
+	}
+
 	err = p.parseService(entireModel)
 	if err != nil {
 		return err
@@ -109,6 +114,21 @@ func (g *serverParser) parseModel(entireModel *EntireModel, mark string) error {
 	err := parseFile(model, "model", _server.ModelTpl, entireModel)
 	if err != nil {
 		return err
+	}
+
+	return nil
+}
+
+func (g *serverParser) parseConverter(entireModel *EntireModel) error {
+	converterDir := filepath.Join(entireModel.Export.ServerOutput, "converter")
+	_ = os.MkdirAll(converterDir, fs.ModeDir|fs.ModePerm)
+
+	for _, c := range entireModel.Converters {
+		converter := filepath.Join(converterDir, strcase.ToSnake(c.DbTableUpperCamel)+"_converter.go")
+		err := parseFile(converter, "converter", _server.ConverterExtTpl, c)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
