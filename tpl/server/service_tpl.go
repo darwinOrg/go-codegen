@@ -3,9 +3,9 @@ package _server
 var ServiceTpl = `package service
 
 import (
-	"{{.ServerPackagePrefix}}/dal"
-	{{if .HasModel}}"{{.ServerPackagePrefix}}/converter"{{end}}
-	{{if .HasModel}}"{{.ServerPackagePrefix}}/model"{{end}}
+	"{{.PackagePrefix}}/dal"
+	{{if .HasModel}}"{{.PackagePrefix}}/converter"{{end}}
+	{{if .HasModel}}"{{.PackagePrefix}}/model"{{end}}
 	{{if .HasId}}cm "github.com/darwinOrg/go-common/model"{{end}}
 	{{if .HasPage}}"github.com/darwinOrg/go-common/page"{{end}}
 	{{if .HasQuery}}dgcoll "github.com/darwinOrg/go-common/collection"{{end}}
@@ -22,7 +22,7 @@ func (s *{{$.GroupLowerCamel}}Service) {{.MethodNameExp}}(ctx *dgctx.DgContext, 
 	{{- if eq .InterfaceType "新建"}}
 	{{.DbTableLowerCamel}} := converter.{{.DbTableUpperCamel}}Converter.{{.RequestModelName}}2Entity(req)
 	
-	return daogext.WriteWithResult(ctx, func(tc *daog.TransContext) {{if ne .ResponseModelName ""}}({{.ResponseModelNameExp}}, error){{else}}error{{end}} {
+	return daogext.Write(ctx, func(tc *daog.TransContext) {{if ne .ResponseModelName ""}}({{.ResponseModelNameExp}}, error){{else}}error{{end}} {
 		return dal.{{.DbTableUpperCamel}}ExtDao.Create(ctx, tc, {{.DbTableLowerCamel}})
 	})
 	{{- else if eq .InterfaceType "修改"}}

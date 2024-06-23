@@ -22,6 +22,7 @@ require (
 	github.com/cloudwego/base64x v0.1.4 // indirect
 	github.com/cloudwego/iasm v0.2.0 // indirect
 	github.com/cznic/mathutil v0.0.0-20181122101859-297441e03548 // indirect
+	github.com/darwinOrg/go-httpclient v0.1.18 // indirect
 	github.com/darwinOrg/go-monitor v0.0.4 // indirect
 	github.com/darwinOrg/go-validator-ext v0.0.7 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.3 // indirect

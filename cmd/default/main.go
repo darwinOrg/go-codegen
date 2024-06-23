@@ -5,13 +5,13 @@ import (
 	"flag"
 	"fmt"
 	_ "github.com/darwinOrg/daog-ext"
+	_ "github.com/darwinOrg/go-httpclient"
 	_ "github.com/darwinOrg/go-logger"
 	_ "github.com/darwinOrg/go-web/wrapper"
 	_ "github.com/gin-gonic/gin"
 	_ "github.com/rolandhe/daog"
 	_ "github.com/shopspring/decimal"
 	"os"
-	"os/exec"
 )
 
 var (
@@ -53,17 +53,4 @@ func main() {
 		fmt.Println("Using output file directory is: ", outputPath)
 	}
 	_ = internal.ParseSql(sql, packagePrefix, outputPath)
-
-	if outputPath == "./" {
-		outputPath, _ = os.Getwd()
-	}
-
-	dirs := []string{"dal", "enum", "model", "converter", "service", "handler", "router"}
-	for _, dir := range dirs {
-		cmd := exec.Command("go", "fmt", outputPath+"/"+dir)
-		err = cmd.Run()
-		if err != nil {
-			fmt.Printf("go fmt %s error: %v", dir, err)
-		}
-	}
 }

@@ -3,9 +3,10 @@ package _server
 var ConverterTpl = `package converter
 
 import (
-	"{{.ServerPackagePrefix}}/dal"
-	"{{.ServerPackagePrefix}}/model"
-	{{if .HasEnum}}"{{.ServerPackagePrefix}}/enum"{{end}}
+	"{{.PackagePrefix}}/dal"
+	"{{.PackagePrefix}}/model"
+	{{if .HasEnum}}"{{.PackagePrefix}}/enum"{{end}}
+	"github.com/rolandhe/daog/ttypes"
 )
 
 var {{.DbTableUpperCamel}}Converter = &{{.DbTableLowerCamel}}Converter{}
@@ -20,7 +21,7 @@ func (c *{{$.DbTableLowerCamel}}Converter) {{.UpperCamelName}}2Entity(req *model
 	}
 
 	{{$.DbTableLowerCamel}} := &dal.{{$.DbTableUpperCamel}}{
-		{{range .Models}}{{if eq .IsArray false}}{{.FieldName}}: req.{{.FieldName}},{{end}}
+		{{range .Models}}{{.FieldName}}: {{if .NullableString}}*ttypes.FromString(req.{{.FieldName}}){{else}}req.{{.FieldName}}{{end}},
 		{{end}}
 	}
 
@@ -32,7 +33,7 @@ func (c *{{$.DbTableLowerCamel}}Converter) FillEntityWith{{.UpperCamelName}}({{$
 		return
 	}
 
-	{{range .Models}}{{if ne .FieldName "Id"}}{{$.DbTableLowerCamel}}.{{.FieldName}} = req.{{.FieldName}}{{end}}
+	{{range .Models}}{{if ne .FieldName "Id"}}{{$.DbTableLowerCamel}}.{{.FieldName}} = {{if .NullableString}}*ttypes.FromString(req.{{.FieldName}}){{else}}req.{{.FieldName}}{{end}}{{end}}
 	{{end}}
 }
 {{else if .IsPageOrList}}
@@ -58,7 +59,7 @@ func (c *{{$.DbTableLowerCamel}}Converter) Entity2{{.UpperCamelName}}({{$.DbTabl
 	}
 
 	return &model.{{.UpperCamelName}}{
-		{{range .Models}}{{if eq .IsArray false}}{{.FieldName}}: {{if ne .EnumFieldName ""}}enum.{{.EnumModel}}Map[{{$.DbTableLowerCamel}}.{{.EnumFieldName}}]{{else}}{{$.DbTableLowerCamel}}.{{.FieldName}}{{end}},{{end}}
+		{{range .Models}}{{.FieldName}}: {{if ne .EnumFieldName ""}}enum.{{.EnumModel}}Map[{{$.DbTableLowerCamel}}.{{.EnumFieldName}}]{{else}}{{$.DbTableLowerCamel}}.{{.FieldName}}{{if .NullableString}}.StringNilAsEmpty(){{end}}{{end}},
 		{{end}}
 	}
 }

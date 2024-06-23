@@ -6,6 +6,6 @@ import (
 
 func main() {
 	entireModel := internal.InitEntireModel()
-	entireModel.Fill(entireModel.Export.ServerPackagePrefix)
-	internal.ServerParser.Parse(entireModel)
+	entireModel.Fill(entireModel.Export.ClientPackagePrefix)
+	internal.ClientParser.Parse(entireModel)
 }

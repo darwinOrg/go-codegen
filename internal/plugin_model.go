@@ -1,5 +1,33 @@
 package internal
 
+import (
+	"dgen/pkg"
+	"fmt"
+	dgcoll "github.com/darwinOrg/go-common/collection"
+	"github.com/darwinOrg/go-common/utils"
+	"github.com/iancoleman/strcase"
+	"os"
+	"path/filepath"
+	"strings"
+)
+
+var (
+	productMap = map[string]int{
+		"RPA机器人":  10,
+		"AI智能面试":  11,
+		"金牌面试官":   12,
+		"需求沟通助手":  13,
+		"候选人沟通助手": 14,
+		"人才库":     15,
+	}
+	logLevelMap = map[string]string{
+		"全部":   "wrapper.LOG_LEVEL_ALL",
+		"请求参数": "wrapper.LOG_LEVEL_PARAM",
+		"返回响应": "wrapper.LOG_LEVEL_RETURN",
+		"无":    "wrapper.LOG_LEVEL_NONE",
+	}
+)
+
 type EntireModel struct {
 	Dbs        []*DbModelData        `json:"dbs,omitempty"`
 	Enums      []*EnumModelData      `json:"enums,omitempty"`
@@ -8,8 +36,8 @@ type EntireModel struct {
 	Interfaces []*InterfaceModelData `json:"interfaces,omitempty"`
 	Export     *ExportConfigData     `json:"export,omitempty"`
 
+	FilePrefix     string           `json:"filePrefix,omitempty"`
 	PackagePrefix  string           `json:"packagePrefix,omitempty"`
-	HasDaogType    bool             `json:"hasDaogType,omitempty"`
 	HasDecimal     bool             `json:"hasDecimal,omitempty"`
 	HasPage        bool             `json:"hasPage,omitempty"`
 	HasQuery       bool             `json:"hasQuery,omitempty"`
@@ -61,6 +89,7 @@ type RequestModel struct {
 	Remark      string `json:"remark,omitempty"`
 
 	LowerCamelName string `json:"lowerCamelName,omitempty"`
+	NullableString bool   `json:"nullableString,omitempty"`
 }
 
 type RequestModelData struct {
@@ -88,6 +117,7 @@ type ResponseModel struct {
 	EnumTitle      string `json:"enumTitle,omitempty"`
 	EnumRemark     string `json:"enumRemark,omitempty"`
 	EnumFieldName  string `json:"enumFieldName,omitempty"`
+	NullableString bool   `json:"nullableString,omitempty"`
 }
 
 type ResponseModelData struct {
@@ -153,4 +183,307 @@ type ConverterData struct {
 	Requests          []*RequestModelData  `json:"requests,omitempty"`
 	Responses         []*ResponseModelData `json:"responses,omitempty"`
 	HasEnum           bool                 `json:"hasEnum,omitempty"`
+}
+
+func InitEntireModel() *EntireModel {
+	if len(os.Args) < 2 {
+		fmt.Println("Please input code generation design file")
+		os.Exit(1)
+	}
+	inputFile := os.Args[len(os.Args)-1]
+	data, err := os.ReadFile(inputFile)
+	if err != nil {
+		fmt.Printf("Read the code generation design file error: %v", err)
+		os.Exit(1)
+	}
+
+	entireModel, err := utils.ConvertJsonBytesToBean[EntireModel](data)
+	if err != nil {
+		fmt.Printf("Parse the code generation design file error: %v", err)
+		os.Exit(1)
+	}
+
+	filenameWithExt := filepath.Base(inputFile)
+	filename := strings.TrimSuffix(filenameWithExt, filepath.Ext(inputFile))
+	entireModel.FilePrefix = strcase.ToSnake(filename)
+	entireModel.UpperCamelName = strcase.ToCamel(filename)
+
+	if !strings.HasPrefix(entireModel.Export.ServerOutput, "/") {
+		entireModel.Export.ServerOutput = filepath.Join(filepath.Dir(inputFile), entireModel.Export.ServerOutput)
+	}
+	if !strings.HasPrefix(entireModel.Export.ClientOutput, "/") {
+		entireModel.Export.ClientOutput = filepath.Join(filepath.Dir(inputFile), entireModel.Export.ClientOutput)
+	}
+
+	return entireModel
+}
+
+func (m *EntireModel) Fill(packagePrefix string) {
+	if m.Enums == nil {
+		m.Enums = []*EnumModelData{}
+	}
+	if m.Requests == nil {
+		m.Requests = []*RequestModelData{}
+	}
+	if m.Responses == nil {
+		m.Responses = []*ResponseModelData{}
+	}
+	if m.Interfaces == nil {
+		m.Interfaces = []*InterfaceModelData{}
+	}
+	m.HasModel = len(m.Requests) > 0 || len(m.Responses) > 0
+
+	m.FillEnums()
+	m.FillRequests()
+	m.FillResponses()
+	m.FillInterfaces()
+	m.FillConverters()
+	m.FillPackagePrefix(packagePrefix)
+}
+
+func (m *EntireModel) FillEnums() {
+	if len(m.Enums) == 0 {
+		return
+	}
+
+	for _, enum := range m.Enums {
+		enum.UpperCamelName = strcase.ToCamel(enum.Name)
+	}
+}
+
+func (m *EntireModel) FillRequests() {
+	if len(m.Requests) == 0 {
+		return
+	}
+
+	for _, request := range m.Requests {
+		request.UpperCamelName = strcase.ToCamel(request.Name)
+
+		for _, model := range request.Models {
+			model.LowerCamelName = strcase.ToLowerCamel(model.FieldName)
+			model.NullableString = model.Nullable && model.DataType == "string"
+
+			if !model.Nullable {
+				if model.VerifyRules != "" {
+					model.VerifyRules = "required," + model.VerifyRules
+				} else {
+					model.VerifyRules = "required"
+				}
+			}
+
+			if model.DataType == "decimal.Decimal" {
+				m.HasDecimal = true
+			}
+
+			if model.DataType == "Id" {
+				m.HasId = true
+			}
+		}
+	}
+}
+
+func (m *EntireModel) FillResponses() {
+	if len(m.Responses) == 0 {
+		return
+	}
+
+	for _, response := range m.Responses {
+		response.UpperCamelName = strcase.ToCamel(response.Name)
+
+		for _, model := range response.Models {
+			model.LowerCamelName = strcase.ToLowerCamel(model.FieldName)
+			model.NullableString = model.Nullable && model.DataType == "string"
+
+			columnComment := model.Remark
+			columnComment = strings.ReplaceAll(columnComment, "（", "(")
+			columnComment = strings.ReplaceAll(columnComment, "）", ")")
+			columnComment = strings.ReplaceAll(columnComment, "，", ",")
+			columnComment = strings.ReplaceAll(columnComment, "：", ":")
+			if model.EnumModel != "" && pkg.HasEnum(columnComment) {
+				model.EnumTitle = columnComment[:strings.Index(columnComment, "(")]
+				model.EnumRemark = columnComment[strings.Index(columnComment, "(")+1 : len(columnComment)-1]
+			}
+
+			if model.DataType == "decimal.Decimal" {
+				m.HasDecimal = true
+			}
+		}
+	}
+}
+
+func (m *EntireModel) FillInterfaces() {
+	if len(m.Interfaces) == 0 {
+		return
+	}
+
+	for _, inter := range m.Interfaces {
+		inter.GroupUpperCamel = strcase.ToCamel(inter.Group)
+		inter.GroupLowerCamel = strcase.ToLowerCamel(inter.Group)
+
+		for _, model := range inter.Models {
+			model.RelativePath = strings.TrimPrefix(model.RelativePath, "/")
+
+			if model.InterfaceType == "分页" && model.RequestModelName != "" {
+				for _, request := range m.Requests {
+					if request.Name == model.RequestModelName {
+						request.IsPage = true
+						m.HasPage = true
+						inter.HasPage = true
+						break
+					}
+				}
+			}
+
+			if (model.InterfaceType == "分页" || model.InterfaceType == "列表") && model.RequestModelName != "" {
+				for _, request := range m.Requests {
+					if request.Name == model.RequestModelName {
+						request.IsPageOrList = true
+						break
+					}
+				}
+			}
+
+			if model.InterfaceType == "分页" || model.InterfaceType == "列表" {
+				m.HasQuery = true
+				inter.HasQuery = true
+			}
+
+			if model.RequestModelName == "Id" {
+				m.HasId = true
+				inter.HasId = true
+				model.RequestModelNameExp = "cm.IdReq"
+			} else if model.RequestModelName != "" {
+				model.RequestModelNameExp = "model." + strcase.ToCamel(model.RequestModelName)
+			} else {
+				model.RequestModelNameExp = "result.Void"
+			}
+
+			if model.ResponseModelName != "" {
+				model.ResponseModelNameExp = model.ResponseModelName
+				for _, response := range m.Responses {
+					if model.ResponseModelName == response.Name {
+						model.ResponseModelHasPointer = true
+						if model.InterfaceType == "分页" {
+							model.ResponseModelNameExp = "*page.PageList[model." + model.ResponseModelName + "]"
+						} else if model.InterfaceType == "列表" {
+							model.ResponseModelNameExp = "[]*model." + model.ResponseModelName
+						} else {
+							model.ResponseModelNameExp = "*model." + model.ResponseModelName
+						}
+						break
+					}
+				}
+			} else {
+				model.ResponseModelNameExp = "*result.Void"
+			}
+
+			if len(model.AllowProducts) > 0 {
+				products := dgcoll.MapToList(model.AllowProducts, func(name string) int {
+					return productMap[name]
+				})
+				model.AllowProductsExp = "[]int{" + dgcoll.JoinIntsByComma(products) + "}"
+			}
+
+			if model.LogLevel != "" {
+				model.LogLevelExp = logLevelMap[model.LogLevel]
+			}
+
+			model.MethodNameExp = strcase.ToCamel(model.MethodName)
+			model.DbTableUpperCamel = strcase.ToCamel(model.DbModelName)
+			model.DbTableLowerCamel = strcase.ToLowerCamel(model.DbModelName)
+
+			inter.HasModel = model.RequestModelName != "" || model.ResponseModelName != ""
+		}
+	}
+}
+
+func (m *EntireModel) FillConverters() {
+	interfaceModels := dgcoll.FlatMapToList(m.Interfaces, func(inter *InterfaceModelData) []*InterfaceModel {
+		return inter.Models
+	})
+	dbTableNames := dgcoll.FilterAndMapToSet(interfaceModels, func(interfaceModel *InterfaceModel) bool {
+		return interfaceModel.DbModelName != ""
+	}, func(interfaceModel *InterfaceModel) string {
+		return interfaceModel.DbModelName
+	})
+	if len(dbTableNames) == 0 {
+		return
+	}
+	dbTableName2RequestsMap := dgcoll.Extract2KeySetMap(interfaceModels, func(interfaceModel *InterfaceModel) string {
+		return interfaceModel.DbModelName
+	}, func(interfaceModel *InterfaceModel) *RequestModelData {
+		if interfaceModel.RequestModelName != "" {
+			for _, request := range m.Requests {
+				if interfaceModel.RequestModelName == request.Name {
+					request.InterfaceType = interfaceModel.InterfaceType
+					return request
+				}
+			}
+		}
+
+		return nil
+	})
+	dbTableName2ResponsesMap := dgcoll.Extract2KeySetMap(interfaceModels, func(interfaceModel *InterfaceModel) string {
+		return interfaceModel.DbModelName
+	}, func(interfaceModel *InterfaceModel) *ResponseModelData {
+		if interfaceModel.ResponseModelName != "" {
+			for _, response := range m.Responses {
+				if interfaceModel.ResponseModelName == response.Name {
+					response.InterfaceType = interfaceModel.InterfaceType
+					return response
+				}
+			}
+		}
+
+		return nil
+	})
+
+	converters := dgcoll.MapToList(dbTableNames, func(dbTableName string) *ConverterData {
+		requests := dbTableName2RequestsMap[dbTableName]
+		requests = dgcoll.FilterList(requests, func(request *RequestModelData) bool {
+			return request != nil
+		})
+
+		responses := dbTableName2ResponsesMap[dbTableName]
+		responses = dgcoll.FilterList(responses, func(response *ResponseModelData) bool {
+			return response != nil
+		})
+
+		hasEnum := false
+		for _, response := range responses {
+			for _, responseModel := range response.Models {
+				if responseModel.EnumModel != "" && strings.HasSuffix(responseModel.FieldName, "Name") {
+					hasEnum = true
+					responseModel.EnumFieldName = strings.TrimSuffix(responseModel.FieldName, "Name")
+					break
+				}
+			}
+		}
+
+		return &ConverterData{
+			DbTableUpperCamel: strcase.ToCamel(dbTableName),
+			DbTableLowerCamel: strcase.ToLowerCamel(dbTableName),
+			Requests:          requests,
+			Responses:         responses,
+			HasEnum:           hasEnum,
+		}
+	})
+
+	m.Converters = converters
+}
+
+func (m *EntireModel) FillPackagePrefix(packagePrefix string) {
+	m.PackagePrefix = packagePrefix
+
+	if len(m.Interfaces) > 0 {
+		for _, inter := range m.Interfaces {
+			inter.PackagePrefix = packagePrefix
+		}
+	}
+
+	if len(m.Converters) > 0 {
+		for _, converter := range m.Converters {
+			converter.PackagePrefix = packagePrefix
+		}
+	}
 }

@@ -3,8 +3,8 @@ package _server
 var RouterTpl = `package router
 
 import (
-	"{{.ServerPackagePrefix}}/handler"
-	{{if .HasModel}}"{{.ServerPackagePrefix}}/model"{{end}}
+	"{{.PackagePrefix}}/handler"
+	{{if .HasModel}}"{{.PackagePrefix}}/model"{{end}}
 	{{if .HasId}}cm "github.com/darwinOrg/go-common/model"{{end}}
 	{{if .HasPage}}"github.com/darwinOrg/go-common/page"{{end}}
 	"github.com/darwinOrg/go-common/result"

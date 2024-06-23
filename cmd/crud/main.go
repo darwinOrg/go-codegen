@@ -14,6 +14,7 @@ import (
 	_ "github.com/rolandhe/daog"
 	_ "github.com/shopspring/decimal"
 	"os"
+	"strings"
 )
 
 var (
@@ -55,7 +56,7 @@ func main() {
 		for column, keyValues := range enumMap {
 			entireModel.Enums = append(entireModel.Enums, &internal.EnumModelData{
 				Name:     meta.GoTable + column.GoName,
-				DataType: column.DbType,
+				DataType: adjustDbType(column.DbType),
 				Models: dgcoll.MapToList(keyValues, func(keyValue *model.KeyValuePair[string, string]) *internal.EnumModel {
 					return &internal.EnumModel{
 						Code:  meta.GoTable + column.GoName + "_" + keyValue.Key,
@@ -71,7 +72,7 @@ func main() {
 			Models: dgcoll.MapToList(meta.CreateColumns, func(column *internal.Column) *internal.RequestModel {
 				model := &internal.RequestModel{
 					FieldName: column.GoName,
-					DataType:  column.DbType,
+					DataType:  adjustDbType(column.DbType),
 					Nullable:  column.IsNull,
 					Remark:    column.Comment,
 				}
@@ -89,7 +90,7 @@ func main() {
 			Models: dgcoll.MapToList(meta.ModifyColumns, func(column *internal.Column) *internal.RequestModel {
 				model := &internal.RequestModel{
 					FieldName: column.GoName,
-					DataType:  column.DbType,
+					DataType:  adjustDbType(column.DbType),
 					Nullable:  column.IsNull,
 					Remark:    column.Comment,
 				}
@@ -105,11 +106,17 @@ func main() {
 		entireModel.Requests = append(entireModel.Requests, &internal.RequestModelData{
 			Name: "Query" + meta.GoTable + "Req",
 			Models: dgcoll.MapToList(meta.QueryColumns, func(column *internal.Column) *internal.RequestModel {
-				return &internal.RequestModel{
+				model := &internal.RequestModel{
 					FieldName: column.GoName,
-					DataType:  column.DbType,
+					DataType:  adjustDbType(column.DbType),
 					Remark:    column.Comment,
 				}
+
+				if column.HasEnum {
+					model.EnumModel = meta.GoTable + column.GoName
+				}
+
+				return model
 			}),
 		})
 
@@ -118,7 +125,7 @@ func main() {
 			Models: dgcoll.FlatMapToList(meta.QueryColumns, func(column *internal.Column) []*internal.ResponseModel {
 				model := &internal.ResponseModel{
 					FieldName: column.GoName,
-					DataType:  column.DbType,
+					DataType:  adjustDbType(column.DbType),
 					Remark:    column.Comment,
 				}
 
@@ -129,6 +136,7 @@ func main() {
 				return []*internal.ResponseModel{model, {
 					FieldName: column.GoName + "Name",
 					DataType:  "string",
+					EnumModel: meta.GoTable + column.GoName,
 					Remark:    column.EnumName + "名称",
 				}}
 			}),
@@ -139,7 +147,7 @@ func main() {
 			Models: dgcoll.FlatMapToList(meta.QueryColumns, func(column *internal.Column) []*internal.ResponseModel {
 				model := &internal.ResponseModel{
 					FieldName: column.GoName,
-					DataType:  column.DbType,
+					DataType:  adjustDbType(column.DbType),
 					Remark:    column.Comment,
 				}
 
@@ -150,6 +158,7 @@ func main() {
 				return []*internal.ResponseModel{model, {
 					FieldName: column.GoName + "Name",
 					DataType:  "string",
+					EnumModel: meta.GoTable + column.GoName,
 					Remark:    column.EnumName + "名称",
 				}}
 			}),
@@ -161,7 +170,8 @@ func main() {
 			Models: []*internal.InterfaceModel{
 				{
 					InterfaceType:    "新建",
-					RelativePath:     "/create",
+					RelativePath:     "create",
+					MethodName:       "create",
 					DbModelName:      meta.TableName,
 					RequestModelName: "Create" + meta.GoTable + "Req",
 					LogLevel:         "全部",
@@ -169,7 +179,8 @@ func main() {
 				},
 				{
 					InterfaceType:    "修改",
-					RelativePath:     "/modify",
+					RelativePath:     "modify",
+					MethodName:       "modify",
 					DbModelName:      meta.TableName,
 					RequestModelName: "Modify" + meta.GoTable + "Req",
 					LogLevel:         "全部",
@@ -177,7 +188,8 @@ func main() {
 				},
 				{
 					InterfaceType:    "删除",
-					RelativePath:     "/delete",
+					RelativePath:     "delete",
+					MethodName:       "delete",
 					DbModelName:      meta.TableName,
 					RequestModelName: "Id",
 					LogLevel:         "全部",
@@ -185,7 +197,8 @@ func main() {
 				},
 				{
 					InterfaceType:     "分页",
-					RelativePath:      "/page",
+					RelativePath:      "page",
+					MethodName:        "page",
 					DbModelName:       meta.TableName,
 					RequestModelName:  "Query" + meta.GoTable + "Req",
 					ResponseModelName: meta.GoTable + "ListResp",
@@ -194,7 +207,8 @@ func main() {
 				},
 				{
 					InterfaceType:     "列表",
-					RelativePath:      "/list",
+					RelativePath:      "list",
+					MethodName:        "list",
 					DbModelName:       meta.TableName,
 					RequestModelName:  "Query" + meta.GoTable + "Req",
 					ResponseModelName: meta.GoTable + "ListResp",
@@ -203,7 +217,8 @@ func main() {
 				},
 				{
 					InterfaceType:     "详情",
-					RelativePath:      "/detail",
+					RelativePath:      "detail",
+					MethodName:        "detail",
 					DbModelName:       meta.TableName,
 					RequestModelName:  "Id",
 					ResponseModelName: meta.GoTable + "DetailResp",
@@ -217,4 +232,12 @@ func main() {
 
 	outputJson := utils.MustConvertBeanToJsonString(entireModel)
 	fmt.Print(outputJson)
+}
+
+func adjustDbType(dbType string) string {
+	if strings.HasPrefix(dbType, "ttypes") {
+		return "string"
+	}
+
+	return dbType
 }

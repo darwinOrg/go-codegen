@@ -18,6 +18,8 @@ github.com/darwinOrg/daog-ext v0.0.4 h1:gEeJuilPu6p2hnYO0OjVfmaZ5C9NuL76fR8IpDZW
 github.com/darwinOrg/daog-ext v0.0.4/go.mod h1:cA37RBvyST0ARTVFd0BwSiZgFSf45iGVQYYLdVuCEZw=
 github.com/darwinOrg/go-common v0.1.56 h1:05XRle3HPQOC+7Ba2nd1bekl+tbnt4ORZ7v8BlaWi2M=
 github.com/darwinOrg/go-common v0.1.56/go.mod h1:pItL/4ZV0bU64N2qD9ACpvDlYjeomAbheIzPXKqbb88=
+github.com/darwinOrg/go-httpclient v0.1.18 h1:WAPv8KchoL6wtphtvzI0m0LjgLVg0oCg9CwnnT0+NKc=
+github.com/darwinOrg/go-httpclient v0.1.18/go.mod h1:KPIVj3lSnC49Y5RqrqXs+obtK1tanPnpcBW4dUswhps=
 github.com/darwinOrg/go-logger v0.0.6 h1:d4n71HquXZV+oKJFEIGrwoidn8e/aqKaXCB/hl+lqng=
 github.com/darwinOrg/go-logger v0.0.6/go.mod h1:9zM9B+2hm8dHADsLYocsdkX2w72Q04i/4zWg9OC3WU0=
 github.com/darwinOrg/go-monitor v0.0.4 h1:t+TCHM/g3UHLrGKquR2iVGtn3ofuBNPBPnXUZwPHYbw=

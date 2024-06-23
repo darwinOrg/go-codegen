@@ -111,5 +111,5 @@ func toDbTypeString(tp byte, flag uint, isNull bool) string {
 		return "decimal.Decimal"
 	}
 
-	return ""
+	return "string"
 }

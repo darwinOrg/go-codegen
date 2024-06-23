@@ -55,15 +55,13 @@
         "datetime",
         "timestamp"
       ],
-      "nullableModelDataType": "ttypes.NilableDatetime",
-      "modelDataType": "ttypes.NormalDatetime"
+      "modelDataType": "string"
     },
     {
       "dbDataTypes": [
         "date"
       ],
-      "nullableModelDataType": "ttypes.NilableDate",
-      "modelDataType": "ttypes.NormalDate"
+      "modelDataType": "string"
     },
     {
       "dbDataTypes": [
@@ -72,7 +70,6 @@
         "json",
         "text"
       ],
-      "nullableModelDataType": "ttypes.NilableString",
       "modelDataType": "string"
     },
     {
@@ -104,10 +101,6 @@
     "uint32",
     "float32",
     "float64",
-    "ttypes.NormalDatetime",
-    "ttypes.NilableDatetime",
-    "ttypes.NormalDate",
-    "ttypes.NilableDate",
     "decimal.Decimal",
     "[]byte",
     "any"

@@ -39,28 +39,24 @@ func (d *{{.LowerCamelName}}ExtDao) MustGetById(ctx *dgctx.DgContext, tc *daog.T
 	return {{.LowerCamelName}}, nil
 }
 
-func (d *{{.LowerCamelName}}ExtDao) Create(ctx *dgctx.DgContext, tc *daog.TransContext, {{.LowerCamelName}} *{{.GoTable}}) (int64, error) {
-	{{range .Columns}}
-		{{if eq .GoName "CreatedAt"}}{{$.LowerCamelName}}.CreatedAt = ttypes.NormalDatetime(time.Now()){{end -}}
-		{{if eq .GoName "CreatedBy"}}{{$.LowerCamelName}}.CreatedBy = ctx.UserId{{end -}}
-		{{if eq .GoName "ModifiedAt"}}{{$.LowerCamelName}}.ModifiedAt = ttypes.NormalDatetime(time.Now()){{end -}}
-		{{if eq .GoName "ModifiedBy"}}{{$.LowerCamelName}}.ModifiedBy = ctx.UserId{{end -}}
-	{{end}}
+func (d *{{.LowerCamelName}}ExtDao) Create(ctx *dgctx.DgContext, tc *daog.TransContext, {{.LowerCamelName}} *{{.GoTable}}) error {
+	{{$.LowerCamelName}}.CreatedAt = ttypes.NormalDatetime(time.Now())
+	{{$.LowerCamelName}}.CreatedBy = ctx.UserId
+	{{$.LowerCamelName}}.ModifiedAt = ttypes.NormalDatetime(time.Now())
+	{{$.LowerCamelName}}.ModifiedBy = ctx.UserId
 
 	_, err := {{.GoTable}}Dao.Insert(tc, {{.LowerCamelName}})
 	if err != nil {
 		dglogger.Errorf(ctx, "{{.GoTable}}Dao.Insert error: %v", err)
-		return 0, dgerr.SYSTEM_ERROR
+		return dgerr.SYSTEM_ERROR
 	}
 
-	return {{.LowerCamelName}}.Id, nil
+	return nil
 }
 
 func (d *{{.LowerCamelName}}ExtDao) Modify(ctx *dgctx.DgContext, tc *daog.TransContext, {{.LowerCamelName}} *{{.GoTable}}) error {
-	{{range .Columns}}
-		{{if eq .GoName "ModifiedAt"}}{{$.LowerCamelName}}.ModifiedAt = ttypes.NormalDatetime(time.Now()){{end -}}
-		{{if eq .GoName "ModifiedBy"}}{{$.LowerCamelName}}.ModifiedBy = ctx.UserId{{end -}}
-	{{end}}
+	{{$.LowerCamelName}}.ModifiedAt = ttypes.NormalDatetime(time.Now())
+	{{$.LowerCamelName}}.ModifiedBy = ctx.UserId
 
 	_, err := {{.GoTable}}Dao.Update(tc, {{.LowerCamelName}})
 	if err != nil {

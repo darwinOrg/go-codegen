@@ -3,10 +3,10 @@ package _server
 var HandlerTpl = `package handler
 
 import (
-	{{if .HasModel}}"{{.ServerPackagePrefix}}/model"{{end}}
+	{{if .HasModel}}"{{.PackagePrefix}}/model"{{end}}
 	{{if .HasId}}cm "github.com/darwinOrg/go-common/model"{{end}}
 	{{if .HasPage}}"github.com/darwinOrg/go-common/page"{{end}}
-	"{{.ServerPackagePrefix}}/service"
+	"{{.PackagePrefix}}/service"
 	dgctx "github.com/darwinOrg/go-common/context"
 	"github.com/darwinOrg/go-common/result"
 	"github.com/gin-gonic/gin"
@@ -28,8 +28,7 @@ func (h *{{$inter.GroupLowerCamel}}Handler) {{.MethodNameExp}}(_ *gin.Context, c
 	if err != nil {
 		return result.SimpleFailByError(err)
 	}
-	return result.SimpleSuccess()
-	{{end -}}
+	return result.SimpleSuccess(){{end}}
 }
 {{end}}
 {{end}}
