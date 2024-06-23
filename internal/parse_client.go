@@ -3,7 +3,6 @@ package internal
 import (
 	_client "dgen/tpl/client"
 	_server "dgen/tpl/server"
-	"github.com/darwinOrg/go-common/utils"
 	"io/fs"
 	"os"
 	"path/filepath"
@@ -15,38 +14,12 @@ type clientParser struct {
 }
 
 func (p *clientParser) Parse(entireModel *EntireModel) error {
-	err := p.parseEnum(entireModel)
-	if err != nil {
-		return err
-	}
-
-	err = p.parseModel(entireModel)
+	err := p.parseModel(entireModel)
 	if err != nil {
 		return err
 	}
 
 	err = p.parseClient(entireModel)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (g *clientParser) parseEnum(entireModel *EntireModel) error {
-	if len(entireModel.Enums) == 0 {
-		return nil
-	}
-
-	enumDir := filepath.Join(entireModel.Export.ClientOutput, "enum")
-	_ = os.MkdirAll(enumDir, fs.ModeDir|fs.ModePerm)
-
-	enum := filepath.Join(enumDir, entireModel.FilePrefix+"_enum.go")
-	if utils.ExistsFile(enum) {
-		return nil
-	}
-
-	err := parseFile(enum, "enum", _server.EnumTpl, entireModel)
 	if err != nil {
 		return err
 	}
