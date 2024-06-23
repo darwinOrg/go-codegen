@@ -1,8 +1,11 @@
-package internal
+package pkg
 
-import "github.com/pingcap/tidb/parser/mysql"
+import (
+	"github.com/pingcap/tidb/parser/mysql"
+	"strings"
+)
 
-func toDbTypeString(tp byte, flag uint, isNull bool) string {
+func ToDbTypeString(tp byte, flag uint, isNull bool) string {
 	switch tp {
 	case mysql.TypeTiny:
 		if mysql.HasUnsignedFlag(flag) {
@@ -112,4 +115,12 @@ func toDbTypeString(tp byte, flag uint, isNull bool) string {
 	}
 
 	return "string"
+}
+
+func AdjustDbType(dbType string) string {
+	if strings.HasPrefix(dbType, "ttypes") {
+		return "string"
+	}
+
+	return dbType
 }

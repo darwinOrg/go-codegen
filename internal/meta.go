@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"dgen/pkg"
 	"fmt"
 	dgcoll "github.com/darwinOrg/go-common/collection"
 	"github.com/darwinOrg/go-common/model"
@@ -30,6 +31,7 @@ type Column struct {
 	GoName         string
 	DbName         string
 	DbType         string
+	ModelType      string
 	LowerCamelName string
 	IsNull         bool
 	HasEnum        bool
@@ -136,12 +138,13 @@ func toColumn(def *ast.ColumnDef) *Column {
 	}
 	c.IsNull = isNull
 
-	dbType := toDbTypeString(def.Tp.GetType(), def.Tp.GetFlag(), isNull)
+	dbType := pkg.ToDbTypeString(def.Tp.GetType(), def.Tp.GetFlag(), isNull)
 	if dbType == "" {
 		log.Printf("%s不能推断出数据库类型\n", c.DbName)
 		return nil
 	}
 	c.DbType = dbType
+	c.ModelType = pkg.AdjustDbType(dbType)
 
 	return c
 }
