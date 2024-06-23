@@ -109,6 +109,7 @@ func main() {
 				model := &internal.RequestModel{
 					FieldName: column.GoName,
 					DataType:  adjustDbType(column.DbType),
+					Nullable:  column.IsNull,
 					Remark:    column.Comment,
 				}
 
@@ -126,6 +127,7 @@ func main() {
 				model := &internal.ResponseModel{
 					FieldName: column.GoName,
 					DataType:  adjustDbType(column.DbType),
+					Nullable:  column.IsNull,
 					Remark:    column.Comment,
 				}
 
@@ -136,6 +138,7 @@ func main() {
 				return []*internal.ResponseModel{model, {
 					FieldName: column.GoName + "Name",
 					DataType:  "string",
+					Nullable:  column.IsNull,
 					EnumModel: meta.GoTable + column.GoName,
 					Remark:    column.EnumName + "名称",
 				}}
@@ -148,6 +151,7 @@ func main() {
 				model := &internal.ResponseModel{
 					FieldName: column.GoName,
 					DataType:  adjustDbType(column.DbType),
+					Nullable:  column.IsNull,
 					Remark:    column.Comment,
 				}
 

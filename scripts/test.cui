@@ -1046,6 +1046,7 @@
         {
           "fieldName": "Code",
           "dataType": "string",
+          "nullable": true,
           "remark": "职位编码"
         },
         {
@@ -1266,6 +1267,7 @@
         {
           "fieldName": "Code",
           "dataType": "string",
+          "nullable": true,
           "remark": "职位编码"
         },
         {
@@ -1490,6 +1492,7 @@
         {
           "fieldName": "Code",
           "dataType": "string",
+          "nullable": true,
           "remark": "职位编码"
         },
         {
@@ -1500,6 +1503,7 @@
         {
           "fieldName": "Description",
           "dataType": "string",
+          "nullable": true,
           "remark": "职位描述"
         },
         {
@@ -1728,6 +1732,7 @@
           "methodName": "modify",
           "dbModelName": "job",
           "requestModelName": "ModifyJobReq",
+          "responseModelName": "",
           "allowRoles": [],
           "allowProducts": [],
           "logLevel": "全部",
@@ -1787,7 +1792,7 @@
     "serverOutput": "../output/server",
     "serverPackagePrefix": "dgen/output/server",
     "clientOutput": "../output/client",
-    "clientPackagePrefix": "dgen/output/client",
+    "clientPackagePrefix": "",
     "apifoxOutput": ""
   }
 }
