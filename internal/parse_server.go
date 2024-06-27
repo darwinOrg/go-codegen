@@ -193,6 +193,10 @@ func (g *serverParser) parseHandler(entireModel *EntireModel) error {
 	_ = os.MkdirAll(handlerDir, fs.ModeDir|fs.ModePerm)
 
 	handler := filepath.Join(handlerDir, entireModel.FilePrefix+"_handler.go")
+	if utils.ExistsFile(handler) {
+		return nil
+	}
+
 	err := parseFile(handler, "handler", _server.HandlerTpl, entireModel)
 	if err != nil {
 		return err

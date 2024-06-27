@@ -88,7 +88,7 @@ func main() {
 		entireModel.Requests = append(entireModel.Requests, &internal.RequestModelData{
 			Name: "Modify" + meta.GoTable + "Req",
 			Models: dgcoll.MapToList(meta.ModifyColumns, func(column *internal.Column) *internal.RequestModel {
-				model := &internal.RequestModel{
+				requestModel := &internal.RequestModel{
 					FieldName: column.GoName,
 					DataType:  adjustDbType(column.DbType),
 					Nullable:  column.IsNull,
@@ -96,17 +96,17 @@ func main() {
 				}
 
 				if column.HasEnum {
-					model.EnumModel = meta.GoTable + column.GoName
+					requestModel.EnumModel = meta.GoTable + column.GoName
 				}
 
-				return model
+				return requestModel
 			}),
 		})
 
 		entireModel.Requests = append(entireModel.Requests, &internal.RequestModelData{
 			Name: "Query" + meta.GoTable + "Req",
 			Models: dgcoll.MapToList(meta.QueryColumns, func(column *internal.Column) *internal.RequestModel {
-				model := &internal.RequestModel{
+				requestModel := &internal.RequestModel{
 					FieldName: column.GoName,
 					DataType:  adjustDbType(column.DbType),
 					Nullable:  column.IsNull,
@@ -114,17 +114,17 @@ func main() {
 				}
 
 				if column.HasEnum {
-					model.EnumModel = meta.GoTable + column.GoName
+					requestModel.EnumModel = meta.GoTable + column.GoName
 				}
 
-				return model
+				return requestModel
 			}),
 		})
 
 		entireModel.Responses = append(entireModel.Responses, &internal.ResponseModelData{
 			Name: meta.GoTable + "ListResp",
 			Models: dgcoll.FlatMapToList(meta.QueryColumns, func(column *internal.Column) []*internal.ResponseModel {
-				model := &internal.ResponseModel{
+				requestModel := &internal.ResponseModel{
 					FieldName: column.GoName,
 					DataType:  adjustDbType(column.DbType),
 					Nullable:  column.IsNull,
@@ -132,10 +132,10 @@ func main() {
 				}
 
 				if !column.HasEnum {
-					return []*internal.ResponseModel{model}
+					return []*internal.ResponseModel{requestModel}
 				}
 
-				return []*internal.ResponseModel{model, {
+				return []*internal.ResponseModel{requestModel, {
 					FieldName: column.GoName + "Name",
 					DataType:  "string",
 					Nullable:  column.IsNull,
@@ -148,7 +148,7 @@ func main() {
 		entireModel.Responses = append(entireModel.Responses, &internal.ResponseModelData{
 			Name: meta.GoTable + "DetailResp",
 			Models: dgcoll.FlatMapToList(meta.QueryColumns, func(column *internal.Column) []*internal.ResponseModel {
-				model := &internal.ResponseModel{
+				requestModel := &internal.ResponseModel{
 					FieldName: column.GoName,
 					DataType:  adjustDbType(column.DbType),
 					Nullable:  column.IsNull,
@@ -156,10 +156,10 @@ func main() {
 				}
 
 				if !column.HasEnum {
-					return []*internal.ResponseModel{model}
+					return []*internal.ResponseModel{requestModel}
 				}
 
-				return []*internal.ResponseModel{model, {
+				return []*internal.ResponseModel{requestModel, {
 					FieldName: column.GoName + "Name",
 					DataType:  "string",
 					EnumModel: meta.GoTable + column.GoName,

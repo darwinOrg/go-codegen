@@ -5,6 +5,7 @@ go 1.20
 require (
 	github.com/darwinOrg/daog-ext v0.0.4
 	github.com/darwinOrg/go-common v0.1.56
+	github.com/darwinOrg/go-httpclient v0.1.18
 	github.com/darwinOrg/go-logger v0.0.6
 	github.com/darwinOrg/go-web v0.1.31
 	github.com/gin-gonic/gin v1.9.1
@@ -22,7 +23,6 @@ require (
 	github.com/cloudwego/base64x v0.1.4 // indirect
 	github.com/cloudwego/iasm v0.2.0 // indirect
 	github.com/cznic/mathutil v0.0.0-20181122101859-297441e03548 // indirect
-	github.com/darwinOrg/go-httpclient v0.1.18 // indirect
 	github.com/darwinOrg/go-monitor v0.0.4 // indirect
 	github.com/darwinOrg/go-validator-ext v0.0.7 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.3 // indirect

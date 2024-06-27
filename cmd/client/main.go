@@ -49,5 +49,5 @@ func main() {
 	}
 
 	entireModel.Fill(entireModel.Export.ClientPackagePrefix)
-	internal.ClientParser.Parse(entireModel)
+	_ = internal.ClientParser.Parse(entireModel)
 }

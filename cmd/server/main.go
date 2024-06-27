@@ -7,5 +7,5 @@ import (
 func main() {
 	entireModel := internal.InitEntireModel()
 	entireModel.Fill(entireModel.Export.ServerPackagePrefix)
-	internal.ServerParser.Parse(entireModel)
+	_ = internal.ServerParser.Parse(entireModel)
 }
