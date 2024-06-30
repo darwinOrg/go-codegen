@@ -90,7 +90,6 @@
   "modelDataTypes": [
     "string",
     "int",
-    "bool",
     "int64",
     "uint64",
     "int8",
@@ -102,7 +101,7 @@
     "float32",
     "float64",
     "decimal.Decimal",
-    "[]byte",
+    "bool",
     "any"
   ],
   "allowRoles": [

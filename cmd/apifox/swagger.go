@@ -1,0 +1,321 @@
+package main
+
+import (
+	"dgen/internal"
+	"fmt"
+	"github.com/go-openapi/spec"
+	"net/http"
+	"strings"
+)
+
+const (
+	contentTypeJson = "application/json"
+)
+
+func buildSwaggerProps(entireModel *internal.EntireModel) spec.SwaggerProps {
+	return spec.SwaggerProps{
+		Swagger:             "2.0",
+		Definitions:         spec.Definitions{},
+		SecurityDefinitions: spec.SecurityDefinitions{},
+		Info: &spec.Info{
+			InfoProps: spec.InfoProps{
+				Title:       "接口文档",
+				Description: "接口描述",
+				Version:     "v1.0.0",
+			},
+		},
+		Paths: buildPaths(entireModel),
+	}
+}
+
+func buildPaths(entireModel *internal.EntireModel) *spec.Paths {
+	paths := map[string]spec.PathItem{}
+
+	for _, g := range entireModel.Interfaces {
+		for _, m := range g.Models {
+			url := fmt.Sprintf("%s/%s", g.RoutePrefix, m.RelativePath)
+			url = strings.ReplaceAll(url, "//", "/")
+
+			operation := &spec.Operation{
+				OperationProps: spec.OperationProps{
+					Summary:     m.Remark,
+					Description: m.Remark,
+					Consumes:    []string{contentTypeJson},
+					Produces:    []string{contentTypeJson},
+					Parameters:  buildPostParameters(m),
+					Responses:   buildResponses(m),
+				},
+			}
+
+			itemProps := spec.PathItemProps{}
+			itemProps.Post = operation
+
+			paths[url] = spec.PathItem{
+				PathItemProps: itemProps,
+			}
+		}
+	}
+
+	return &spec.Paths{
+		Paths: paths,
+	}
+}
+
+func buildPostParameters(interfaceModel *internal.InterfaceModel) []spec.Parameter {
+	schema := createRequestSchemaForInterface(interfaceModel)
+	bodyParam := *spec.BodyParam("body", schema)
+	bodyParam.Required = true
+	return []spec.Parameter{bodyParam}
+}
+
+func createRequestSchemaForInterface(interfaceModel *internal.InterfaceModel) *spec.Schema {
+	schema := &spec.Schema{}
+
+	if interfaceModel.RequestModelName == "Id" {
+		property := &spec.Schema{}
+		property.Type = []string{"integer"}
+		property.Description = "id"
+
+		schema.Properties = map[string]spec.Schema{
+			"id": *property,
+		}
+		schema.Required = []string{"id"}
+
+		return schema
+	}
+
+	if interfaceModel.RequestModelName == "" || interfaceModel.RequestModelData == nil {
+		return schema
+	}
+
+	schema.Type = []string{"object"}
+	schema.Properties = make(map[string]spec.Schema)
+	schema.Required = make([]string, 0)
+	depth := 0
+
+	for _, requestModelData := range []*internal.RequestModelData{interfaceModel.RequestModelData, interfaceModel.RequestModelData.ExtendRequestModelData} {
+		if requestModelData == nil {
+			continue
+		}
+
+		fillPropertyForRequest(schema, requestModelData, depth)
+	}
+
+	return schema
+}
+
+func fillPropertyForRequest(schema *spec.Schema, requestModelData *internal.RequestModelData, depth int) {
+	// 限制递归深度最大为8
+	if depth > 8 {
+		return
+	}
+
+	for _, requestModel := range requestModelData.Models {
+		var property *spec.Schema
+		modelSchema := createSchemaForRequest(requestModel, depth)
+
+		if requestModel.IsArray {
+			property = &spec.Schema{}
+			property.Type = []string{"array"}
+			property.Items = &spec.SchemaOrArray{Schema: modelSchema}
+		} else {
+			property = modelSchema
+		}
+
+		schema.Properties[requestModel.LowerCamelName] = *property
+		if !requestModel.Nullable {
+			schema.Required = append(schema.Required, requestModel.LowerCamelName)
+		}
+	}
+}
+
+func createSchemaForRequest(requestModel *internal.RequestModel, depth int) *spec.Schema {
+	schema := &spec.Schema{}
+	schema.Description = requestModel.Remark
+
+	switch requestModel.DataType {
+	case "string":
+		schema.Type = []string{"string"}
+	case "int", "int64", "uint64", "int8", "uint8", "int16", "uint16", "int32", "uint32":
+		schema.Type = []string{"integer"}
+	case "float32", "float64", "decimal.Decimal":
+		schema.Type = []string{"number"}
+	case "bool":
+		schema.Type = []string{"boolean"}
+	case "any":
+	default:
+		schema.Type = []string{"object"}
+		schema.Properties = make(map[string]spec.Schema)
+		schema.Required = make([]string, 0)
+
+		if requestModel.RequestModelData != nil {
+			fillPropertyForRequest(schema, requestModel.RequestModelData, depth)
+		}
+	}
+
+	return schema
+}
+
+func buildResponses(interfaceModel *internal.InterfaceModel) *spec.Responses {
+	return &spec.Responses{
+		ResponsesProps: spec.ResponsesProps{
+			StatusCodeResponses: map[int]spec.Response{
+				http.StatusOK: {
+					ResponseProps: spec.ResponseProps{
+						Description: "成功",
+						Schema:      createResponseSchemaForInterface(interfaceModel),
+					},
+				},
+			},
+		},
+	}
+}
+
+func createResponseSchemaForInterface(interfaceModel *internal.InterfaceModel) *spec.Schema {
+	successProperty := &spec.Schema{}
+	successProperty.Type = []string{"bool"}
+	successProperty.Description = "是否成功"
+
+	codeProperty := newIntegerSchema("消息编码")
+
+	messageProperty := &spec.Schema{}
+	messageProperty.Type = []string{"string"}
+	messageProperty.Description = "消息内容"
+
+	schema := &spec.Schema{}
+	schema.Type = []string{"object"}
+	schema.Required = []string{"success", "code"}
+	schema.Properties = map[string]spec.Schema{
+		"success": *successProperty,
+		"code":    *codeProperty,
+		"message": *messageProperty,
+	}
+
+	if interfaceModel.ResponseModelName == "" || interfaceModel.ResponseModelData == nil {
+		return schema
+	}
+
+	var dataProperty *spec.Schema
+	modelSchema := createResponseModelSchema(interfaceModel)
+
+	if interfaceModel.InterfaceType == "分页" {
+		dataProperty = &spec.Schema{}
+		dataProperty.Type = []string{"object"}
+
+		pageNoProperty := newIntegerSchema("页码")
+		pageSizeProperty := newIntegerSchema("每页记录数")
+		totalCountProperty := newIntegerSchema("总记录数")
+		totalPagesProperty := newIntegerSchema("总页数")
+
+		listProperty := &spec.Schema{}
+		listProperty.Type = []string{"array"}
+		listProperty.Description = "列表数据"
+		listProperty.Items = &spec.SchemaOrArray{Schema: modelSchema}
+
+		dataProperty.Properties = map[string]spec.Schema{
+			"pageNo":     *pageNoProperty,
+			"pageSize":   *pageSizeProperty,
+			"totalCount": *totalCountProperty,
+			"totalPages": *totalPagesProperty,
+			"list":       *listProperty,
+		}
+
+		dataProperty.Required = []string{"pageNo", "pageSize", "totalCount", "totalPages"}
+	} else if interfaceModel.InterfaceType == "列表" {
+		dataProperty = &spec.Schema{}
+		dataProperty.Type = []string{"array"}
+		dataProperty.Items = &spec.SchemaOrArray{Schema: modelSchema}
+	} else {
+		dataProperty = modelSchema
+	}
+
+	dataProperty.Description = "数据"
+	schema.Properties["data"] = *dataProperty
+	return schema
+}
+
+func createResponseModelSchema(interfaceModel *internal.InterfaceModel) *spec.Schema {
+	schema := &spec.Schema{}
+	schema.Type = []string{"object"}
+	schema.Properties = make(map[string]spec.Schema)
+	schema.Required = make([]string, 0)
+	depth := 0
+
+	for _, responseModelData := range []*internal.ResponseModelData{interfaceModel.ResponseModelData, interfaceModel.ResponseModelData.ExtendResponseModelData} {
+		if responseModelData == nil {
+			continue
+		}
+
+		fillPropertyForResponse(schema, responseModelData, depth)
+	}
+
+	return schema
+}
+
+func fillPropertyForResponse(schema *spec.Schema, responseModelData *internal.ResponseModelData, depth int) {
+	// 限制递归深度最大为8
+	if depth > 8 {
+		return
+	}
+
+	for _, responseModel := range responseModelData.Models {
+		var property *spec.Schema
+		modelSchema := createSchemaForResponse(responseModel, depth)
+
+		if responseModel.IsArray {
+			property = &spec.Schema{}
+			property.Type = []string{"array"}
+			property.Items = &spec.SchemaOrArray{Schema: modelSchema}
+		} else {
+			property = modelSchema
+		}
+
+		schema.Properties[responseModel.LowerCamelName] = *property
+		if !responseModel.Nullable {
+			schema.Required = append(schema.Required, responseModel.LowerCamelName)
+		}
+	}
+}
+
+func createSchemaForResponse(responseModel *internal.ResponseModel, depth int) *spec.Schema {
+	schema := &spec.Schema{}
+
+	if responseModel.EnumTitle != "" {
+		schema.Title = responseModel.EnumTitle
+	}
+
+	if responseModel.EnumRemark != "" {
+		schema.Description = responseModel.EnumRemark
+	} else {
+		schema.Description = responseModel.Remark
+	}
+
+	switch responseModel.DataType {
+	case "string":
+		schema.Type = []string{"string"}
+	case "int", "int64", "uint64", "int8", "uint8", "int16", "uint16", "int32", "uint32":
+		schema.Type = []string{"integer"}
+	case "float32", "float64", "decimal.Decimal":
+		schema.Type = []string{"number"}
+	case "bool":
+		schema.Type = []string{"boolean"}
+	case "any":
+	default:
+		schema.Type = []string{"object"}
+		schema.Properties = make(map[string]spec.Schema)
+		schema.Required = make([]string, 0)
+
+		if responseModel.ResponseModelData != nil {
+			fillPropertyForResponse(schema, responseModel.ResponseModelData, depth)
+		}
+	}
+
+	return schema
+}
+
+func newIntegerSchema(desc string) *spec.Schema {
+	codeProperty := &spec.Schema{}
+	codeProperty.Type = []string{"integer"}
+	codeProperty.Description = desc
+	return codeProperty
+}

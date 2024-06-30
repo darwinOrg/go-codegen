@@ -1793,6 +1793,6 @@
     "serverPackagePrefix": "dgen/output/server",
     "clientOutput": "../output/client",
     "clientPackagePrefix": "",
-    "apifoxOutput": ""
+    "apifoxOutput": "测试1/测试2"
   }
 }

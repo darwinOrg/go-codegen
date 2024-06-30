@@ -88,8 +88,9 @@ type RequestModel struct {
 	EnumModel   string `json:"enumModel,omitempty"`
 	Remark      string `json:"remark,omitempty"`
 
-	LowerCamelName string `json:"lowerCamelName,omitempty"`
-	NullableString bool   `json:"nullableString,omitempty"`
+	LowerCamelName   string            `json:"lowerCamelName,omitempty"`
+	NullableString   bool              `json:"nullableString,omitempty"`
+	RequestModelData *RequestModelData `json:"requestModelData,omitempty"`
 }
 
 type RequestModelData struct {
@@ -97,10 +98,11 @@ type RequestModelData struct {
 	Models     []*RequestModel `json:"models,omitempty"`
 	ExtendName string          `json:"extendName,omitempty"`
 
-	UpperCamelName string `json:"upperCamelName,omitempty"`
-	IsPage         bool   `json:"isPage,omitempty"`
-	IsPageOrList   bool   `json:"isPageOrList,omitempty"`
-	InterfaceType  string `json:"interfaceType,omitempty"`
+	UpperCamelName         string            `json:"upperCamelName,omitempty"`
+	IsPage                 bool              `json:"isPage,omitempty"`
+	IsPageOrList           bool              `json:"isPageOrList,omitempty"`
+	InterfaceType          string            `json:"interfaceType,omitempty"`
+	ExtendRequestModelData *RequestModelData `json:"extendRequestModelData,omitempty"`
 }
 
 type ResponseModel struct {
@@ -113,11 +115,12 @@ type ResponseModel struct {
 	EnumModel  string `json:"enumModel,omitempty"`
 	Remark     string `json:"remark,omitempty"`
 
-	LowerCamelName string `json:"lowerCamelName,omitempty"`
-	EnumTitle      string `json:"enumTitle,omitempty"`
-	EnumRemark     string `json:"enumRemark,omitempty"`
-	EnumFieldName  string `json:"enumFieldName,omitempty"`
-	NullableString bool   `json:"nullableString,omitempty"`
+	LowerCamelName    string             `json:"lowerCamelName,omitempty"`
+	EnumTitle         string             `json:"enumTitle,omitempty"`
+	EnumRemark        string             `json:"enumRemark,omitempty"`
+	EnumFieldName     string             `json:"enumFieldName,omitempty"`
+	NullableString    bool               `json:"nullableString,omitempty"`
+	ResponseModelData *ResponseModelData `json:"responseModelData,omitempty"`
 }
 
 type ResponseModelData struct {
@@ -125,8 +128,9 @@ type ResponseModelData struct {
 	Models     []*ResponseModel `json:"models,omitempty"`
 	ExtendName string           `json:"extendName,omitempty"`
 
-	UpperCamelName string `json:"upperCamelName,omitempty"`
-	InterfaceType  string `json:"interfaceType,omitempty"`
+	UpperCamelName          string             `json:"upperCamelName,omitempty"`
+	InterfaceType           string             `json:"interfaceType,omitempty"`
+	ExtendResponseModelData *ResponseModelData `json:"extendResponseModelData,omitempty"`
 }
 
 type InterfaceModel struct {
@@ -143,14 +147,16 @@ type InterfaceModel struct {
 	NotLogSQL         bool     `json:"notLogSQL,omitempty"`
 	Remark            string   `json:"remark,omitempty"`
 
-	DbTableUpperCamel       string `json:"dbTableUpperCamel,omitempty"`
-	DbTableLowerCamel       string `json:"dbTableLowerCamel,omitempty"`
-	RequestModelNameExp     string `json:"requestModelNameExp,omitempty"`
-	ResponseModelNameExp    string `json:"responseModelNameExp,omitempty"`
-	ResponseModelHasPointer bool   `json:"responseModelHasPointer,omitempty"`
-	AllowProductsExp        string `json:"allowProductsExp,omitempty"`
-	LogLevelExp             string `json:"logLevelExp,omitempty"`
-	MethodNameExp           string `json:"methodNameExp,omitempty"`
+	DbTableUpperCamel       string             `json:"dbTableUpperCamel,omitempty"`
+	DbTableLowerCamel       string             `json:"dbTableLowerCamel,omitempty"`
+	RequestModelData        *RequestModelData  `json:"requestModelData,omitempty"`
+	RequestModelNameExp     string             `json:"requestModelNameExp,omitempty"`
+	ResponseModelData       *ResponseModelData `json:"responseModelData,omitempty"`
+	ResponseModelNameExp    string             `json:"responseModelNameExp,omitempty"`
+	ResponseModelHasPointer bool               `json:"responseModelHasPointer,omitempty"`
+	AllowProductsExp        string             `json:"allowProductsExp,omitempty"`
+	LogLevelExp             string             `json:"logLevelExp,omitempty"`
+	MethodNameExp           string             `json:"methodNameExp,omitempty"`
 }
 
 type InterfaceModelData struct {
@@ -278,6 +284,20 @@ func (m *EntireModel) FillRequests() {
 			if model.DataType == "Id" {
 				m.HasId = true
 			}
+
+			for _, req := range m.Requests {
+				if req.Name == model.DataType {
+					model.RequestModelData = request
+				}
+			}
+		}
+
+		if request.ExtendName != "" {
+			for _, req := range m.Requests {
+				if req.Name == request.ExtendName {
+					req.ExtendRequestModelData = request
+				}
+			}
 		}
 	}
 }
@@ -307,6 +327,20 @@ func (m *EntireModel) FillResponses() {
 			if model.DataType == "decimal.Decimal" {
 				m.HasDecimal = true
 			}
+
+			for _, resp := range m.Responses {
+				if resp.Name == model.DataType {
+					model.ResponseModelData = resp
+				}
+			}
+		}
+
+		if response.ExtendName != "" {
+			for _, resp := range m.Responses {
+				if resp.Name == response.ExtendName {
+					resp.ExtendResponseModelData = response
+				}
+			}
 		}
 	}
 }
@@ -323,26 +357,6 @@ func (m *EntireModel) FillInterfaces() {
 		for _, model := range inter.Models {
 			model.RelativePath = strings.TrimPrefix(model.RelativePath, "/")
 
-			if model.InterfaceType == "分页" && model.RequestModelName != "" {
-				for _, request := range m.Requests {
-					if request.Name == model.RequestModelName {
-						request.IsPage = true
-						m.HasPage = true
-						inter.HasPage = true
-						break
-					}
-				}
-			}
-
-			if (model.InterfaceType == "分页" || model.InterfaceType == "列表") && model.RequestModelName != "" {
-				for _, request := range m.Requests {
-					if request.Name == model.RequestModelName {
-						request.IsPageOrList = true
-						break
-					}
-				}
-			}
-
 			if model.InterfaceType == "分页" || model.InterfaceType == "列表" {
 				m.HasQuery = true
 				inter.HasQuery = true
@@ -358,10 +372,28 @@ func (m *EntireModel) FillInterfaces() {
 				model.RequestModelNameExp = "result.Void"
 			}
 
+			if model.RequestModelName != "" {
+				for _, request := range m.Requests {
+					if request.Name == model.RequestModelName {
+						model.RequestModelData = request
+
+						if model.InterfaceType == "分页" {
+							request.IsPage = true
+							request.IsPageOrList = true
+							m.HasPage = true
+							inter.HasPage = true
+						} else if model.InterfaceType == "列表" {
+							request.IsPageOrList = true
+						}
+					}
+				}
+			}
+
 			if model.ResponseModelName != "" {
 				model.ResponseModelNameExp = model.ResponseModelName
 				for _, response := range m.Responses {
 					if model.ResponseModelName == response.Name {
+						model.ResponseModelData = response
 						model.ResponseModelHasPointer = true
 						if model.InterfaceType == "分页" {
 							model.ResponseModelNameExp = "*page.PageList[model." + model.ResponseModelName + "]"
