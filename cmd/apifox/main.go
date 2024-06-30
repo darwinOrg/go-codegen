@@ -17,7 +17,7 @@ func main() {
 
 	entireModel := internal.InitEntireModel()
 	entireModel.Fill(entireModel.Export.ServerPackagePrefix)
-	swaggerProps := buildSwaggerProps(entireModel)
+	swaggerProps := internal.BuildSwaggerProps(entireModel)
 	swaggerJsonBytes, err := json.MarshalIndent(swaggerProps, "", "  ")
 	if err != nil {
 		log.Println(err.Error())

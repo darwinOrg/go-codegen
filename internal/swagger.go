@@ -1,7 +1,6 @@
-package main
+package internal
 
 import (
-	"dgen/internal"
 	"fmt"
 	"github.com/go-openapi/spec"
 	"net/http"
@@ -12,7 +11,7 @@ const (
 	contentTypeJson = "application/json"
 )
 
-func buildSwaggerProps(entireModel *internal.EntireModel) spec.SwaggerProps {
+func BuildSwaggerProps(entireModel *EntireModel) spec.SwaggerProps {
 	return spec.SwaggerProps{
 		Swagger:             "2.0",
 		Definitions:         spec.Definitions{},
@@ -28,7 +27,7 @@ func buildSwaggerProps(entireModel *internal.EntireModel) spec.SwaggerProps {
 	}
 }
 
-func buildPaths(entireModel *internal.EntireModel) *spec.Paths {
+func buildPaths(entireModel *EntireModel) *spec.Paths {
 	paths := map[string]spec.PathItem{}
 
 	for _, g := range entireModel.Interfaces {
@@ -61,14 +60,14 @@ func buildPaths(entireModel *internal.EntireModel) *spec.Paths {
 	}
 }
 
-func buildPostParameters(interfaceModel *internal.InterfaceModel) []spec.Parameter {
+func buildPostParameters(interfaceModel *InterfaceModel) []spec.Parameter {
 	schema := createRequestSchemaForInterface(interfaceModel)
 	bodyParam := *spec.BodyParam("body", schema)
 	bodyParam.Required = true
 	return []spec.Parameter{bodyParam}
 }
 
-func createRequestSchemaForInterface(interfaceModel *internal.InterfaceModel) *spec.Schema {
+func createRequestSchemaForInterface(interfaceModel *InterfaceModel) *spec.Schema {
 	schema := &spec.Schema{}
 
 	if interfaceModel.RequestModelName == "Id" {
@@ -93,7 +92,7 @@ func createRequestSchemaForInterface(interfaceModel *internal.InterfaceModel) *s
 	schema.Required = make([]string, 0)
 	depth := 0
 
-	for _, requestModelData := range []*internal.RequestModelData{interfaceModel.RequestModelData, interfaceModel.RequestModelData.ExtendRequestModelData} {
+	for _, requestModelData := range []*RequestModelData{interfaceModel.RequestModelData, interfaceModel.RequestModelData.ExtendRequestModelData} {
 		if requestModelData == nil {
 			continue
 		}
@@ -104,7 +103,7 @@ func createRequestSchemaForInterface(interfaceModel *internal.InterfaceModel) *s
 	return schema
 }
 
-func fillPropertyForRequest(schema *spec.Schema, requestModelData *internal.RequestModelData, depth int) {
+func fillPropertyForRequest(schema *spec.Schema, requestModelData *RequestModelData, depth int) {
 	// 限制递归深度最大为8
 	if depth > 8 {
 		return
@@ -129,7 +128,7 @@ func fillPropertyForRequest(schema *spec.Schema, requestModelData *internal.Requ
 	}
 }
 
-func createSchemaForRequest(requestModel *internal.RequestModel, depth int) *spec.Schema {
+func createSchemaForRequest(requestModel *RequestModel, depth int) *spec.Schema {
 	schema := &spec.Schema{}
 	schema.Description = requestModel.Remark
 
@@ -156,7 +155,7 @@ func createSchemaForRequest(requestModel *internal.RequestModel, depth int) *spe
 	return schema
 }
 
-func buildResponses(interfaceModel *internal.InterfaceModel) *spec.Responses {
+func buildResponses(interfaceModel *InterfaceModel) *spec.Responses {
 	return &spec.Responses{
 		ResponsesProps: spec.ResponsesProps{
 			StatusCodeResponses: map[int]spec.Response{
@@ -171,7 +170,7 @@ func buildResponses(interfaceModel *internal.InterfaceModel) *spec.Responses {
 	}
 }
 
-func createResponseSchemaForInterface(interfaceModel *internal.InterfaceModel) *spec.Schema {
+func createResponseSchemaForInterface(interfaceModel *InterfaceModel) *spec.Schema {
 	successProperty := &spec.Schema{}
 	successProperty.Type = []string{"bool"}
 	successProperty.Description = "是否成功"
@@ -234,14 +233,14 @@ func createResponseSchemaForInterface(interfaceModel *internal.InterfaceModel) *
 	return schema
 }
 
-func createResponseModelSchema(interfaceModel *internal.InterfaceModel) *spec.Schema {
+func createResponseModelSchema(interfaceModel *InterfaceModel) *spec.Schema {
 	schema := &spec.Schema{}
 	schema.Type = []string{"object"}
 	schema.Properties = make(map[string]spec.Schema)
 	schema.Required = make([]string, 0)
 	depth := 0
 
-	for _, responseModelData := range []*internal.ResponseModelData{interfaceModel.ResponseModelData, interfaceModel.ResponseModelData.ExtendResponseModelData} {
+	for _, responseModelData := range []*ResponseModelData{interfaceModel.ResponseModelData, interfaceModel.ResponseModelData.ExtendResponseModelData} {
 		if responseModelData == nil {
 			continue
 		}
@@ -252,7 +251,7 @@ func createResponseModelSchema(interfaceModel *internal.InterfaceModel) *spec.Sc
 	return schema
 }
 
-func fillPropertyForResponse(schema *spec.Schema, responseModelData *internal.ResponseModelData, depth int) {
+func fillPropertyForResponse(schema *spec.Schema, responseModelData *ResponseModelData, depth int) {
 	// 限制递归深度最大为8
 	if depth > 8 {
 		return
@@ -277,7 +276,7 @@ func fillPropertyForResponse(schema *spec.Schema, responseModelData *internal.Re
 	}
 }
 
-func createSchemaForResponse(responseModel *internal.ResponseModel, depth int) *spec.Schema {
+func createSchemaForResponse(responseModel *ResponseModel, depth int) *spec.Schema {
 	schema := &spec.Schema{}
 
 	if responseModel.EnumTitle != "" {
