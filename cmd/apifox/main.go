@@ -4,6 +4,7 @@ import (
 	"dgen/internal"
 	"encoding/json"
 	"fmt"
+	dglogger "github.com/darwinOrg/go-logger"
 	"github.com/darwinOrg/go-swagger"
 	"log"
 	"os"
@@ -14,6 +15,7 @@ func main() {
 		fmt.Println("Please input correct params")
 		os.Exit(1)
 	}
+	dglogger.GlobalDgLogger = dglogger.NewDgLogger(dglogger.WarnLevel, dglogger.DefaultTimestampFormat, os.Stdout)
 
 	entireModel := internal.InitEntireModel()
 	entireModel.Fill(entireModel.Export.ServerPackagePrefix)

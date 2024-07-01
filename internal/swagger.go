@@ -39,6 +39,7 @@ func buildPaths(entireModel *EntireModel) *spec.Paths {
 				OperationProps: spec.OperationProps{
 					Summary:     m.Remark,
 					Description: m.Remark,
+					ID:          g.GroupUpperCamel + "_" + m.MethodNameExp + "_",
 					Consumes:    []string{contentTypeJson},
 					Produces:    []string{contentTypeJson},
 					Parameters:  buildPostParameters(m),

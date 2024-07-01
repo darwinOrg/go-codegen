@@ -7,6 +7,7 @@ require (
 	github.com/darwinOrg/go-common v0.1.56
 	github.com/darwinOrg/go-httpclient v0.1.18
 	github.com/darwinOrg/go-logger v0.0.6
+	github.com/darwinOrg/go-swagger v0.0.10
 	github.com/darwinOrg/go-web v0.1.31
 	github.com/gin-gonic/gin v1.9.1
 	github.com/go-openapi/spec v0.21.0
@@ -25,7 +26,6 @@ require (
 	github.com/cloudwego/iasm v0.2.0 // indirect
 	github.com/cznic/mathutil v0.0.0-20181122101859-297441e03548 // indirect
 	github.com/darwinOrg/go-monitor v0.0.4 // indirect
-	github.com/darwinOrg/go-swagger v0.0.9 // indirect
 	github.com/darwinOrg/go-validator-ext v0.0.7 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.3 // indirect
 	github.com/gin-contrib/cors v1.7.2 // indirect
