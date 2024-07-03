@@ -1,3 +1,5 @@
+e.globalpand.cn/libs/nvwa-sdk v0.0.94 h1:Ji6mGsBWmepwJ1d9M3VEGn8VCMs67IWcUjxTtutTO5g=
+e.globalpand.cn/libs/nvwa-sdk v0.0.94/go.mod h1:/Ps9eZjUj9jJRiFryn6+f1RbbFdtL9eTdneUsfxcCjk=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/benbjohnson/clock v1.1.0/go.mod h1:J11/hYXuz8f4ySSvYwY0FKfm+ezbsZBKZxNJlLklBHA=
 github.com/beorn7/perks v1.0.1 h1:VlbKKnNfV8bJzeqoa4cOKqO6bYr3WgKZxO8Z16+hsOM=
@@ -120,6 +122,8 @@ github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec/go.mod h1:qq
 github.com/rogpeppe/go-internal v1.12.0 h1:exVL4IDcn6na9z1rAb56Vxr+CgyK3nn3O+epU5NdKM8=
 github.com/rolandhe/daog v0.0.34 h1:lKGwdtDrAzQPuMtNFMLb7pR7WOu6ENiygXhA5oSgdHs=
 github.com/rolandhe/daog v0.0.34/go.mod h1:kCzpAQO1/bYEnOCiIiOSN8286JkINHzdSDTWywtf/Cc=
+github.com/rolandhe/o2client-runtime v0.0.12 h1:cE4s7dE3fMy0ou9f1otB89JLMVqrk8RpgSL6B1UFKuk=
+github.com/rolandhe/o2client-runtime v0.0.12/go.mod h1:Cjw2CJTITkamawfA7vK5HqOfPTNMKPsVtRfOTBawBAg=
 github.com/sergi/go-diff v1.1.0/go.mod h1:STckp+ISIX8hZLjrqAeVduY0gWCT9IjLuqbuNXdaHfM=
 github.com/shopspring/decimal v1.4.0 h1:bxl37RwXBklmTi0C79JfXCEBD1cqqHt0bbgBAGFp81k=
 github.com/shopspring/decimal v1.4.0/go.mod h1:gawqmDU56v4yIKSwfBSFip1HdCCXN8/+DMd9qYNcwME=

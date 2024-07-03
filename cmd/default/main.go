@@ -2,6 +2,7 @@ package main
 
 import (
 	"dgen/internal"
+	_ "e.globalpand.cn/libs/nvwa-sdk"
 	"flag"
 	"fmt"
 	_ "github.com/darwinOrg/daog-ext"

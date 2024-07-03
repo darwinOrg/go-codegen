@@ -12,13 +12,13 @@ import (
 )
 
 var (
-	productMap = map[string]int{
-		"RPA机器人":  10,
-		"AI智能面试":  11,
-		"金牌面试官":   12,
-		"需求沟通助手":  13,
-		"候选人沟通助手": 14,
-		"人才库":     15,
+	productMap = map[string]string{
+		"RPA机器人":  "nvwa_enum.Product.RPA",
+		"AI智能面试":  "nvwa_enum.Product.AsyncInterview",
+		"金牌面试官":   "nvwa_enum.Product.OnlineInterview",
+		"需求沟通助手":  "nvwa_enum.Product.RequirementAssistant",
+		"候选人沟通助手": "nvwa_enum.Product.RPA",
+		"人才库":     "nvwa_enum.Product.CandidateAssistant",
 	}
 	logLevelMap = map[string]string{
 		"全部":   "wrapper.LOG_LEVEL_ALL",
@@ -43,6 +43,7 @@ type EntireModel struct {
 	HasQuery       bool             `json:"hasQuery,omitempty"`
 	HasId          bool             `json:"hasId,omitempty"`
 	HasModel       bool             `json:"hasModel,omitempty"`
+	HasProducts    bool             `json:"hasProducts,omitempty"`
 	UpperCamelName string           `json:"upperCamelName,omitempty"`
 	Converters     []*ConverterData `json:"converters,omitempty"`
 }
@@ -410,10 +411,11 @@ func (m *EntireModel) FillInterfaces() {
 			}
 
 			if len(model.AllowProducts) > 0 {
-				products := dgcoll.MapToList(model.AllowProducts, func(name string) int {
+				products := dgcoll.MapToList(model.AllowProducts, func(name string) string {
 					return productMap[name]
 				})
-				model.AllowProductsExp = "[]int{" + dgcoll.JoinIntsByComma(products) + "}"
+				model.AllowProductsExp = "[]int{" + strings.Join(products, ",") + "}"
+				m.HasProducts = true
 			}
 
 			if model.LogLevel != "" {

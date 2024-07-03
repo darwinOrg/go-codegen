@@ -1722,7 +1722,11 @@
           "dbModelName": "job",
           "requestModelName": "CreateJobReq",
           "allowRoles": [],
-          "allowProducts": [],
+          "allowProducts": [
+            "RPA机器人",
+            "AI智能面试",
+            "金牌面试官"
+          ],
           "logLevel": "全部",
           "remark": "职位 - 新建"
         },
@@ -1769,7 +1773,9 @@
           "requestModelName": "QueryJobReq",
           "responseModelName": "JobListResp",
           "allowRoles": [],
-          "allowProducts": [],
+          "allowProducts": [
+            "人才库"
+          ],
           "logLevel": "请求参数",
           "remark": "职位 - 列表"
         },
@@ -1793,6 +1799,6 @@
     "serverPackagePrefix": "dgen/output/server",
     "clientOutput": "../output/client",
     "clientPackagePrefix": "",
-    "apifoxOutput": "测试1/测试2"
+    "apifoxOutput": "测试1/测试3"
   }
 }
