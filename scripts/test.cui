@@ -1712,12 +1712,13 @@
   "interfaces": [
     {
       "group": "Job",
-      "routePrefix": "/api/job/v1",
-      "exportClient": false,
+      "routePrefix": "/api/job/v2",
+      "exportClient": true,
       "models": [
         {
           "interfaceType": "新建",
           "relativePath": "/create",
+          "methodType": "Post",
           "methodName": "create",
           "dbModelName": "job",
           "requestModelName": "CreateJobReq",
@@ -1733,6 +1734,7 @@
         {
           "interfaceType": "修改",
           "relativePath": "/modify",
+          "methodType": "Post",
           "methodName": "modify",
           "dbModelName": "job",
           "requestModelName": "ModifyJobReq",
@@ -1745,9 +1747,11 @@
         {
           "interfaceType": "删除",
           "relativePath": "/delete",
+          "methodType": "Post",
           "methodName": "delete",
           "dbModelName": "job",
           "requestModelName": "Id",
+          "responseModelName": "",
           "allowRoles": [],
           "allowProducts": [],
           "logLevel": "全部",
@@ -1756,6 +1760,7 @@
         {
           "interfaceType": "分页",
           "relativePath": "/page",
+          "methodType": "Post",
           "methodName": "page",
           "dbModelName": "job",
           "requestModelName": "QueryJobReq",
@@ -1768,6 +1773,7 @@
         {
           "interfaceType": "列表",
           "relativePath": "/list",
+          "methodType": "Post",
           "methodName": "list",
           "dbModelName": "job",
           "requestModelName": "QueryJobReq",
@@ -1782,6 +1788,7 @@
         {
           "interfaceType": "详情",
           "relativePath": "/detail",
+          "methodType": "Get",
           "methodName": "detail",
           "dbModelName": "job",
           "requestModelName": "Id",

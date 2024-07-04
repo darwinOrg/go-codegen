@@ -16,13 +16,13 @@ import (
 func Bind{{$inter.GroupUpperCamel}}Router(rg *gin.RouterGroup) {
 	g := rg.Group("{{.RoutePrefix}}")
 	{{range .Models}}
-	wrapper.Post(&wrapper.RequestHolder[{{.RequestModelNameExp}}, *result.Result[{{.ResponseModelNameExp}}]]{
-		Remark:       "{{.Remark}}", RouterGroup:  g, RelativePath: "{{.RelativePath}}",
+	wrapper.{{.MethodType}}(&wrapper.RequestHolder[{{.RequestModelNameExp}}, *result.Result[{{.ResponseModelNameExp}}]]{
+		Remark: "{{.Remark}}", RouterGroup: g, RelativePath: "{{.RelativePath}}",
 		{{if .NonLogin}}NonLogin: true,{{- end -}}
 		{{if .NotLogSQL}}NotLogSQL: true,{{- end -}}
 		{{if ne .AllowProductsExp ""}}AllowProducts: {{.AllowProductsExp}},{{- end -}}
 		{{if ne .LogLevelExp ""}}LogLevel: {{.LogLevelExp}},{{- end}}
-		BizHandler:   handler.{{$inter.GroupUpperCamel}}Handler.{{.MethodNameExp}},
+		BizHandler: handler.{{$inter.GroupUpperCamel}}Handler.{{.MethodNameExp}},
 	})
 	{{end}}
 }

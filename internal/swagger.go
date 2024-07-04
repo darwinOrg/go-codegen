@@ -2,6 +2,7 @@ package internal
 
 import (
 	"fmt"
+	"github.com/darwinOrg/go-common/utils"
 	"github.com/go-openapi/spec"
 	"net/http"
 	"strings"
@@ -42,8 +43,9 @@ func buildPaths(entireModel *EntireModel) *spec.Paths {
 					ID:          g.GroupUpperCamel + "_" + m.MethodNameExp + "_",
 					Consumes:    []string{contentTypeJson},
 					Produces:    []string{contentTypeJson},
-					Parameters:  buildPostParameters(m),
-					Responses:   buildResponses(m),
+					Parameters: utils.IfReturn(strings.EqualFold(m.MethodType, http.MethodGet),
+						buildGetParameters(m), buildPostParameters(m)),
+					Responses: buildResponses(m),
 				},
 			}
 
@@ -59,6 +61,45 @@ func buildPaths(entireModel *EntireModel) *spec.Paths {
 	return &spec.Paths{
 		Paths: paths,
 	}
+}
+
+func buildGetParameters(interfaceModel *InterfaceModel) []spec.Parameter {
+	if interfaceModel.RequestModelName == "Id" {
+		p := *spec.QueryParam("id")
+		p.Required = true
+		p.Description = "id"
+
+		return []spec.Parameter{p}
+	}
+
+	if interfaceModel.RequestModelData == nil || len(interfaceModel.RequestModelData.Models) == 0 {
+		return []spec.Parameter{}
+	}
+
+	var parameters []spec.Parameter
+
+	for _, requestModel := range interfaceModel.RequestModelData.Models {
+		p := *spec.QueryParam(requestModel.LowerCamelName)
+		if requestModel.IsArray {
+			p.Type = "array"
+		} else {
+			switch requestModel.DataType {
+			case "int", "int64", "uint64", "int8", "uint8", "int16", "uint16", "int32", "uint32":
+				p.Type = "integer"
+			case "float32", "float64", "decimal.Decimal":
+				p.Type = "number"
+			default:
+				p.Type = "string"
+			}
+		}
+
+		p.Required = !requestModel.Nullable
+		p.Description = requestModel.Remark
+
+		parameters = append(parameters, p)
+	}
+
+	return parameters
 }
 
 func buildPostParameters(interfaceModel *InterfaceModel) []spec.Parameter {

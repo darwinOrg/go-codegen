@@ -136,6 +136,7 @@ type ResponseModelData struct {
 
 type InterfaceModel struct {
 	InterfaceType     string   `json:"interfaceType,omitempty"`
+	MethodType        string   `json:"methodType,omitempty"`
 	RelativePath      string   `json:"relativePath,omitempty"`
 	MethodName        string   `json:"methodName,omitempty"`
 	DbModelName       string   `json:"dbModelName,omitempty"`
