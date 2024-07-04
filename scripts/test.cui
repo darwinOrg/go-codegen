@@ -548,11 +548,13 @@
         {
           "fieldName": "Title",
           "dataType": "string",
+          "nullable": true,
           "remark": "职位标题"
         },
         {
           "fieldName": "Description",
           "dataType": "string",
+          "nullable": true,
           "remark": "职位描述"
         },
         {
@@ -726,6 +728,7 @@
         {
           "fieldName": "PublishedBy",
           "dataType": "int64",
+          "nullable": true,
           "remark": "发布人"
         },
         {
@@ -789,7 +792,8 @@
       "models": [
         {
           "fieldName": "Id",
-          "dataType": "int64"
+          "dataType": "int64",
+          "nullable": true
         },
         {
           "fieldName": "Code",
@@ -800,11 +804,13 @@
         {
           "fieldName": "Title",
           "dataType": "string",
+          "nullable": true,
           "remark": "职位标题"
         },
         {
           "fieldName": "Description",
           "dataType": "string",
+          "nullable": true,
           "remark": "职位描述"
         },
         {
@@ -978,6 +984,7 @@
         {
           "fieldName": "PublishedBy",
           "dataType": "int64",
+          "nullable": true,
           "remark": "发布人"
         },
         {
@@ -1041,7 +1048,8 @@
       "models": [
         {
           "fieldName": "Id",
-          "dataType": "int64"
+          "dataType": "int64",
+          "nullable": false
         },
         {
           "fieldName": "Code",
@@ -1052,205 +1060,246 @@
         {
           "fieldName": "Title",
           "dataType": "string",
+          "nullable": true,
           "remark": "职位标题"
         },
         {
           "fieldName": "Description",
           "dataType": "string",
+          "nullable": true,
           "remark": "职位描述"
         },
         {
           "fieldName": "Status",
           "dataType": "string",
+          "nullable": true,
           "remark": "职位状态"
         },
         {
           "fieldName": "JobType",
           "dataType": "string",
+          "nullable": true,
           "remark": "工作性质"
         },
         {
           "fieldName": "RecruitmentType",
           "dataType": "string",
+          "nullable": true,
           "remark": "招聘类型"
         },
         {
           "fieldName": "SalaryType",
           "dataType": "string",
+          "nullable": true,
           "remark": "薪水类型"
         },
         {
           "fieldName": "SalaryFrom",
           "dataType": "string",
+          "nullable": true,
           "remark": "最低薪水"
         },
         {
           "fieldName": "SalaryTo",
           "dataType": "string",
+          "nullable": true,
           "remark": "最高薪水"
         },
         {
           "fieldName": "SalaryTimes",
           "dataType": "int32",
+          "nullable": true,
           "remark": "薪水数"
         },
         {
           "fieldName": "Headcount",
           "dataType": "int32",
+          "nullable": true,
           "remark": "招聘人数"
         },
         {
           "fieldName": "ExperienceFrom",
           "dataType": "string",
+          "nullable": true,
           "remark": "最低工作年限"
         },
         {
           "fieldName": "ExperienceTo",
           "dataType": "string",
+          "nullable": true,
           "remark": "最高工作年限"
         },
         {
           "fieldName": "EducationFrom",
           "dataType": "string",
+          "nullable": true,
           "remark": "最低学历"
         },
         {
           "fieldName": "EducationTo",
           "dataType": "string",
+          "nullable": true,
           "remark": "最高学历"
         },
         {
           "fieldName": "OfficeProvince",
           "dataType": "string",
+          "nullable": true,
           "remark": "办公地点-省"
         },
         {
           "fieldName": "OfficeCity",
           "dataType": "string",
+          "nullable": true,
           "remark": "办公地点-市"
         },
         {
           "fieldName": "OfficeDistrict",
           "dataType": "string",
+          "nullable": true,
           "remark": "办公地点-区/县"
         },
         {
           "fieldName": "OfficeStreet",
           "dataType": "string",
+          "nullable": true,
           "remark": "办公地点-街道"
         },
         {
           "fieldName": "OfficeAddress",
           "dataType": "string",
+          "nullable": true,
           "remark": "办公室详细地址"
         },
         {
           "fieldName": "OfficePosX",
           "dataType": "float64",
+          "nullable": true,
           "remark": "办公室X坐标"
         },
         {
           "fieldName": "OfficePosY",
           "dataType": "float64",
+          "nullable": true,
           "remark": "办公室Y坐标"
         },
         {
           "fieldName": "Workplaces",
           "dataType": "string",
+          "nullable": true,
           "remark": "工作地点"
         },
         {
           "fieldName": "Category",
           "dataType": "string",
+          "nullable": true,
           "remark": "分类"
         },
         {
           "fieldName": "Keywords",
           "dataType": "string",
+          "nullable": true,
           "remark": "职位关键词"
         },
         {
           "fieldName": "Welfare",
           "dataType": "string",
+          "nullable": true,
           "remark": "福利"
         },
         {
           "fieldName": "Skills",
           "dataType": "string",
+          "nullable": true,
           "remark": "技能点"
         },
         {
           "fieldName": "Snippets",
           "dataType": "string",
+          "nullable": true,
           "remark": "内容片段集"
         },
         {
           "fieldName": "Exams",
           "dataType": "string",
+          "nullable": true,
           "remark": "试卷集"
         },
         {
           "fieldName": "DirectInterview",
           "dataType": "string",
+          "nullable": true,
           "remark": "直面"
         },
         {
           "fieldName": "Evaluators",
           "dataType": "string",
+          "nullable": true,
           "remark": "面试评估人数组"
         },
         {
           "fieldName": "Ext",
           "dataType": "string",
+          "nullable": true,
           "remark": "扩展字段"
         },
         {
           "fieldName": "PublishedBy",
           "dataType": "int64",
+          "nullable": true,
           "remark": "发布人"
         },
         {
           "fieldName": "PublishedAt",
           "dataType": "string",
+          "nullable": true,
           "remark": "发布时间"
         },
         {
           "fieldName": "Platform",
           "dataType": "int32",
+          "nullable": true,
           "remark": "创建来源"
         },
         {
           "fieldName": "Source",
           "dataType": "int32",
+          "nullable": true,
           "remark": "来源渠道"
         },
         {
           "fieldName": "SyncedChannels",
           "dataType": "string",
+          "nullable": true,
           "remark": "同步的其他渠道"
         },
         {
           "fieldName": "Opened",
           "dataType": "int32",
+          "nullable": true,
           "remark": "面试间开启状态（0：关闭，1：已开启）"
         },
         {
           "fieldName": "OpenedAt",
           "dataType": "string",
+          "nullable": true,
           "remark": "面试间开启时间"
         },
         {
           "fieldName": "ReferId",
           "dataType": "int64",
+          "nullable": true,
           "remark": "引用最新快照id"
         },
         {
           "fieldName": "OrgId",
-          "dataType": "int64"
+          "dataType": "int64",
+          "nullable": true
         },
         {
           "fieldName": "CompanyId",
-          "dataType": "int64"
+          "dataType": "int64",
+          "nullable": true
         }
       ],
       "extendName": ""
@@ -1262,7 +1311,8 @@
       "models": [
         {
           "fieldName": "Id",
-          "dataType": "int64"
+          "dataType": "int64",
+          "nullable": true
         },
         {
           "fieldName": "Code",
@@ -1273,211 +1323,253 @@
         {
           "fieldName": "Title",
           "dataType": "string",
+          "nullable": true,
           "remark": "职位标题"
         },
         {
           "fieldName": "Description",
           "dataType": "string",
+          "nullable": true,
           "remark": "职位描述"
         },
         {
           "fieldName": "Status",
           "dataType": "string",
+          "nullable": true,
           "remark": "职位状态"
         },
         {
           "fieldName": "JobType",
           "dataType": "string",
+          "nullable": true,
           "remark": "工作性质"
         },
         {
           "fieldName": "RecruitmentType",
           "dataType": "string",
+          "nullable": true,
           "remark": "招聘类型"
         },
         {
           "fieldName": "SalaryType",
           "dataType": "string",
+          "nullable": true,
           "remark": "薪水类型"
         },
         {
           "fieldName": "SalaryFrom",
           "dataType": "string",
+          "nullable": true,
           "remark": "最低薪水"
         },
         {
           "fieldName": "SalaryTo",
           "dataType": "string",
+          "nullable": true,
           "remark": "最高薪水"
         },
         {
           "fieldName": "SalaryTimes",
           "dataType": "int32",
+          "nullable": true,
           "remark": "薪水数"
         },
         {
           "fieldName": "Headcount",
           "dataType": "int32",
+          "nullable": true,
           "remark": "招聘人数"
         },
         {
           "fieldName": "ExperienceFrom",
           "dataType": "string",
+          "nullable": true,
           "remark": "最低工作年限"
         },
         {
           "fieldName": "ExperienceTo",
           "dataType": "string",
+          "nullable": true,
           "remark": "最高工作年限"
         },
         {
           "fieldName": "EducationFrom",
           "dataType": "string",
+          "nullable": true,
           "remark": "最低学历"
         },
         {
           "fieldName": "EducationTo",
           "dataType": "string",
+          "nullable": true,
           "remark": "最高学历"
         },
         {
           "fieldName": "OfficeProvince",
           "dataType": "string",
+          "nullable": true,
           "remark": "办公地点-省"
         },
         {
           "fieldName": "OfficeCity",
           "dataType": "string",
+          "nullable": true,
           "remark": "办公地点-市"
         },
         {
           "fieldName": "OfficeDistrict",
           "dataType": "string",
+          "nullable": true,
           "remark": "办公地点-区/县"
         },
         {
           "fieldName": "OfficeStreet",
           "dataType": "string",
+          "nullable": true,
           "remark": "办公地点-街道"
         },
         {
           "fieldName": "OfficeAddress",
           "dataType": "string",
+          "nullable": true,
           "remark": "办公室详细地址"
         },
         {
           "fieldName": "OfficePosX",
           "dataType": "float64",
+          "nullable": true,
           "remark": "办公室X坐标"
         },
         {
           "fieldName": "OfficePosY",
           "dataType": "float64",
+          "nullable": true,
           "remark": "办公室Y坐标"
         },
         {
           "fieldName": "Workplaces",
           "dataType": "string",
+          "nullable": true,
           "remark": "工作地点"
         },
         {
           "fieldName": "Category",
           "dataType": "string",
+          "nullable": true,
           "remark": "分类"
         },
         {
           "fieldName": "Keywords",
           "dataType": "string",
+          "nullable": true,
           "remark": "职位关键词"
         },
         {
           "fieldName": "Welfare",
           "dataType": "string",
+          "nullable": true,
           "remark": "福利"
         },
         {
           "fieldName": "Skills",
           "dataType": "string",
+          "nullable": true,
           "remark": "技能点"
         },
         {
           "fieldName": "Snippets",
           "dataType": "string",
+          "nullable": true,
           "remark": "内容片段集"
         },
         {
           "fieldName": "Exams",
           "dataType": "string",
+          "nullable": true,
           "remark": "试卷集"
         },
         {
           "fieldName": "DirectInterview",
           "dataType": "string",
+          "nullable": true,
           "remark": "直面"
         },
         {
           "fieldName": "Evaluators",
           "dataType": "string",
+          "nullable": true,
           "remark": "面试评估人数组"
         },
         {
           "fieldName": "Ext",
           "dataType": "string",
+          "nullable": true,
           "remark": "扩展字段"
         },
         {
           "fieldName": "PublishedBy",
           "dataType": "int64",
+          "nullable": true,
           "remark": "发布人"
         },
         {
           "fieldName": "PublishedAt",
           "dataType": "string",
+          "nullable": true,
           "remark": "发布时间"
         },
         {
           "fieldName": "Platform",
           "dataType": "int32",
+          "nullable": true,
           "remark": "创建来源"
         },
         {
           "fieldName": "Source",
           "dataType": "int32",
+          "nullable": true,
           "remark": "来源渠道"
         },
         {
           "fieldName": "SyncedChannels",
           "dataType": "string",
+          "nullable": true,
           "remark": "同步的其他渠道"
         },
         {
           "fieldName": "Opened",
           "dataType": "int32",
+          "nullable": true,
           "remark": "面试间开启状态（0：关闭，1：已开启）"
         },
         {
           "fieldName": "OpenedName",
           "dataType": "string",
+          "nullable": true,
           "enumModel": "JobOpened",
           "remark": "面试间开启状态名称"
         },
         {
           "fieldName": "OpenedAt",
           "dataType": "string",
+          "nullable": true,
           "remark": "面试间开启时间"
         },
         {
           "fieldName": "ReferId",
           "dataType": "int64",
+          "nullable": true,
           "remark": "引用最新快照id"
         },
         {
           "fieldName": "OrgId",
-          "dataType": "int64"
+          "dataType": "int64",
+          "nullable": true
         },
         {
           "fieldName": "CompanyId",
-          "dataType": "int64"
+          "dataType": "int64",
+          "nullable": true
         }
       ],
       "extendName": ""
@@ -1487,17 +1579,19 @@
       "models": [
         {
           "fieldName": "Id",
-          "dataType": "int64"
+          "dataType": "int64",
+          "nullable": true
         },
         {
           "fieldName": "Code",
           "dataType": "string",
-          "nullable": true,
+          "nullable": false,
           "remark": "职位编码"
         },
         {
           "fieldName": "Title",
           "dataType": "string",
+          "nullable": true,
           "remark": "职位标题"
         },
         {
@@ -1509,201 +1603,241 @@
         {
           "fieldName": "Status",
           "dataType": "string",
+          "nullable": true,
           "remark": "职位状态"
         },
         {
           "fieldName": "JobType",
           "dataType": "string",
+          "nullable": true,
           "remark": "工作性质"
         },
         {
           "fieldName": "RecruitmentType",
           "dataType": "string",
+          "nullable": true,
           "remark": "招聘类型"
         },
         {
           "fieldName": "SalaryType",
           "dataType": "string",
+          "nullable": true,
           "remark": "薪水类型"
         },
         {
           "fieldName": "SalaryFrom",
           "dataType": "string",
+          "nullable": true,
           "remark": "最低薪水"
         },
         {
           "fieldName": "SalaryTo",
           "dataType": "string",
+          "nullable": true,
           "remark": "最高薪水"
         },
         {
           "fieldName": "SalaryTimes",
           "dataType": "int32",
+          "nullable": true,
           "remark": "薪水数"
         },
         {
           "fieldName": "Headcount",
           "dataType": "int32",
+          "nullable": true,
           "remark": "招聘人数"
         },
         {
           "fieldName": "ExperienceFrom",
           "dataType": "string",
+          "nullable": true,
           "remark": "最低工作年限"
         },
         {
           "fieldName": "ExperienceTo",
           "dataType": "string",
+          "nullable": true,
           "remark": "最高工作年限"
         },
         {
           "fieldName": "EducationFrom",
           "dataType": "string",
+          "nullable": true,
           "remark": "最低学历"
         },
         {
           "fieldName": "EducationTo",
           "dataType": "string",
+          "nullable": true,
           "remark": "最高学历"
         },
         {
           "fieldName": "OfficeProvince",
           "dataType": "string",
+          "nullable": true,
           "remark": "办公地点-省"
         },
         {
           "fieldName": "OfficeCity",
           "dataType": "string",
+          "nullable": true,
           "remark": "办公地点-市"
         },
         {
           "fieldName": "OfficeDistrict",
           "dataType": "string",
+          "nullable": true,
           "remark": "办公地点-区/县"
         },
         {
           "fieldName": "OfficeStreet",
           "dataType": "string",
+          "nullable": true,
           "remark": "办公地点-街道"
         },
         {
           "fieldName": "OfficeAddress",
           "dataType": "string",
+          "nullable": true,
           "remark": "办公室详细地址"
         },
         {
           "fieldName": "OfficePosX",
           "dataType": "float64",
+          "nullable": true,
           "remark": "办公室X坐标"
         },
         {
           "fieldName": "OfficePosY",
           "dataType": "float64",
+          "nullable": true,
           "remark": "办公室Y坐标"
         },
         {
           "fieldName": "Workplaces",
           "dataType": "string",
+          "nullable": true,
           "remark": "工作地点"
         },
         {
           "fieldName": "Category",
           "dataType": "string",
+          "nullable": true,
           "remark": "分类"
         },
         {
           "fieldName": "Keywords",
           "dataType": "string",
+          "nullable": true,
           "remark": "职位关键词"
         },
         {
           "fieldName": "Welfare",
           "dataType": "string",
+          "nullable": true,
           "remark": "福利"
         },
         {
           "fieldName": "Skills",
           "dataType": "string",
+          "nullable": true,
           "remark": "技能点"
         },
         {
           "fieldName": "Snippets",
           "dataType": "string",
+          "nullable": true,
           "remark": "内容片段集"
         },
         {
           "fieldName": "Exams",
           "dataType": "string",
+          "nullable": true,
           "remark": "试卷集"
         },
         {
           "fieldName": "DirectInterview",
           "dataType": "string",
+          "nullable": true,
           "remark": "直面"
         },
         {
           "fieldName": "Evaluators",
           "dataType": "string",
+          "nullable": true,
           "remark": "面试评估人数组"
         },
         {
           "fieldName": "Ext",
           "dataType": "string",
+          "nullable": true,
           "remark": "扩展字段"
         },
         {
           "fieldName": "PublishedBy",
           "dataType": "int64",
+          "nullable": true,
           "remark": "发布人"
         },
         {
           "fieldName": "PublishedAt",
           "dataType": "string",
+          "nullable": true,
           "remark": "发布时间"
         },
         {
           "fieldName": "Platform",
           "dataType": "int32",
+          "nullable": true,
           "remark": "创建来源"
         },
         {
           "fieldName": "Source",
           "dataType": "int32",
+          "nullable": true,
           "remark": "来源渠道"
         },
         {
           "fieldName": "SyncedChannels",
           "dataType": "string",
+          "nullable": true,
           "remark": "同步的其他渠道"
         },
         {
           "fieldName": "Opened",
           "dataType": "int32",
+          "nullable": true,
           "remark": "面试间开启状态（0：关闭，1：已开启）"
         },
         {
           "fieldName": "OpenedName",
           "dataType": "string",
+          "nullable": true,
           "enumModel": "JobOpened",
           "remark": "面试间开启状态名称"
         },
         {
           "fieldName": "OpenedAt",
           "dataType": "string",
+          "nullable": true,
           "remark": "面试间开启时间"
         },
         {
           "fieldName": "ReferId",
           "dataType": "int64",
+          "nullable": true,
           "remark": "引用最新快照id"
         },
         {
           "fieldName": "OrgId",
-          "dataType": "int64"
+          "dataType": "int64",
+          "nullable": true
         },
         {
           "fieldName": "CompanyId",
-          "dataType": "int64"
+          "dataType": "int64",
+          "nullable": true
         }
       ],
       "extendName": ""

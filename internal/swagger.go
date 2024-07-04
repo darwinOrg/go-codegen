@@ -50,7 +50,11 @@ func buildPaths(entireModel *EntireModel) *spec.Paths {
 			}
 
 			itemProps := spec.PathItemProps{}
-			itemProps.Post = operation
+			if strings.EqualFold(m.MethodType, http.MethodGet) {
+				itemProps.Get = operation
+			} else {
+				itemProps.Post = operation
+			}
 
 			paths[url] = spec.PathItem{
 				PathItemProps: itemProps,
