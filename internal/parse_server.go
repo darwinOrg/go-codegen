@@ -135,6 +135,18 @@ func (g *serverParser) parseModel(entireModel *EntireModel) error {
 		return err
 	}
 
+	//request := filepath.Join(modelDir, entireModel.FilePrefix+"_request.go")
+	//err := parseFile(request, "request", _server.RequestTpl, entireModel)
+	//if err != nil {
+	//	return err
+	//}
+	//
+	//response := filepath.Join(modelDir, entireModel.FilePrefix+"_response.go")
+	//err = parseFile(response, "response", _server.ResponseTpl, entireModel)
+	//if err != nil {
+	//	return err
+	//}
+
 	return nil
 }
 
