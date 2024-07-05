@@ -120,24 +120,37 @@ func buildGetParameters(interfaceModel *InterfaceModel) []spec.Parameter {
 }
 
 func buildPostParameters(interfaceModel *InterfaceModel) []spec.Parameter {
-	schema := createRequestSchemaForInterface(interfaceModel)
+	schema := createPostRequestSchemaForInterface(interfaceModel)
 	bodyParam := *spec.BodyParam("body", schema)
 	bodyParam.Required = true
 	return []spec.Parameter{bodyParam}
 }
 
-func createRequestSchemaForInterface(interfaceModel *InterfaceModel) *spec.Schema {
+func createPostRequestSchemaForInterface(interfaceModel *InterfaceModel) *spec.Schema {
 	schema := &spec.Schema{}
+	schema.Type = []string{"object"}
+	schema.Properties = make(map[string]spec.Schema)
+
+	if interfaceModel.InterfaceType == "分页" {
+		pageNoProperty := &spec.Schema{}
+		pageNoProperty.Type = []string{"integer"}
+		pageNoProperty.Description = "页码"
+		schema.Properties["pageNo"] = *pageNoProperty
+
+		pageSizeProperty := &spec.Schema{}
+		pageSizeProperty.Type = []string{"integer"}
+		pageSizeProperty.Description = "每页记录数"
+		schema.Properties["pagSize"] = *pageSizeProperty
+
+		schema.Required = append(schema.Required, "pageNo", "pageSize")
+	}
 
 	if interfaceModel.RequestModelName == "Id" {
-		property := &spec.Schema{}
-		property.Type = []string{"integer"}
-		property.Description = "id"
-
-		schema.Properties = map[string]spec.Schema{
-			"id": *property,
-		}
-		schema.Required = []string{"id"}
+		idProperty := &spec.Schema{}
+		idProperty.Type = []string{"integer"}
+		idProperty.Description = "id"
+		schema.Properties["id"] = *idProperty
+		schema.Required = append(schema.Required, "id")
 
 		return schema
 	}
@@ -146,17 +159,12 @@ func createRequestSchemaForInterface(interfaceModel *InterfaceModel) *spec.Schem
 		return schema
 	}
 
-	schema.Type = []string{"object"}
-	schema.Properties = make(map[string]spec.Schema)
-	schema.Required = make([]string, 0)
-	depth := 0
-
 	for _, requestModelData := range []*RequestModelData{interfaceModel.RequestModelData, interfaceModel.RequestModelData.ExtendRequestModelData} {
 		if requestModelData == nil {
 			continue
 		}
 
-		fillPropertyForRequest(schema, requestModelData, depth)
+		fillPropertyForRequest(schema, requestModelData, 0)
 	}
 
 	return schema
@@ -207,7 +215,7 @@ func createSchemaForRequest(requestModel *RequestModel, depth int) *spec.Schema 
 		schema.Required = make([]string, 0)
 
 		if requestModel.RequestModelData != nil {
-			fillPropertyForRequest(schema, requestModel.RequestModelData, depth)
+			fillPropertyForRequest(schema, requestModel.RequestModelData, depth+1)
 		}
 	}
 
