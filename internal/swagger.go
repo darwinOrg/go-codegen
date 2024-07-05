@@ -68,19 +68,32 @@ func buildPaths(entireModel *EntireModel) *spec.Paths {
 }
 
 func buildGetParameters(interfaceModel *InterfaceModel) []spec.Parameter {
+	var parameters []spec.Parameter
+
+	if interfaceModel.InterfaceType == "分页" {
+		pageNoParam := *spec.QueryParam("pageNo")
+		pageNoParam.Required = true
+		pageNoParam.Description = "页码"
+
+		pageSizeParam := *spec.QueryParam("pageSize")
+		pageSizeParam.Required = true
+		pageSizeParam.Description = "每页记录数"
+
+		parameters = append(parameters, pageNoParam, pageSizeParam)
+	}
+
 	if interfaceModel.RequestModelName == "Id" {
 		p := *spec.QueryParam("id")
 		p.Required = true
 		p.Description = "id"
 
-		return []spec.Parameter{p}
+		parameters = append(parameters, p)
+		return parameters
 	}
 
 	if interfaceModel.RequestModelData == nil || len(interfaceModel.RequestModelData.Models) == 0 {
-		return []spec.Parameter{}
+		return parameters
 	}
-
-	var parameters []spec.Parameter
 
 	for _, requestModel := range interfaceModel.RequestModelData.Models {
 		p := *spec.QueryParam(requestModel.LowerCamelName)
