@@ -4,10 +4,8 @@ import "strings"
 
 var ModelTpl = `package model
 
-import (
-	{{if .HasDecimal}}"github.com/shopspring/decimal"{{end}}
-	{{if .HasPage}}"github.com/darwinOrg/go-common/page"{{end}}
-)
+{{if .HasDecimal}}import "github.com/shopspring/decimal"{{end}}
+{{if .HasPage}}import "github.com/darwinOrg/go-common/page"{{end}}
 
 {{range .Requests}}
 type {{.UpperCamelName}} struct {
