@@ -1,300 +1,115 @@
-namespace go job
-go_import ALL_HINT "github.com/darwinOrg/go-common/page"
+namespace go online_interview
 with_client=false
 
-struct QueryMyJobReq extends struct page.PageParam
+struct QuestionAssessReq
 {
-    required string status (binding="required,mustIn=PUBLISHED#CLOSED", remark="状态"),
-    string title (remark="标题")
-    list<i64> departmentIds (remark="部门id列表")
+    i64 id (remark="id"),
+    i64 attitude (remark="我的态度：1：满意  2：不满意"),
 }
 
-struct MyJobResp
+struct Question
 {
-    i64 id (remark="id")
-    string title (remark="标题")
-    i64 departmentId (remark="部门id")
-    string departmentName (remark="部门名称")
-    string description (remark="描述")
-    string workplace (remark="工作地点")
-    string workplaceCode (remark="工作地点编码")
-    string detailAddress (remark="工作详细地址")
-    string status (remark="状态")
-    string statusName (remark="状态名称")
-    struct UserVo publishedBy (remark="发布人")
-    string createdAt (remark="创建时间")
-    string publishedAt (remark="发布时间")
-    list<struct UserVo> evaluators (remark="协作人")
+    i64 id (remark="id"),
+    i64 questionId (remark="问题id"),
+    string content (remark="内容"),
+    i64 attitude (remark="我的态度：1：满意  2：不满意"),
+    string notes(remark="备注"),
 }
 
-struct QueryMyInterviewJobReq extends struct page.PageParam
+struct Tag
 {
-    required string status (binding="required,mustIn=PUBLISHED#CLOSED", remark="状态"),
+    i64 tagId (remark="标签id"),
+    string content (remark="内容"),
+    i64 attitude (remark="我的态度：1：符合  2：不符合"),
 }
 
-struct MyInterviewJobResp
+struct EditTagReq
 {
-    i64 id (remark="id")
-    string title (remark="标题")
-    string description (remark="描述")
-    string status (remark="状态")
-    string statusName (remark="状态名称")
-    struct UserVo publishedBy (remark="发布人")
-    string publishedAt (remark="发布时间")
-    list<struct UserVo> evaluators (remark="协作人")
-    i64 paperId (remark="试卷id")
-    i32 candidateCount (remark="候选人数")
-    i32 asyncInterviewCount (remark="异步面试数")
-    i32 onlineInterviewCount (remark="在线面试数")
+    i64 tagId (remark="标签id"),
+    i64 attitude (remark="我的态度：1：符合  2：不符合"),
 }
 
-struct UserVo
+struct InterviewEvaluate
 {
-    i64 id (remark="id")
-    string name (remark="名称")
-    i64 activation (remark="账号状态 0:停用  1:使用中")
+    i64 InterviewId (remark="面试id"),
+    string content (remark="内容"),
+    i64 attitude (remark="3: 待定，4: 通过， 5:不通过"),
 }
 
-struct SimpleJobResp
+struct InterviewRecordVO
 {
-    i64 id (remark="id")
-    string title (remark="标题")
-    string status (remark="状态")
-    string statusName (remark="状态名称")
-    struct UserVo publishedBy (remark="发布人")
-    list<struct UserVo> evaluators (remark="协作人")
+    i64 id (remark="面试记录id"),
+    i32 type (remark="记录类型 1:笔记, 2:标记, 3:提问"),
+    i64 attitude (remark="我的态度：1：满意  2：不满意"),
+    string remark (binding="required", remark="备注信息"),
+    string content (binding="required", remark="笔记|标记|提问的内容"),
+    string ext (remark="拓展信息"),
 }
 
-struct CountJobResp
+struct InterviewAllInfo
 {
-    i32 publishedCount (remark="已发布数量")
-    i32 closedCount (remark="已关闭数量")
+    string playbackUrl(remark="回放地址"),
+    string resume (remark="简历地址"),
+    string dialogue (remark="对话内容"),
+    list<struct InterviewRecordVO> recordList(remark="面试记录列表"),
+    list<struct Tag> tag(remark="候选人标签"),
+    struct InterviewEvaluate interviewEvaluate(remark="面试最终评价"),
 }
 
-struct JobIdReq
+
+struct InterviewId
 {
-    required i64 jobId (binding="required", form="jobId", remark="职位id")
+    i64 interviewId (remark="面试id"),
 }
 
-struct JobDetailResp
+struct TagContent
 {
-    i64 id (remark="id")
-    i64 departmentId (remark="部门id")
-    string departmentName (remark="部门名称")
-    string title (remark="标题")
-    string description (remark="描述")
-    i64 categoryId (remark="职类id")
-    string experience (remark="经验要求")
-    string education (remark="学历要求")
-    string salaryFrom (remark="薪资范围-起始")
-    string salaryTo (remark="薪资范围-结束")
-    string salaryCycle (remark="薪资周期")
-    string workplaceCode (remark="工作地点编码"),
-    string workplace (remark="工作地址"),
-    string detailAddress (remark="详细地址")
-    string status (remark="状态")
-    string statusName (remark="状态名称")
-    struct UserVo publishedBy (remark="发布人")
-    string publishedAt (remark="发布时间")
-    list<struct UserVo> evaluators (remark="协作人")
-    i64 paperId (remark="试卷id")
+    i64 interviewId (remark="面试id"),
+    string content (remark="标签内容"),
 }
 
-struct JobDetailWithPaperResp
+struct StepInfo
 {
-    i64 id (remark="id")
-    string title (remark="标题")
-    string description (remark="描述")
-    string status (remark="状态")
-    string statusName (remark="状态名称")
-    struct UserVo publishedBy (remark="发布人")
-    string publishedAt (remark="发布时间")
-    list<struct UserVo> evaluators (remark="协作人")
-    i64 paperId (remark="试卷id")
-    list<struct QuestionVo> questions (remark="试题列表")
+    i64 interviewId (remark="面试id"),
+    i64 step (remark="流程状态：0:欢迎页, 1:简历分析, 2:面试题准备, 3:画面测试"),
 }
 
-struct QuestionVo
+service EndInterview URL="/api/v1/online-interview"
 {
-    i64 id (remark="问题id")
-    string title (remark="标题")
-    string tips (remark="答题建议")
-    list<struct QuestionCategoryVo> categories (remark="职类")
-    i32 duration (remark="时长")
-    i32 score (remark="分数")
-    struct QuestionStyleVo questionStyle (remark="问题样式")
-    struct LevelVo level (remark="难度级别")
-    list<struct TagVo> tags (remark="考察点")
-    list<struct TagVo> skillTags (remark="考察技能")
-    list<struct MediaVo> medias (remark="媒体")
-    string content (remark="内容")
-}
+    # 问题评价
+    ("对问题的进行评价和备注@prod=12")
+    POST URL="question/mark" void questionAssess(struct QuestionAssessReq req),
+    ("获取所有问题列表@prod=12")
+    GET URL="question/get-all" list<struct Question> getQuestions(i64 interviewId),
 
-struct QuestionStyleVo
-{
-    i32 id (remark="id")
-    string name (remark="名称")
-}
 
-struct QuestionCategoryVo
-{
-    string code (remark="编码")
-    string name (remark="名称")
-}
+    # 标签
+    ("AI打标签@prod=12")
+    POST URL="tag/gene" void geneAITag(struct InterviewId interviewId),
+    ("获取所有能力标签(ai+人工)@prod=12")
+    POST URL="tag/get-all" list<struct Tag> getAllTag(struct InterviewId interviewId),
+    ("添加标签@prod=12")
+    POST URL="tag/add" i64 addTag(struct TagContent req),
+    ("对标签进行点评@prod=12")
+    POST URL="tag/edit" void editTag(struct EditTagReq req),
 
-struct LevelVo
-{
-    i32 id (remark="id")
-    string name (remark="名称")
-}
+    # 最终面试评价
+    ("生成ai面试评价@prod=12")
+    POST URL="gene-ai-evaluation" string geneAIEvaluation(struct InterviewId interviewId),
+    ("修改面试评价@prod=12")
+    POST URL="manual-evaluation" void  manualEvaluate(struct InterviewEvaluate req),
+    ("获取最终评价@prod=12")
+    GET URL="final-evaluation" struct InterviewEvaluate getFinalEvaluation(i64 id),
 
-struct MediaVo
-{
-    i64 mediaId (remark="id")
-    string type (remark="类型")
-    string data (remark="数据", appendUid="true")
-    i32 status (remark="状态(1: OK, -1: DELETED, -2: NOT_READY)")
-}
 
-struct TagVo
-{
-    i64 id (remark="id")
-    string name (remark="名称")
-    string typeCode (remark="类型编码")
-}
+    # 获取全部信息
+    ("获取全部信息@prod=12")
+    GET URL="all-info" struct InterviewAllInfo getAllInfo(i64 id),
 
-struct ConfigPaperReq
-{
-    required i64 jobId (binding="required", remark="职位id")
-    required list<i64> questionIds (binding="required,minLength=1", remark="题目id列表")
-}
 
-struct FormalJobDetailResp
-{
-    i64 id (remark="id")
-    string title (remark="标题")
-    string description (remark="描述")
-    string publishedAt (remark="发布时间")
-}
+    ("获取用户当前流程状态@prod=12")
+    GET URL="step/info" i64 getStepInfo(i64 interviewId),
+    ("修改用户当前流程状态@prod=12")
+    POST URL="step/update" void updateStepInfo(struct StepInfo req),
 
-struct SaveJobReq
-{
-    i64 id (remark="职位id"),
-    required i64 departmentId (binding="required", remark="部门id"),
-    required string title (binding="required", remark="职位名称"),
-    string description (remark="职位描述"),
-    i64 categoryId (remark="职位类型"),
-    string experience (remark="经验要求"),
-    string education (remark="学历要求"),
-    string salaryFrom (remark="月薪下限"),
-    string salaryTo (remark="月薪上限"),
-    string salaryCycle (remark="月薪周期"),
-    string workplaceCode (remark="工作地点编码"),
-    string workplace (remark="工作地址"),
-    string detailAddress (remark="详细地址"),
-}
-
-struct SaveJobResp
-{
-    i64 jobId (remark="职位id"),
-}
-
-struct AddableEvaluatorsReq extends struct page.PageParam
-{
-    required i64 jobId (binding="required", form="jobId", remark="职位id"),
-}
-
-struct AddableEvaluatorVO
-{
-    i64    id               (remark="用户id"),
-    i64    bid              (remark="用户id"),
-    i16    product          (remark="产品线"),
-    string name             (remark="名称"),
-    string username         (remark="用户名"),
-    string nickname         (remark="昵称"),
-    string mobile           (remark="手机号"),
-    string email            (remark="邮件"),
-    string avatar           (remark="头像"),
-    i64    companyId        (remark="公司id"),
-    string companyName      (remark="公司名称"),
-    string companyShortName (remark="公司简称"),
-    i64    departmentId     (remark="所属部门"),
-    string title            (remark="职称"),
-    string role            (remark="角色"),
-}
-
-struct AddEvaluatorsRequest
-{
-    required i64 jobId (binding="required", remark="职位id")
-    required list<i64> bids (binding="required,minLength=1", remark="面试协作人列表")
-}
-
-struct DepartmentResp
-{
-    i64 id (remark="部门id"),
-    string name (remark="部门名称")
-}
-
-service BoleJob URL="/api/bole/v1/job"
-{
-    ("B端 - 我的职位")
-    POST URL="my" struct MyJobResp PAGEABLE myJobs(struct QueryMyJobReq req),
-    ("B端 - 职位数量统计")
-    GET URL="count" struct CountJobResp countJobs(),
-    ("B端 - 职位详情")
-    POST URL="detail" struct JobDetailResp detail(struct JobIdReq req),
-    ("B端 - 保存职位")
-    POST URL="save" struct SaveJobResp save(struct SaveJobReq req),
-    ("B端 - 关闭职位")
-    POST URL="close" void closeJob(struct JobIdReq req),
-    ("B端 - 开启职位")
-    POST URL="publish" void publishJob(struct JobIdReq req),
-    ("B端 - 删除职位")
-    POST URL="delete" void deleteJob(struct JobIdReq req),
-    ("B端 - 可添加的职位协作人")
-    GET URL="addible-evaluators" struct AddableEvaluatorVO PAGEABLE addableEvaluators(struct AddableEvaluatorsReq req),
-    ("B端 - 已添加的职位协作人")
-    GET URL="added-evaluators" list<i64> addedEvaluators(struct JobIdReq req),
-    ("B端 - 添加职位协作人")
-    POST URL="add-evaluators" void addEvaluators(struct AddEvaluatorsRequest req),
-    ("B端 - 职位 -获取部门列表")
-    GET URL="job-department" list<struct DepartmentResp> jobDepartment(),
-}
-
-service BoleInterviewJob URL="/api/bole/v1/interview/job"
-{
-    ("B端 - 面试职位 - 我的职位")
-    POST URL="my" struct MyInterviewJobResp PAGEABLE myInterviewJobs(struct QueryMyInterviewJobReq req),
-    ("B端 - 面试职位 - 职位数量统计")
-    GET URL="count" struct CountJobResp countJobs(),
-    ("B端 - 面试职位 - 简单职位列表")
-    GET URL="list" list<struct SimpleJobResp> simpleJobs(),
-    ("B端 - 面试职位 - 职位详情")
-    POST URL="detail" struct JobDetailResp detail(struct JobIdReq req),
-    ("B端 - 面试职位 - 职位详情并且附带试卷信息")
-    POST URL="detail-with-paper" struct JobDetailWithPaperResp detailWithPaper(struct JobIdReq req),
-    ("B端 - 面试职位 - 配置试卷")
-    POST URL="config-paper" void configPaper(struct ConfigPaperReq req),
-    ("B端 - 面试职位 - 可添加的职位协作人")
-    GET URL="addible-evaluators" struct AddableEvaluatorVO PAGEABLE addableEvaluators(struct AddableEvaluatorsReq req),
-    ("B端 - 面试职位 - 已添加的职位协作人")
-    GET URL="added-evaluators" list<i64> addedEvaluators(struct JobIdReq req),
-    ("B端 - 面试职位 - 添加职位协作人")
-    POST URL="add-evaluators" void addEvaluators(struct AddEvaluatorsRequest req),
-}
-
-service QianXunJob URL="/api/qianxun/v1/job"
-{
-    ("C端 - 职位详情")
-    POST URL="detail" struct FormalJobDetailResp detail(struct JobIdReq req),
-}
-
-service SiKongJob URL="/api/sikong/v1/job"
-{
-    ("A端 - 职位详情")
-    POST URL="detail" struct JobDetailResp detail(struct JobIdReq req),
-    ("A端 - 职位详情并且附带试卷信息")
-    POST URL="detail-with-paper" struct JobDetailWithPaperResp detailWithPaper(struct JobIdReq req),
-    ("A端 - 配置试卷")
-    POST URL="config-paper" void configPaper(struct ConfigPaperReq req),
 }

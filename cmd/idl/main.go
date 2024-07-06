@@ -4,6 +4,7 @@ import (
 	"dgen/internal"
 	"dgen/internal/idl/transfer"
 	"github.com/darwinOrg/go-common/utils"
+	"github.com/iancoleman/strcase"
 	"os"
 	"strings"
 )
@@ -184,7 +185,36 @@ func main() {
 					}
 				}
 
-				interfaceModel.RequestModelName = getMethod.Params.StructName
+				if getMethod.Params.StructName != "" {
+					interfaceModel.RequestModelName = getMethod.Params.StructName
+				} else if len(getMethod.Params.BasicParams) > 0 {
+					interfaceModel.RequestModelName = strcase.ToCamel(getMethod.Name)
+					sd := &transfer.StructDefine{
+						Name: interfaceModel.RequestModelName,
+					}
+					def.Structs = append(def.Structs, sd)
+
+					for _, param := range getMethod.Params.BasicParams {
+						field := &transfer.Field{
+							Name: param.ParamName,
+							Tp: &transfer.FieldType{
+								IsBasic:  true,
+								IsList:   param.IsList,
+								TypeName: param.TypeName,
+							},
+							Annotations: param.Annotations,
+						}
+
+						if param.IsList {
+							field.Tp.ValueType = &transfer.FieldType{
+								IsBasic:  true,
+								TypeName: param.TypeName,
+							}
+						}
+
+						sd.Fields = append(sd.Fields, field)
+					}
+				}
 				interfaceModel.ResponseModelName = getMethod.MethodReturnType.TypeName
 			}
 		}
