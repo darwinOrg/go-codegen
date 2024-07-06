@@ -17,6 +17,9 @@ import (
 var {{.GroupUpperCamel}}Service = &{{.GroupLowerCamel}}Service{}
 type {{.GroupLowerCamel}}Service struct {
 }
+`
+
+var ServiceAppendTpl = `
 {{range .Models}}
 func (s *{{$.GroupLowerCamel}}Service) {{.MethodNameExp}}(ctx *dgctx.DgContext, req *{{.RequestModelNameExp}}) {{if ne .ResponseModelName ""}}({{.ResponseModelNameExp}}, error){{else}}error{{end}} {
 	{{- if eq .InterfaceType "新建"}}
@@ -74,3 +77,7 @@ func (s *{{$.GroupLowerCamel}}Service) {{.MethodNameExp}}(ctx *dgctx.DgContext, 
 }
 {{end}}
 `
+
+func init() {
+	ServiceTpl = ServiceTpl + ServiceAppendTpl
+}

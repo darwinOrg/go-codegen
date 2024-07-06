@@ -185,12 +185,33 @@ func (g *serverParser) parseService(entireModel *EntireModel) error {
 	for _, inter := range entireModel.Interfaces {
 		service := filepath.Join(serviceDir, strcase.ToSnake(inter.Group)+"_service.go")
 		if utils.ExistsFile(service) {
-			continue
-		}
+			fileBytes, err := os.ReadFile(service)
+			if err != nil {
+				return err
+			}
+			fileString := string(fileBytes)
 
-		err := parseNewFile(service, "service", _server.ServiceTpl, inter)
-		if err != nil {
-			return err
+			newInter, err := utils.ConvertToNewBeanByJson[InterfaceModelData](inter)
+			if err != nil {
+				return err
+			}
+			newInter.Models = dgcoll.FilterList(newInter.Models, func(interfaceModel *InterfaceModel) bool {
+				return !strings.Contains(fileString, fmt.Sprintf("%sService) %s(", inter.GroupLowerCamel, interfaceModel.MethodNameExp))
+			})
+
+			if len(newInter.Models) == 0 {
+				return nil
+			}
+
+			err = parseAppendFile(service, "service", _server.ServiceAppendTpl, newInter)
+			if err != nil {
+				return err
+			}
+		} else {
+			err := parseNewFile(service, "service", _server.ServiceTpl, inter)
+			if err != nil {
+				return err
+			}
 		}
 	}
 
