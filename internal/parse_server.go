@@ -162,12 +162,38 @@ func (g *serverParser) parseConverter(entireModel *EntireModel) error {
 	for _, c := range entireModel.Converters {
 		converter := filepath.Join(converterDir, strcase.ToSnake(c.DbTableUpperCamel)+"_converter.go")
 		if utils.ExistsFile(converter) {
-			continue
-		}
+			fileBytes, err := os.ReadFile(converter)
+			if err != nil {
+				return err
+			}
+			fileString := string(fileBytes)
 
-		err := parseNewFile(converter, "converter", _server.ConverterTpl, c)
-		if err != nil {
-			return err
+			nc, err := utils.ConvertToNewBeanByJson[ConverterData](c)
+			if err != nil {
+				return err
+			}
+			nc.Requests = dgcoll.FilterList(nc.Requests, func(rmd *RequestModelData) bool {
+				return !strings.Contains(fileString, fmt.Sprintf("%sConverter) %s2Entity(", c.DbTableLowerCamel, rmd.UpperCamelName)) &&
+					!strings.Contains(fileString, fmt.Sprintf("%sConverter) %s2Param(", c.DbTableLowerCamel, rmd.UpperCamelName)) &&
+					!strings.Contains(fileString, fmt.Sprintf("%sConverter) FillEntityWith%s(", c.DbTableLowerCamel, rmd.UpperCamelName))
+			})
+			nc.Responses = dgcoll.FilterList(nc.Responses, func(rmd *ResponseModelData) bool {
+				return !strings.Contains(fileString, fmt.Sprintf("%sConverter) Entity2%s(", c.DbTableLowerCamel, rmd.UpperCamelName))
+			})
+
+			if len(nc.Requests) == 0 && len(nc.Responses) == 0 {
+				return nil
+			}
+
+			err = parseAppendFile(converter, "converter", _server.ConverterAppendTpl, nc)
+			if err != nil {
+				return err
+			}
+		} else {
+			err := parseNewFile(converter, "converter", _server.ConverterTpl, c)
+			if err != nil {
+				return err
+			}
 		}
 	}
 

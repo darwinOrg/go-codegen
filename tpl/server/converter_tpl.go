@@ -13,6 +13,9 @@ var {{.DbTableUpperCamel}}Converter = &{{.DbTableLowerCamel}}Converter{}
 
 type {{.DbTableLowerCamel}}Converter struct {
 }
+`
+
+var ConverterAppendTpl = `
 {{range .Requests}}
 {{- if eq .InterfaceType "新建"}}
 func (c *{{$.DbTableLowerCamel}}Converter) {{.UpperCamelName}}2Entity(req *model.{{.UpperCamelName}}) *dal.{{$.DbTableUpperCamel}} {
@@ -65,3 +68,7 @@ func (c *{{$.DbTableLowerCamel}}Converter) Entity2{{.UpperCamelName}}({{$.DbTabl
 }
 {{end}}
 `
+
+func init() {
+	ConverterTpl = ConverterTpl + ConverterAppendTpl
+}
