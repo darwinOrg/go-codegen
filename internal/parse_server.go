@@ -111,12 +111,29 @@ func (g *serverParser) parseEnum(entireModel *EntireModel) error {
 
 	enum := filepath.Join(enumDir, entireModel.FilePrefix+"_enum.go")
 	if utils.ExistsFile(enum) {
-		return nil
-	}
+		fileBytes, err := os.ReadFile(enum)
+		if err != nil {
+			return err
+		}
+		fileString := string(fileBytes)
 
-	err := parseNewFile(enum, "enum", _server.EnumTpl, entireModel)
-	if err != nil {
-		return err
+		enums := dgcoll.FilterList(entireModel.Enums, func(enum *EnumModelData) bool {
+			return !strings.Contains(fileString, "var "+enum.UpperCamelName+"Map = map[")
+		})
+		if len(enums) == 0 {
+			return nil
+		}
+
+		ne := &EntireModel{Enums: enums}
+		err = parseAppendFile(enum, "enum", _server.EnumAppendTpl, ne)
+		if err != nil {
+			return err
+		}
+	} else {
+		err := parseNewFile(enum, "enum", _server.EnumTpl, entireModel)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
