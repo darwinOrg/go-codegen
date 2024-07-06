@@ -2,7 +2,6 @@ package main
 
 import (
 	"dgen/internal"
-	"flag"
 	"fmt"
 	_ "github.com/darwinOrg/daog-ext"
 	dgcoll "github.com/darwinOrg/go-common/collection"
@@ -17,23 +16,11 @@ import (
 	"strings"
 )
 
-var (
-	inputFile string
-)
-
-func init() {
-	flag.StringVar(&inputFile, "i", "", "the create tables file")
-}
-
 func main() {
-	flag.Parse()
-
-	if inputFile == "" {
-		if len(os.Args) < 2 {
-			os.Exit(1)
-		}
-		inputFile = os.Args[1]
+	if len(os.Args) < 2 {
+		os.Exit(1)
 	}
+	inputFile := os.Args[1]
 	data, err := os.ReadFile(inputFile)
 	if err != nil {
 		os.Exit(1)

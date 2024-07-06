@@ -164,7 +164,7 @@ type InterfaceModel struct {
 type InterfaceModelData struct {
 	Group        string            `json:"group,omitempty"`
 	RoutePrefix  string            `json:"routePrefix,omitempty"`
-	ExportClient bool              `json:"exportClient,omitempty"`
+	ExportClient bool              `json:"exportClient"`
 	Models       []*InterfaceModel `json:"models,omitempty"`
 
 	PackagePrefix   string `json:"packagePrefix,omitempty"`
