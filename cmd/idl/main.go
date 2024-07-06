@@ -3,6 +3,7 @@ package main
 import (
 	"dgen/internal"
 	"dgen/internal/idl/transfer"
+	dgcoll "github.com/darwinOrg/go-common/collection"
 	"github.com/darwinOrg/go-common/utils"
 	"github.com/iancoleman/strcase"
 	"os"
@@ -210,6 +211,15 @@ func main() {
 								IsBasic:  true,
 								TypeName: param.TypeName,
 							}
+						}
+
+						if dgcoll.NoneMatch(field.Annotations, func(annotation *transfer.Annotation) bool {
+							return annotation.Key == "binding"
+						}) {
+							field.Annotations = append(field.Annotations, &transfer.Annotation{
+								Key:   "binding",
+								Value: "required",
+							})
 						}
 
 						sd.Fields = append(sd.Fields, field)
