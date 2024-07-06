@@ -35,12 +35,7 @@ func (p *serverParser) Parse(entireModel *EntireModel) error {
 		return err
 	}
 
-	err = p.parseConverter(entireModel)
-	if err != nil {
-		return err
-	}
-
-	err = p.parseService(entireModel)
+	err = p.parseRouter(entireModel)
 	if err != nil {
 		return err
 	}
@@ -50,7 +45,12 @@ func (p *serverParser) Parse(entireModel *EntireModel) error {
 		return err
 	}
 
-	err = p.parseRouter(entireModel)
+	err = p.parseService(entireModel)
+	if err != nil {
+		return err
+	}
+
+	err = p.parseConverter(entireModel)
 	if err != nil {
 		return err
 	}
@@ -172,13 +172,35 @@ func (g *serverParser) parseConverter(entireModel *EntireModel) error {
 			if err != nil {
 				return err
 			}
+
 			nc.Requests = dgcoll.FilterList(nc.Requests, func(rmd *RequestModelData) bool {
 				return !strings.Contains(fileString, fmt.Sprintf("%sConverter) %s2Entity(", c.DbTableLowerCamel, rmd.UpperCamelName)) &&
 					!strings.Contains(fileString, fmt.Sprintf("%sConverter) %s2Param(", c.DbTableLowerCamel, rmd.UpperCamelName)) &&
 					!strings.Contains(fileString, fmt.Sprintf("%sConverter) FillEntityWith%s(", c.DbTableLowerCamel, rmd.UpperCamelName))
 			})
+			nc.Requests = dgcoll.FilterList(nc.Requests, func(rmd *RequestModelData) bool {
+				return dgcoll.AnyMatch(entireModel.Interfaces, func(inter *InterfaceModelData) bool {
+					service := filepath.Join(entireModel.Export.ServerOutput, "service", strcase.ToSnake(inter.Group)+"_service.go")
+					serviceBytes, _ := os.ReadFile(service)
+					serviceString := string(serviceBytes)
+
+					return strings.Contains(serviceString, fmt.Sprintf("converter.%sConverter.%s2Entity(", c.DbTableUpperCamel, rmd.UpperCamelName)) ||
+						strings.Contains(serviceString, fmt.Sprintf("converter.%sConverter.%s2Param(", c.DbTableUpperCamel, rmd.UpperCamelName)) ||
+						strings.Contains(serviceString, fmt.Sprintf("converter.%sConverter.FillEntityWith%s(", c.DbTableUpperCamel, rmd.UpperCamelName))
+				})
+			})
+
 			nc.Responses = dgcoll.FilterList(nc.Responses, func(rmd *ResponseModelData) bool {
-				return !strings.Contains(fileString, fmt.Sprintf("%sConverter) Entity2%s(", c.DbTableLowerCamel, rmd.UpperCamelName))
+				return !strings.Contains(fileString, fmt.Sprintf("converter.%sConverter.Entity2%s(", c.DbTableLowerCamel, rmd.UpperCamelName))
+			})
+			nc.Responses = dgcoll.FilterList(nc.Responses, func(rmd *ResponseModelData) bool {
+				return dgcoll.AnyMatch(entireModel.Interfaces, func(inter *InterfaceModelData) bool {
+					service := filepath.Join(entireModel.Export.ServerOutput, "service", strcase.ToSnake(inter.Group)+"_service.go")
+					serviceBytes, _ := os.ReadFile(service)
+					serviceString := string(serviceBytes)
+
+					return strings.Contains(serviceString, fmt.Sprintf("converter.%sConverter.Entity2%s(", c.DbTableUpperCamel, rmd.UpperCamelName))
+				})
 			})
 
 			if len(nc.Requests) == 0 && len(nc.Responses) == 0 {
