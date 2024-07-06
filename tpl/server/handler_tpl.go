@@ -14,6 +14,9 @@ import (
 var {{.GroupUpperCamel}}Handler = &{{.GroupLowerCamel}}Handler{}
 type {{.GroupLowerCamel}}Handler struct {
 }
+`
+
+var HandlerAppendTpl = `
 {{range .Models}}
 func (h *{{$.GroupLowerCamel}}Handler) {{.MethodNameExp}}(_ *gin.Context, ctx *dgctx.DgContext, req *{{.RequestModelNameExp}}) *result.Result[{{.ResponseModelNameExp}}] {
 	{{- if ne .ResponseModelName ""}}
@@ -31,3 +34,7 @@ func (h *{{$.GroupLowerCamel}}Handler) {{.MethodNameExp}}(_ *gin.Context, ctx *d
 }
 {{end}}
 `
+
+func init() {
+	HandlerTpl = HandlerTpl + HandlerAppendTpl
+}

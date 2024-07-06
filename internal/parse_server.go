@@ -3,6 +3,7 @@ package internal
 import (
 	_default "dgen/tpl/default"
 	_server "dgen/tpl/server"
+	"fmt"
 	dgcoll "github.com/darwinOrg/go-common/collection"
 	"github.com/darwinOrg/go-common/utils"
 	"github.com/iancoleman/strcase"
@@ -80,7 +81,7 @@ func (g *serverParser) parseDal(entireModel *EntireModel) error {
 		meta.PackagePrefix = entireModel.Export.ServerPackagePrefix
 
 		dalMain := filepath.Join(dalDir, meta.GoTable+".go")
-		err := parseFile(dalMain, "dal-main", _default.DalMainTpl, meta)
+		err := parseNewFile(dalMain, "dal-main", _default.DalMainTpl, meta)
 		if err != nil {
 			return err
 		}
@@ -90,7 +91,7 @@ func (g *serverParser) parseDal(entireModel *EntireModel) error {
 			continue
 		}
 
-		err = parseFile(dalExt, "dal-ext", _default.DalExtTpl, meta)
+		err = parseNewFile(dalExt, "dal-ext", _default.DalExtTpl, meta)
 		if err != nil {
 			return err
 		}
@@ -113,7 +114,7 @@ func (g *serverParser) parseEnum(entireModel *EntireModel) error {
 		return nil
 	}
 
-	err := parseFile(enum, "enum", _server.EnumTpl, entireModel)
+	err := parseNewFile(enum, "enum", _server.EnumTpl, entireModel)
 	if err != nil {
 		return err
 	}
@@ -130,19 +131,19 @@ func (g *serverParser) parseModel(entireModel *EntireModel) error {
 	_ = os.MkdirAll(modelDir, fs.ModeDir|fs.ModePerm)
 
 	model := filepath.Join(modelDir, entireModel.FilePrefix+"_model.go")
-	err := parseFile(model, "model", _server.ModelTpl, entireModel)
+	err := parseNewFile(model, "model", _server.ModelTpl, entireModel)
 	if err != nil {
 		return err
 	}
 
 	//request := filepath.Join(modelDir, entireModel.FilePrefix+"_request.go")
-	//err := parseFile(request, "request", _server.RequestTpl, entireModel)
+	//err := parseNewFile(request, "request", _server.RequestTpl, entireModel)
 	//if err != nil {
 	//	return err
 	//}
 	//
 	//response := filepath.Join(modelDir, entireModel.FilePrefix+"_response.go")
-	//err = parseFile(response, "response", _server.ResponseTpl, entireModel)
+	//err = parseNewFile(response, "response", _server.ResponseTpl, entireModel)
 	//if err != nil {
 	//	return err
 	//}
@@ -164,7 +165,7 @@ func (g *serverParser) parseConverter(entireModel *EntireModel) error {
 			continue
 		}
 
-		err := parseFile(converter, "converter", _server.ConverterTpl, c)
+		err := parseNewFile(converter, "converter", _server.ConverterTpl, c)
 		if err != nil {
 			return err
 		}
@@ -187,7 +188,7 @@ func (g *serverParser) parseService(entireModel *EntireModel) error {
 			continue
 		}
 
-		err := parseFile(service, "service", _server.ServiceTpl, inter)
+		err := parseNewFile(service, "service", _server.ServiceTpl, inter)
 		if err != nil {
 			return err
 		}
@@ -207,12 +208,33 @@ func (g *serverParser) parseHandler(entireModel *EntireModel) error {
 	for _, inter := range entireModel.Interfaces {
 		handler := filepath.Join(handlerDir, strcase.ToSnake(inter.Group)+"_handler.go")
 		if utils.ExistsFile(handler) {
-			continue
-		}
+			fileBytes, err := os.ReadFile(handler)
+			if err != nil {
+				return err
+			}
+			fileString := string(fileBytes)
 
-		err := parseFile(handler, "handler", _server.HandlerTpl, inter)
-		if err != nil {
-			return err
+			newInter, err := utils.ConvertToNewBeanByJson[InterfaceModelData](inter)
+			if err != nil {
+				return err
+			}
+			newInter.Models = dgcoll.FilterList(newInter.Models, func(interfaceModel *InterfaceModel) bool {
+				return !strings.Contains(fileString, fmt.Sprintf("%sHandler) %s(", inter.GroupLowerCamel, interfaceModel.MethodNameExp))
+			})
+
+			if len(newInter.Models) == 0 {
+				return nil
+			}
+
+			err = parseAppendFile(handler, "handler", _server.HandlerAppendTpl, newInter)
+			if err != nil {
+				return err
+			}
+		} else {
+			err := parseNewFile(handler, "handler", _server.HandlerTpl, inter)
+			if err != nil {
+				return err
+			}
 		}
 	}
 
@@ -230,7 +252,7 @@ func (g *serverParser) parseRouter(entireModel *EntireModel) error {
 	for _, inter := range entireModel.Interfaces {
 		router := filepath.Join(routerDir, strcase.ToSnake(inter.Group)+"_router.go")
 
-		err := parseFile(router, "router", _server.RouterTpl, inter)
+		err := parseNewFile(router, "router", _server.RouterTpl, inter)
 		if err != nil {
 			return err
 		}

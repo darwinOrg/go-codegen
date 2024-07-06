@@ -52,13 +52,13 @@ func parseMetaDAL(targetPath string, meta *Meta) error {
 	_ = os.MkdirAll(dalDir, fs.ModeDir|fs.ModePerm)
 
 	dalMain := filepath.Join(dalDir, meta.GoTable+".go")
-	err := parseFile(dalMain, "dal-main", _default.DalMainTpl, meta)
+	err := parseNewFile(dalMain, "dal-main", _default.DalMainTpl, meta)
 	if err != nil {
 		return err
 	}
 
 	dalExt := filepath.Join(dalDir, meta.GoTable+"-ext.go")
-	err = parseFile(dalExt, "dal-ext", _default.DalExtTpl, meta)
+	err = parseNewFile(dalExt, "dal-ext", _default.DalExtTpl, meta)
 	if err != nil {
 		return err
 	}
@@ -75,7 +75,7 @@ func parseMetaEnum(targetPath string, meta *Meta) error {
 	_ = os.MkdirAll(enumDir, fs.ModeDir|fs.ModePerm)
 
 	enum := filepath.Join(enumDir, strcase.ToSnake(meta.GoTable)+"_enum.go")
-	err := parseFile(enum, "enum", _default.EnumTpl, meta)
+	err := parseNewFile(enum, "enum", _default.EnumTpl, meta)
 	if err != nil {
 		return err
 	}
@@ -88,7 +88,7 @@ func parseMetaModel(targetPath string, meta *Meta) error {
 	_ = os.MkdirAll(modelDir, fs.ModeDir|fs.ModePerm)
 
 	model := filepath.Join(modelDir, strcase.ToSnake(meta.GoTable)+"_model.go")
-	err := parseFile(model, "model", _default.ModelTpl, meta)
+	err := parseNewFile(model, "model", _default.ModelTpl, meta)
 	if err != nil {
 		return err
 	}
@@ -101,7 +101,7 @@ func parseMetaConverter(targetPath string, meta *Meta) error {
 	_ = os.MkdirAll(converterDir, fs.ModeDir|fs.ModePerm)
 
 	converter := filepath.Join(converterDir, strcase.ToSnake(meta.GoTable)+"_converter.go")
-	err := parseFile(converter, "converter", _default.ConverterTpl, meta)
+	err := parseNewFile(converter, "converter", _default.ConverterTpl, meta)
 	if err != nil {
 		return err
 	}
@@ -114,7 +114,7 @@ func parseMetaService(targetPath string, meta *Meta) error {
 	_ = os.MkdirAll(serviceDir, fs.ModeDir|fs.ModePerm)
 
 	service := filepath.Join(serviceDir, strcase.ToSnake(meta.GoTable)+"_service.go")
-	err := parseFile(service, "service", _default.ServiceTpl, meta)
+	err := parseNewFile(service, "service", _default.ServiceTpl, meta)
 	if err != nil {
 		return err
 	}
@@ -127,7 +127,7 @@ func parseMetaHandler(targetPath string, meta *Meta) error {
 	_ = os.MkdirAll(handlerDir, fs.ModeDir|fs.ModePerm)
 
 	handler := filepath.Join(handlerDir, strcase.ToSnake(meta.GoTable)+"_handler.go")
-	err := parseFile(handler, "handler", _default.HandlerTpl, meta)
+	err := parseNewFile(handler, "handler", _default.HandlerTpl, meta)
 	if err != nil {
 		return err
 	}
@@ -140,7 +140,7 @@ func parseMetaRouter(targetPath string, meta *Meta) error {
 	_ = os.MkdirAll(routerDir, fs.ModeDir|fs.ModePerm)
 
 	router := filepath.Join(routerDir, strcase.ToSnake(meta.GoTable)+"_router.go")
-	err := parseFile(router, "router", _default.RouterTpl, meta)
+	err := parseNewFile(router, "router", _default.RouterTpl, meta)
 	if err != nil {
 		return err
 	}

@@ -3,8 +3,9 @@ module dgen
 go 1.20
 
 require (
+	e.globalpand.cn/libs/nvwa-sdk v0.0.94
 	github.com/darwinOrg/daog-ext v0.0.4
-	github.com/darwinOrg/go-common v0.1.56
+	github.com/darwinOrg/go-common v0.1.57
 	github.com/darwinOrg/go-httpclient v0.1.18
 	github.com/darwinOrg/go-logger v0.0.6
 	github.com/darwinOrg/go-swagger v0.0.10
@@ -18,7 +19,6 @@ require (
 )
 
 require (
-	e.globalpand.cn/libs/nvwa-sdk v0.0.94 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/bytedance/sonic v1.11.6 // indirect
 	github.com/bytedance/sonic/loader v0.1.1 // indirect

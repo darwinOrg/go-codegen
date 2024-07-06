@@ -18,8 +18,8 @@ github.com/cznic/mathutil v0.0.0-20181122101859-297441e03548 h1:iwZdTE0PVqJCos1v
 github.com/cznic/mathutil v0.0.0-20181122101859-297441e03548/go.mod h1:e6NPNENfs9mPDVNRekM7lKScauxd5kXTr1Mfyig6TDM=
 github.com/darwinOrg/daog-ext v0.0.4 h1:gEeJuilPu6p2hnYO0OjVfmaZ5C9NuL76fR8IpDZWTZg=
 github.com/darwinOrg/daog-ext v0.0.4/go.mod h1:cA37RBvyST0ARTVFd0BwSiZgFSf45iGVQYYLdVuCEZw=
-github.com/darwinOrg/go-common v0.1.56 h1:05XRle3HPQOC+7Ba2nd1bekl+tbnt4ORZ7v8BlaWi2M=
-github.com/darwinOrg/go-common v0.1.56/go.mod h1:pItL/4ZV0bU64N2qD9ACpvDlYjeomAbheIzPXKqbb88=
+github.com/darwinOrg/go-common v0.1.57 h1:iPVGzmsU6H8lvQgVICZbEvf2L7YXNiVZV3/jydxGCXA=
+github.com/darwinOrg/go-common v0.1.57/go.mod h1:pItL/4ZV0bU64N2qD9ACpvDlYjeomAbheIzPXKqbb88=
 github.com/darwinOrg/go-httpclient v0.1.18 h1:WAPv8KchoL6wtphtvzI0m0LjgLVg0oCg9CwnnT0+NKc=
 github.com/darwinOrg/go-httpclient v0.1.18/go.mod h1:KPIVj3lSnC49Y5RqrqXs+obtK1tanPnpcBW4dUswhps=
 github.com/darwinOrg/go-logger v0.0.6 h1:d4n71HquXZV+oKJFEIGrwoidn8e/aqKaXCB/hl+lqng=

@@ -36,7 +36,7 @@ func (g *clientParser) parseModel(entireModel *EntireModel) error {
 	_ = os.MkdirAll(modelDir, fs.ModeDir|fs.ModePerm)
 
 	model := filepath.Join(modelDir, entireModel.FilePrefix+"_model.go")
-	err := parseFile(model, "model", _server.ModelTpl, entireModel)
+	err := parseNewFile(model, "model", _server.ModelTpl, entireModel)
 	if err != nil {
 		return err
 	}
@@ -53,7 +53,7 @@ func (g *clientParser) parseClient(entireModel *EntireModel) error {
 	_ = os.MkdirAll(clientDir, fs.ModeDir|fs.ModePerm)
 
 	client := filepath.Join(clientDir, entireModel.FilePrefix+"_client.go")
-	err := parseFile(client, "client", _client.ClientTpl, entireModel)
+	err := parseNewFile(client, "client", _client.ClientTpl, entireModel)
 	if err != nil {
 		return err
 	}
