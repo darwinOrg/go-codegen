@@ -12,8 +12,8 @@ import (
 	"github.com/darwinOrg/go-web/wrapper"
 	"github.com/gin-gonic/gin"
 )
-{{range $index, $inter := .Interfaces}}
-func Bind{{$inter.GroupUpperCamel}}Router(rg *gin.RouterGroup) {
+
+func Bind{{.GroupUpperCamel}}Router(rg *gin.RouterGroup) {
 	g := rg.Group("{{.RoutePrefix}}")
 	{{range .Models}}
 	wrapper.{{.MethodType}}(&wrapper.RequestHolder[{{.RequestModelNameExp}}, *result.Result[{{.ResponseModelNameExp}}]]{
@@ -22,9 +22,8 @@ func Bind{{$inter.GroupUpperCamel}}Router(rg *gin.RouterGroup) {
 		{{if .NotLogSQL}}NotLogSQL: true,{{- end -}}
 		{{if ne .AllowProductsExp ""}}AllowProducts: {{.AllowProductsExp}},{{- end -}}
 		{{if ne .LogLevelExp ""}}LogLevel: {{.LogLevelExp}},{{- end}}
-		BizHandler: handler.{{$inter.GroupUpperCamel}}Handler.{{.MethodNameExp}},
+		BizHandler: handler.{{$.GroupUpperCamel}}Handler.{{.MethodNameExp}},
 	})
 	{{end}}
 }
-{{end}}
 `

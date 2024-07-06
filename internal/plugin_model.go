@@ -174,6 +174,7 @@ type InterfaceModelData struct {
 	HasQuery        bool   `json:"hasQuery,omitempty"`
 	HasId           bool   `json:"hasId,omitempty"`
 	HasModel        bool   `json:"hasModel,omitempty"`
+	HasProducts     bool   `json:"hasProducts,omitempty"`
 }
 
 type ExportConfigData struct {
@@ -359,6 +360,10 @@ func (m *EntireModel) FillInterfaces() {
 		for _, model := range inter.Models {
 			model.RelativePath = strings.TrimPrefix(model.RelativePath, "/")
 
+			if model.InterfaceType == "分页" {
+				inter.HasPage = true
+			}
+
 			if model.InterfaceType == "分页" || model.InterfaceType == "列表" {
 				m.HasQuery = true
 				inter.HasQuery = true
@@ -416,6 +421,7 @@ func (m *EntireModel) FillInterfaces() {
 					return productMap[name]
 				})
 				model.AllowProductsExp = "[]int{" + strings.Join(products, ",") + "}"
+				inter.HasProducts = true
 				m.HasProducts = true
 			}
 
@@ -427,7 +433,7 @@ func (m *EntireModel) FillInterfaces() {
 			model.DbTableUpperCamel = strcase.ToCamel(model.DbModelName)
 			model.DbTableLowerCamel = strcase.ToLowerCamel(model.DbModelName)
 
-			inter.HasModel = model.RequestModelName != "" || model.ResponseModelName != ""
+			inter.HasModel = (model.RequestModelName != "" && model.RequestModelName != "Id") || model.ResponseModelName != ""
 		}
 	}
 }

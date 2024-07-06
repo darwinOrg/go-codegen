@@ -204,14 +204,16 @@ func (g *serverParser) parseHandler(entireModel *EntireModel) error {
 	handlerDir := filepath.Join(entireModel.Export.ServerOutput, "handler")
 	_ = os.MkdirAll(handlerDir, fs.ModeDir|fs.ModePerm)
 
-	handler := filepath.Join(handlerDir, entireModel.FilePrefix+"_handler.go")
-	if utils.ExistsFile(handler) {
-		return nil
-	}
+	for _, inter := range entireModel.Interfaces {
+		handler := filepath.Join(handlerDir, strcase.ToSnake(inter.Group)+"_handler.go")
+		if utils.ExistsFile(handler) {
+			continue
+		}
 
-	err := parseFile(handler, "handler", _server.HandlerTpl, entireModel)
-	if err != nil {
-		return err
+		err := parseFile(handler, "handler", _server.HandlerTpl, inter)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -225,10 +227,13 @@ func (g *serverParser) parseRouter(entireModel *EntireModel) error {
 	routerDir := filepath.Join(entireModel.Export.ServerOutput, "router")
 	_ = os.MkdirAll(routerDir, fs.ModeDir|fs.ModePerm)
 
-	router := filepath.Join(routerDir, entireModel.FilePrefix+"_router.go")
-	err := parseFile(router, "router", _server.RouterTpl, entireModel)
-	if err != nil {
-		return err
+	for _, inter := range entireModel.Interfaces {
+		router := filepath.Join(routerDir, strcase.ToSnake(inter.Group)+"_router.go")
+
+		err := parseFile(router, "router", _server.RouterTpl, inter)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
