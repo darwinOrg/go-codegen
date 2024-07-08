@@ -92,7 +92,9 @@ func main() {
 
 		entireModel.Requests = append(entireModel.Requests, &internal.RequestModelData{
 			Name: "Query" + meta.GoTable + "Req",
-			Models: dgcoll.MapToList(meta.QueryColumns, func(column *internal.Column) *internal.RequestModel {
+			Models: dgcoll.FilterAndMapToList(meta.QueryColumns, func(column *internal.Column) bool {
+				return column.DbName != "id" && !column.IsNull
+			}, func(column *internal.Column) *internal.RequestModel {
 				requestModel := &internal.RequestModel{
 					FieldName: column.GoName,
 					DataType:  adjustDbType(column.DbType),
