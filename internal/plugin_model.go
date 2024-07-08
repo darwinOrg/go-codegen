@@ -53,7 +53,7 @@ type DbModel struct {
 	ModelFieldName string `json:"modelFieldName,omitempty"`
 	DbDataType     string `json:"dbDataType,omitempty"`
 	ModelDataType  string `json:"modelDataType,omitempty"`
-	Nullable       bool   `json:"nullable,omitempty"`
+	Nullable       bool   `json:"nullable"`
 	DefaultValue   string `json:"defaultValue,omitempty"`
 	Enumerable     bool   `json:"enumerable,omitempty"`
 	Remark         string `json:"remark,omitempty"`
@@ -84,7 +84,7 @@ type RequestModel struct {
 	DataType    string `json:"dataType,omitempty"`
 	IsPointer   bool   `json:"isPointer,omitempty"`
 	IsArray     bool   `json:"isArray,omitempty"`
-	Nullable    bool   `json:"nullable,omitempty"`
+	Nullable    bool   `json:"nullable"`
 	VerifyRules string `json:"verifyRules,omitempty"`
 	EnumModel   string `json:"enumModel,omitempty"`
 	Remark      string `json:"remark,omitempty"`
@@ -111,7 +111,7 @@ type ResponseModel struct {
 	DataType   string `json:"dataType,omitempty"`
 	IsPointer  bool   `json:"isPointer,omitempty"`
 	IsArray    bool   `json:"isArray,omitempty"`
-	Nullable   bool   `json:"nullable,omitempty"`
+	Nullable   bool   `json:"nullable"`
 	IsMediaUrl bool   `json:"isMediaUrl,omitempty"`
 	EnumModel  string `json:"enumModel,omitempty"`
 	Remark     string `json:"remark,omitempty"`
