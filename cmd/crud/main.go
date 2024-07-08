@@ -161,6 +161,7 @@ func main() {
 			Models: []*internal.InterfaceModel{
 				{
 					InterfaceType:    "新建",
+					MethodType:       "Post",
 					RelativePath:     "create",
 					MethodName:       "create",
 					DbModelName:      meta.TableName,
@@ -170,6 +171,7 @@ func main() {
 				},
 				{
 					InterfaceType:    "修改",
+					MethodType:       "Post",
 					RelativePath:     "modify",
 					MethodName:       "modify",
 					DbModelName:      meta.TableName,
@@ -179,6 +181,7 @@ func main() {
 				},
 				{
 					InterfaceType:    "删除",
+					MethodType:       "Post",
 					RelativePath:     "delete",
 					MethodName:       "delete",
 					DbModelName:      meta.TableName,
@@ -188,6 +191,7 @@ func main() {
 				},
 				{
 					InterfaceType:     "分页",
+					MethodType:        "Post",
 					RelativePath:      "page",
 					MethodName:        "page",
 					DbModelName:       meta.TableName,
@@ -198,6 +202,7 @@ func main() {
 				},
 				{
 					InterfaceType:     "列表",
+					MethodType:        "Post",
 					RelativePath:      "list",
 					MethodName:        "list",
 					DbModelName:       meta.TableName,
@@ -208,6 +213,7 @@ func main() {
 				},
 				{
 					InterfaceType:     "详情",
+					MethodType:        "Get",
 					RelativePath:      "detail",
 					MethodName:        "detail",
 					DbModelName:       meta.TableName,

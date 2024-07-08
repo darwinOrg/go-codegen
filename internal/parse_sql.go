@@ -63,7 +63,7 @@ func BuildTableMetas(sql string) ([]*Meta, error) {
 		}
 
 		meta.QueryColumns = dgcoll.FilterList(meta.Columns, func(c *Column) bool {
-			return !dgcoll.Contains(ignoreQueryModelFieldNames, c.DbName)
+			return !dgcoll.Contains(ignoreQueryModelFieldNames, c.DbName) && !c.IsNull
 		})
 
 		meta.ModifyColumns = dgcoll.FilterList(meta.Columns, func(c *Column) bool {
