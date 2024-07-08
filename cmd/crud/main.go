@@ -96,7 +96,7 @@ func main() {
 				requestModel := &internal.RequestModel{
 					FieldName: column.GoName,
 					DataType:  adjustDbType(column.DbType),
-					Nullable:  column.IsNull,
+					Nullable:  true,
 					Remark:    column.Comment,
 				}
 
