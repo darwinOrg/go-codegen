@@ -15,7 +15,7 @@ import (
 var keywordsMap = map[string]int{}
 
 var (
-	ignoreQueryModelFieldNames  = []string{"mask", "deleted", "test", "vsn", "op_id", "created_by", "created_at", "modified_by", "modified_at"}
+	ignoreQueryModelFieldNames  = []string{"company_id", "org_id", "mask", "deleted", "test", "vsn", "op_id", "created_by", "created_at", "modified_by", "modified_at"}
 	ignoreModifyModelFieldNames = append(ignoreQueryModelFieldNames, "status", "state")
 	ignoreCreateModelFieldNames = append(ignoreModifyModelFieldNames, "id")
 )
