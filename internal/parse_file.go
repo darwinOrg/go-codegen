@@ -50,7 +50,7 @@ func parseFile(fileName string, file *os.File, tplName string, tplText string, d
 		return err
 	}
 
-	cmd := exec.Command("go", "fmt", fileName)
+	cmd := exec.Command("gofmt", "-w", fileName)
 	_ = cmd.Run()
 
 	return nil
