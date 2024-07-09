@@ -46,7 +46,15 @@ func parseFile(fileName string, file *os.File, tplName string, tplText string, d
 	}
 
 	cmd := exec.Command("gofmt", "-w", fileName)
-	_ = cmd.Run()
+	err = cmd.Run()
+	if err != nil {
+		cmd = exec.Command("/opt/homebrew/bin/gofmt", "-w", fileName)
+		err = cmd.Run()
+	}
+	if err != nil {
+		cmd = exec.Command("go", "fmt", fileName)
+		_ = cmd.Run()
+	}
 
 	return nil
 }
