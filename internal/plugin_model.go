@@ -89,6 +89,7 @@ type RequestModel struct {
 	EnumModel   string `json:"enumModel,omitempty"`
 	Remark      string `json:"remark,omitempty"`
 
+	UpperCamelName   string            `json:"upperCamelName,omitempty"`
 	LowerCamelName   string            `json:"lowerCamelName,omitempty"`
 	NullableString   bool              `json:"nullableString,omitempty"`
 	RequestModelData *RequestModelData `json:"requestModelData,omitempty"`
@@ -116,6 +117,7 @@ type ResponseModel struct {
 	EnumModel  string `json:"enumModel,omitempty"`
 	Remark     string `json:"remark,omitempty"`
 
+	UpperCamelName    string             `json:"upperCamelName,omitempty"`
 	LowerCamelName    string             `json:"lowerCamelName,omitempty"`
 	EnumTitle         string             `json:"enumTitle,omitempty"`
 	EnumRemark        string             `json:"enumRemark,omitempty"`
@@ -269,6 +271,7 @@ func (m *EntireModel) FillRequests() {
 		request.UpperCamelName = strcase.ToCamel(request.Name)
 
 		for _, model := range request.Models {
+			model.UpperCamelName = strcase.ToCamel(model.FieldName)
 			model.LowerCamelName = strcase.ToLowerCamel(model.FieldName)
 			model.NullableString = model.Nullable && model.DataType == "string"
 
@@ -314,6 +317,7 @@ func (m *EntireModel) FillResponses() {
 		response.UpperCamelName = strcase.ToCamel(response.Name)
 
 		for _, model := range response.Models {
+			model.UpperCamelName = strcase.ToCamel(model.FieldName)
 			model.LowerCamelName = strcase.ToLowerCamel(model.FieldName)
 			model.NullableString = model.Nullable && model.DataType == "string"
 
