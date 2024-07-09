@@ -208,7 +208,7 @@ func (g *serverParser) parseConverter(entireModel *EntireModel) error {
 			})
 
 			nc.Responses = dgcoll.FilterList(nc.Responses, func(rmd *ResponseModelData) bool {
-				return !strings.Contains(fileString, fmt.Sprintf("converter.%sConverter.Entity2%s(", c.DbTableLowerCamel, rmd.UpperCamelName))
+				return !strings.Contains(fileString, fmt.Sprintf("%sConverter) Entity2%s(", c.DbTableLowerCamel, rmd.UpperCamelName))
 			})
 			nc.Responses = dgcoll.FilterList(nc.Responses, func(rmd *ResponseModelData) bool {
 				return dgcoll.AnyMatch(entireModel.Interfaces, func(inter *InterfaceModelData) bool {
