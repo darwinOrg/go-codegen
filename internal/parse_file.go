@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"github.com/darwinOrg/go-common/utils"
 	"os"
 	"os/exec"
 	"strings"
@@ -16,11 +15,7 @@ var (
 )
 
 func parseNewFile(fileName string, tplName string, tplText string, data any) error {
-	if utils.ExistsFile(fileName) {
-		return nil
-	}
-
-	file, err := os.Create(fileName)
+	file, err := os.OpenFile(fileName, os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		return err
 	}
