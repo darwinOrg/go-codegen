@@ -15,7 +15,7 @@ var (
 )
 
 func parseNewFile(fileName string, tplName string, tplText string, data any) error {
-	file, err := os.OpenFile(fileName, os.O_CREATE|os.O_WRONLY, 0644)
+	file, err := os.OpenFile(fileName, os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		return err
 	}
