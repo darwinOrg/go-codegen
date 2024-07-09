@@ -9,7 +9,7 @@ var ModelTpl = `package model
 
 {{range .Requests}}
 type {{.UpperCamelName}} struct {
-	{{range .Models}}{{.FieldName}} {{if .IsArray}}[]{{end}}{{if .IsPointer}}*{{end}}{{.DataType}} ###json:"{{.LowerCamelName}}" form:"{{.LowerCamelName}}"{{if ne .VerifyRules ""}} binding:"{{.VerifyRules}}"{{end}} remark:"{{.Remark}}"###
+	{{range .Models}}{{.UpperCamelName}} {{if .IsArray}}[]{{end}}{{if .IsPointer}}*{{end}}{{.DataType}} ###json:"{{.LowerCamelName}}" form:"{{.LowerCamelName}}"{{if ne .VerifyRules ""}} binding:"{{.VerifyRules}}"{{end}} remark:"{{.Remark}}"###
 	{{end}}
 	{{if ne .ExtendName ""}}{{.ExtendName}}{{- end}}
 	{{if .IsPage}}*page.PageParam{{- end}}
@@ -18,7 +18,7 @@ type {{.UpperCamelName}} struct {
 
 {{range .Responses}}
 type {{.UpperCamelName}} struct {
-	{{range .Models}}{{.FieldName}} {{if .IsArray}}[]{{end}}{{if .IsPointer}}*{{end}}{{.DataType}} ###json:"{{.LowerCamelName}}"{{if .IsMediaUrl}} appendUid:"true"{{end}} {{if ne .EnumRemark ""}}title:"{{.EnumTitle}}" remark:"{{.EnumRemark}}"{{else}}remark:"{{.Remark}}"{{end}}###
+	{{range .Models}}{{.UpperCamelName}} {{if .IsArray}}[]{{end}}{{if .IsPointer}}*{{end}}{{.DataType}} ###json:"{{.LowerCamelName}}"{{if .IsMediaUrl}} appendUid:"true"{{end}} {{if ne .EnumRemark ""}}title:"{{.EnumTitle}}" remark:"{{.EnumRemark}}"{{else}}remark:"{{.Remark}}"{{end}}###
 	{{end}}
 	{{if ne .ExtendName ""}}*{{.ExtendName}}{{- end}}
 }
