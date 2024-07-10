@@ -184,6 +184,7 @@ func fillPropertyForRequest(schema *spec.Schema, requestModelData *RequestModelD
 			property = &spec.Schema{}
 			property.Type = []string{"array"}
 			property.Items = &spec.SchemaOrArray{Schema: modelSchema}
+			property.Description = requestModel.Remark
 		} else {
 			property = modelSchema
 		}
