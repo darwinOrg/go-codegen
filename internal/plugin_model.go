@@ -177,6 +177,7 @@ type InterfaceModelData struct {
 	HasId           bool   `json:"hasId,omitempty"`
 	HasModel        bool   `json:"hasModel,omitempty"`
 	HasProducts     bool   `json:"hasProducts,omitempty"`
+	HasDbTable      bool   `json:"hasDbTable,omitempty"`
 }
 
 type ExportConfigData struct {
@@ -437,7 +438,12 @@ func (m *EntireModel) FillInterfaces() {
 			model.DbTableUpperCamel = strcase.ToCamel(model.DbModelName)
 			model.DbTableLowerCamel = strcase.ToLowerCamel(model.DbModelName)
 
-			inter.HasModel = (model.RequestModelName != "" && model.RequestModelName != "Id") || model.ResponseModelName != ""
+			if (model.RequestModelName != "" && model.RequestModelName != "Id") || model.ResponseModelName != "" {
+				inter.HasModel = true
+			}
+			if model.DbModelName != "" {
+				inter.HasDbTable = true
+			}
 		}
 	}
 }

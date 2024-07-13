@@ -3,15 +3,17 @@ package _server
 var ServiceTpl = `package service
 
 import (
-	"{{.PackagePrefix}}/dal"
-	{{if .HasModel}}"{{.PackagePrefix}}/converter"{{end}}
+	dgctx "github.com/darwinOrg/go-common/context"
 	{{if .HasModel}}"{{.PackagePrefix}}/model"{{end}}
 	{{if .HasId}}cm "github.com/darwinOrg/go-common/model"{{end}}
 	{{if .HasPage}}"github.com/darwinOrg/go-common/page"{{end}}
-	{{if .HasQuery}}dgcoll "github.com/darwinOrg/go-common/collection"{{end}}
-	daogext "github.com/darwinOrg/daog-ext"
-	dgctx "github.com/darwinOrg/go-common/context"
-	"github.com/rolandhe/daog"
+	{{if .HasDbTable}}
+		{{if .HasModel}}"{{.PackagePrefix}}/converter"{{end}}
+		{{if .HasQuery}}dgcoll "github.com/darwinOrg/go-common/collection"{{end}}
+		"{{.PackagePrefix}}/dal"
+		daogext "github.com/darwinOrg/daog-ext"
+		"github.com/rolandhe/daog"
+	{{end}}
 )
 
 var {{.GroupUpperCamel}}Service = &{{.GroupLowerCamel}}Service{}
@@ -22,7 +24,10 @@ type {{.GroupLowerCamel}}Service struct {
 var ServiceAppendTpl = `
 {{range .Models}}
 func (s *{{$.GroupLowerCamel}}Service) {{.MethodNameExp}}(ctx *dgctx.DgContext, req *{{.RequestModelNameExp}}) {{if ne .ResponseModelName ""}}({{.ResponseModelNameExp}}, error){{else}}error{{end}} {
-	{{- if eq .InterfaceType "新建"}}
+	{{- if eq .DbModelName ""}}
+	// TODO
+	return {{if ne .ResponseModelName ""}}nil, {{end}}nil
+	{{- else if eq .InterfaceType "新建"}}
 	return daogext.Write(ctx, func(tc *daog.TransContext) {{if ne .ResponseModelName ""}}({{.ResponseModelNameExp}}, error){{else}}error{{end}} {
 		{{.DbTableLowerCamel}} := converter.{{.DbTableUpperCamel}}Converter.{{.RequestModelName}}2Entity(req)
 		return dal.{{.DbTableUpperCamel}}ExtDao.Create(ctx, tc, {{.DbTableLowerCamel}})
