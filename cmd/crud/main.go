@@ -57,7 +57,7 @@ func main() {
 		entireModel.Requests = append(entireModel.Requests, &internal.RequestModelData{
 			Name: "Create" + meta.GoTable + "Req",
 			Models: dgcoll.MapToList(meta.CreateColumns, func(column *internal.Column) *internal.RequestModel {
-				model := &internal.RequestModel{
+				md := &internal.RequestModel{
 					FieldName: column.GoName,
 					DataType:  adjustDbType(column.DbType),
 					Nullable:  column.IsNull,
@@ -65,10 +65,10 @@ func main() {
 				}
 
 				if column.HasEnum {
-					model.EnumModel = meta.GoTable + column.GoName
+					md.EnumModel = meta.GoTable + column.GoName
 				}
 
-				return model
+				return md
 			}),
 		})
 

@@ -276,7 +276,7 @@ func main() {
 		}
 	}
 
-	utils.WriteFileWithString("output/"+def.Namespace+".cui", utils.MustConvertBeanToJsonString(entireModel))
+	_ = utils.WriteFileWithString("output/"+def.Namespace+".cui", utils.MustConvertBeanToJsonString(entireModel))
 }
 
 func convertRequest(def *transfer.Definition, entireModel *internal.EntireModel, requestModelName string) {
