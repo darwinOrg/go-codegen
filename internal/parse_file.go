@@ -8,8 +8,7 @@ import (
 )
 
 var (
-	// 创建函数映射
-	funcs = template.FuncMap{
+	customFuncMap = template.FuncMap{
 		"contains": strings.Contains,
 	}
 )
@@ -19,7 +18,9 @@ func parseNewFile(fileName string, tplName string, tplText string, data any) err
 	if err != nil {
 		return err
 	}
-	defer file.Close()
+	defer func() {
+		_ = file.Close()
+	}()
 
 	return parseFile(fileName, file, tplName, tplText, data)
 }
@@ -29,13 +30,15 @@ func parseAppendFile(fileName string, tplName string, tplText string, data any) 
 	if err != nil {
 		return err
 	}
-	defer file.Close()
+	defer func() {
+		_ = file.Close()
+	}()
 
 	return parseFile(fileName, file, tplName, tplText, data)
 }
 
 func parseFile(fileName string, file *os.File, tplName string, tplText string, data any) error {
-	t, err := template.New(tplName).Funcs(funcs).Parse(tplText)
+	t, err := template.New(tplName).Funcs(customFuncMap).Parse(tplText)
 	if err != nil {
 		return err
 	}
