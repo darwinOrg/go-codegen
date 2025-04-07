@@ -11,6 +11,7 @@ import (
 	dglogger "github.com/darwinOrg/go-logger"
 	"github.com/rolandhe/daog"
 	"github.com/rolandhe/daog/ttypes"
+	{{if .HasDecimal}}"github.com/shopspring/decimal"{{end}}
 	"time"
 )
 

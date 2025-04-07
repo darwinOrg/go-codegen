@@ -28,7 +28,7 @@ func (c *{{.LowerCamelName}}Converter) CreateModel2Entity(req *model.Create{{.Go
 
 func (c *{{.LowerCamelName}}Converter) FillEntityWithModifyModel({{.LowerCamelName}} *dal.{{.GoTable}}, req *model.Modify{{.GoTable}}Req) {
 	if {{.LowerCamelName}} == nil {
-		return nil
+		return
 	}
 
 	{{range .ModifyColumns}}{{$.LowerCamelName}}.{{.GoName}} = req.{{.GoName}}
