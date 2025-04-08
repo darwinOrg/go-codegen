@@ -3,7 +3,6 @@ package main
 import (
 	"dgen/internal"
 	"dgen/internal/idl/transfer"
-	nvwa_enum "e.globalpand.cn/libs/nvwa-sdk/api/nvwa/enum"
 	dgcoll "github.com/darwinOrg/go-common/collection"
 	"github.com/darwinOrg/go-common/utils"
 	"github.com/iancoleman/strcase"
@@ -28,15 +27,6 @@ func main() {
 	queryRelatedKeywords := []string{"Query", "Search", "List", "query", "search", "list"}
 	detailRelatedKeywords := []string{"Get", "Detail", "get", "detail"}
 
-	productMap := map[int]string{
-		nvwa_enum.Product.RPA:                  "RPA机器人",
-		nvwa_enum.Product.AsyncInterview:       "AI智能面试",
-		nvwa_enum.Product.OnlineInterview:      "金牌面试官",
-		nvwa_enum.Product.RequirementAssistant: "需求沟通助手",
-		nvwa_enum.Product.RPA:                  "候选人沟通助手",
-		nvwa_enum.Product.CandidateAssistant:   "人才库",
-	}
-
 	entireModel := &internal.EntireModel{}
 
 	for _, serviceDefine := range def.Services {
@@ -57,18 +47,6 @@ func main() {
 					Remark:       postMethod.Description,
 				}
 				inter.Models = append(inter.Models, interfaceModel)
-
-				if strings.Contains(postMethod.Description, "@prod=") {
-					prodIndex := strings.Index(postMethod.Description, "@prod=")
-					interfaceModel.Remark = postMethod.Description[:prodIndex]
-					strProducts := postMethod.Description[prodIndex+len("@prod="):]
-					if strProducts != "" {
-						products := dgcoll.SplitToIntsByComma[int](strProducts)
-						interfaceModel.AllowProducts = dgcoll.MapToList(products, func(product int) string {
-							return productMap[product]
-						})
-					}
-				}
 
 				if postMethod.IsPager {
 					interfaceModel.InterfaceType = "分页"
@@ -146,18 +124,6 @@ func main() {
 					Remark:       getMethod.Description,
 				}
 				inter.Models = append(inter.Models, interfaceModel)
-
-				if strings.Contains(getMethod.Description, "@prod=") {
-					prodIndex := strings.Index(getMethod.Description, "@prod=")
-					interfaceModel.Remark = getMethod.Description[:prodIndex]
-					strProducts := getMethod.Description[prodIndex+len("@prod="):]
-					if strProducts != "" {
-						products := dgcoll.SplitToIntsByComma[int](strProducts)
-						interfaceModel.AllowProducts = dgcoll.MapToList(products, func(product int) string {
-							return productMap[product]
-						})
-					}
-				}
 
 				if getMethod.IsPager {
 					interfaceModel.InterfaceType = "分页"

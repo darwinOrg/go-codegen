@@ -3,7 +3,6 @@ module dgen
 go 1.23.1
 
 require (
-	e.globalpand.cn/libs/nvwa-sdk v0.0.118
 	github.com/antlr4-go/antlr/v4 v4.13.1
 	github.com/darwinOrg/daog-ext v0.0.10
 	github.com/darwinOrg/go-common v0.1.82
@@ -62,7 +61,6 @@ require (
 	github.com/prometheus/common v0.63.0 // indirect
 	github.com/prometheus/procfs v0.16.0 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
-	github.com/rolandhe/o2client-runtime v0.0.12 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
 	github.com/swaggo/files v1.0.1 // indirect
 	github.com/swaggo/gin-swagger v1.6.0 // indirect

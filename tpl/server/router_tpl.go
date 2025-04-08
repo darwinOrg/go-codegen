@@ -7,7 +7,6 @@ import (
 	{{if .HasModel}}"{{.PackagePrefix}}/model"{{end}}
 	{{if .HasId}}cm "github.com/darwinOrg/go-common/model"{{end}}
 	{{if .HasPage}}"github.com/darwinOrg/go-common/page"{{end}}
-	{{if .HasProducts}}nvwa_enum "e.globalpand.cn/libs/nvwa-sdk/api/nvwa/enum"{{end}}
 	"github.com/darwinOrg/go-common/result"
 	"github.com/darwinOrg/go-web/wrapper"
 	"github.com/gin-gonic/gin"
