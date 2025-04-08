@@ -23,12 +23,12 @@ type {{.GroupLowerCamel}}Service struct {
 
 var ServiceAppendTpl = `
 {{range .Models}}
-func (s *{{$.GroupLowerCamel}}Service) {{.MethodNameExp}}(ctx *dgctx.DgContext, req *{{.RequestModelNameExp}}) {{if ne .ResponseModelName ""}}({{.ResponseModelNameExp}}, error){{else}}error{{end}} {
+func (s *{{$.GroupLowerCamel}}Service) {{.MethodNameExp}}(ctx *dgctx.DgContext, req *{{.RequestModelNameExp}}) {{if ne .ResponseModelName ""}}({{.ResponseModelNameExp}}, error){{else}}(int64, error){{end}} {
 	{{- if eq .DbModelName ""}}
 	// TODO
 	return {{if ne .ResponseModelName ""}}nil, {{end}}nil
 	{{- else if eq .InterfaceType "新建"}}
-	return daogext.Write(ctx, func(tc *daog.TransContext) {{if ne .ResponseModelName ""}}({{.ResponseModelNameExp}}, error){{else}}error{{end}} {
+	return daogext.WriteWithResult(ctx, func(tc *daog.TransContext) {{if ne .ResponseModelName ""}}({{.ResponseModelNameExp}}, error){{else}}(int64, error){{end}} {
 		{{.DbTableLowerCamel}} := converter.{{.DbTableUpperCamel}}Converter.{{.RequestModelName}}2Entity(req)
 		return dal.{{.DbTableUpperCamel}}ExtDao.Create(ctx, tc, {{.DbTableLowerCamel}})
 	})

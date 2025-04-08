@@ -22,7 +22,7 @@ func main() {
 	swaggerProps := internal.BuildSwaggerProps(entireModel)
 	swaggerJsonBytes, err := json.MarshalIndent(swaggerProps, "", "  ")
 	if err != nil {
-		log.Println(err.Error())
+		log.Printf("json marshal error: %v", err)
 	}
 
 	swagger.SyncSwaggerJsonBytesToApifox(&swagger.SyncToApifoxRequest{

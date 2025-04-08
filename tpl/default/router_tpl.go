@@ -1,6 +1,6 @@
 package _default
 
-var RouterTpl = `package router
+var RouterTpl = `package {{.GroupLowerCamel}}
 
 import (
 	"{{.PackagePrefix}}/handler"

@@ -52,7 +52,7 @@ func (d *{{.LowerCamelName}}ExtDao) Create(ctx *dgctx.DgContext, tc *daog.TransC
 		return 0, dgerr.SYSTEM_ERROR
 	}
 
-	return rpaCandidate.Id, nil
+	return {{.LowerCamelName}}.Id, nil
 }
 
 func (d *{{.LowerCamelName}}ExtDao) Modify(ctx *dgctx.DgContext, tc *daog.TransContext, {{.LowerCamelName}} *{{.GoTable}}) error {
