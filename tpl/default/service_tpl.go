@@ -19,10 +19,10 @@ var {{.GoTable}}Service = &{{.LowerCamelName}}Service{}
 type {{.LowerCamelName}}Service struct {
 }
 
-func (s *{{.LowerCamelName}}Service) Create(ctx *dgctx.DgContext, req *model.Create{{.GoTable}}Req) error {
+func (s *{{.LowerCamelName}}Service) Create(ctx *dgctx.DgContext, req *model.Create{{.GoTable}}Req) (int64, error) {
 	{{.LowerCamelName}} := converter.{{.GoTable}}Converter.CreateModel2Entity(req)
 
-	return daogext.Write(ctx, func(tc *daog.TransContext) error {
+	return daogext.WriteWithResult(ctx, func(tc *daog.TransContext) (int64, error) {
 		return dal.{{.GoTable}}ExtDao.Create(ctx, tc, {{.LowerCamelName}})
 	})
 }

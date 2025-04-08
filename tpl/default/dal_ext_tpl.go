@@ -40,7 +40,7 @@ func (d *{{.LowerCamelName}}ExtDao) MustGetById(ctx *dgctx.DgContext, tc *daog.T
 	return {{.LowerCamelName}}, nil
 }
 
-func (d *{{.LowerCamelName}}ExtDao) Create(ctx *dgctx.DgContext, tc *daog.TransContext, {{.LowerCamelName}} *{{.GoTable}}) error {
+func (d *{{.LowerCamelName}}ExtDao) Create(ctx *dgctx.DgContext, tc *daog.TransContext, {{.LowerCamelName}} *{{.GoTable}}) (int64, error) {
 	{{$.LowerCamelName}}.CreatedAt = ttypes.NormalDatetime(time.Now())
 	{{$.LowerCamelName}}.CreatedBy = ctx.UserId
 	{{$.LowerCamelName}}.ModifiedAt = ttypes.NormalDatetime(time.Now())
@@ -49,10 +49,10 @@ func (d *{{.LowerCamelName}}ExtDao) Create(ctx *dgctx.DgContext, tc *daog.TransC
 	_, err := {{.GoTable}}Dao.Insert(tc, {{.LowerCamelName}})
 	if err != nil {
 		dglogger.Errorf(ctx, "{{.GoTable}}Dao.Insert error: %v", err)
-		return dgerr.SYSTEM_ERROR
+		return 0, dgerr.SYSTEM_ERROR
 	}
 
-	return nil
+	return rpaCandidate.Id, nil
 }
 
 func (d *{{.LowerCamelName}}ExtDao) Modify(ctx *dgctx.DgContext, tc *daog.TransContext, {{.LowerCamelName}} *{{.GoTable}}) error {

@@ -136,7 +136,7 @@ func parseMetaHandler(targetPath string, meta *Meta) error {
 }
 
 func parseMetaRouter(targetPath string, meta *Meta) error {
-	routerDir := filepath.Join(targetPath, "router")
+	routerDir := targetPath
 	_ = os.MkdirAll(routerDir, fs.ModeDir|fs.ModePerm)
 
 	router := filepath.Join(routerDir, strcase.ToSnake(meta.GoTable)+"_router.go")
