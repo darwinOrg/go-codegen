@@ -437,6 +437,11 @@ func (m *EntireModel) FillInterfaces() {
 				model.LogLevelExp = logLevelMap[model.LogLevel]
 			}
 
+			if model.MethodName == "" {
+				parts := strings.Split(model.RelativePath, "/")
+				model.MethodName = parts[len(parts)-1]
+			}
+
 			model.MethodNameExp = strcase.ToCamel(model.MethodName)
 			model.DbTableUpperCamel = strcase.ToCamel(model.DbModelName)
 			model.DbTableLowerCamel = strcase.ToLowerCamel(model.DbModelName)
