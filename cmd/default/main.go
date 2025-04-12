@@ -1,10 +1,10 @@
 package main
 
 import (
-	"dgen/internal"
 	"flag"
 	"fmt"
 	_ "github.com/darwinOrg/daog-ext"
+	"github.com/darwinOrg/go-codegen/parser"
 	_ "github.com/darwinOrg/go-httpclient"
 	_ "github.com/darwinOrg/go-logger"
 	_ "github.com/darwinOrg/go-web/wrapper"
@@ -52,5 +52,5 @@ func main() {
 	} else {
 		fmt.Println("Using output file directory is: ", outputPath)
 	}
-	_ = internal.ParseSql(sql, packagePrefix, outputPath)
+	_ = parser.ParseSql(sql, packagePrefix, outputPath)
 }

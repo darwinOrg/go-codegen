@@ -1,8 +1,8 @@
 package transfer
 
 import (
-	"dgen/internal/idl/parser"
 	"github.com/antlr4-go/antlr/v4"
+	"github.com/darwinOrg/go-codegen/internal/idl/parser"
 	"log"
 )
 

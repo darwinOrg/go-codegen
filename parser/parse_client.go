@@ -1,8 +1,8 @@
-package internal
+package parser
 
 import (
-	_client "dgen/tpl/client"
-	_server "dgen/tpl/server"
+	_client "github.com/darwinOrg/go-codegen/tpl/client"
+	_server "github.com/darwinOrg/go-codegen/tpl/server"
 	"io/fs"
 	"os"
 	"path/filepath"
@@ -14,12 +14,12 @@ type clientParser struct {
 }
 
 func (p *clientParser) Parse(entireModel *EntireModel) error {
-	err := p.parseModel(entireModel)
+	err := p.ParseModel(entireModel)
 	if err != nil {
 		return err
 	}
 
-	err = p.parseClient(entireModel)
+	err = p.ParseClient(entireModel)
 	if err != nil {
 		return err
 	}
@@ -27,7 +27,7 @@ func (p *clientParser) Parse(entireModel *EntireModel) error {
 	return nil
 }
 
-func (g *clientParser) parseModel(entireModel *EntireModel) error {
+func (g *clientParser) ParseModel(entireModel *EntireModel) error {
 	if len(entireModel.Requests) == 0 && len(entireModel.Responses) == 0 {
 		return nil
 	}
@@ -44,7 +44,7 @@ func (g *clientParser) parseModel(entireModel *EntireModel) error {
 	return nil
 }
 
-func (g *clientParser) parseClient(entireModel *EntireModel) error {
+func (g *clientParser) ParseClient(entireModel *EntireModel) error {
 	if len(entireModel.Interfaces) == 0 {
 		return nil
 	}

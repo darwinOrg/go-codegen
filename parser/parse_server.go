@@ -1,9 +1,9 @@
-package internal
+package parser
 
 import (
-	_default "dgen/tpl/default"
-	_server "dgen/tpl/server"
 	"fmt"
+	_default "github.com/darwinOrg/go-codegen/tpl/default"
+	_server "github.com/darwinOrg/go-codegen/tpl/server"
 	dgcoll "github.com/darwinOrg/go-common/collection"
 	"github.com/darwinOrg/go-common/utils"
 	"github.com/iancoleman/strcase"
@@ -19,38 +19,10 @@ var ServerParser = &serverParser{}
 type serverParser struct {
 }
 
-func (p *serverParser) Parse(entireModel *EntireModel) error {
-	err := p.parseDal(entireModel)
-	if err != nil {
-		return err
-	}
+func (p *serverParser) ParseAll(entireModel *EntireModel) error {
+	p.Parse(entireModel)
 
-	err = p.parseEnum(entireModel)
-	if err != nil {
-		return err
-	}
-
-	err = p.parseModel(entireModel)
-	if err != nil {
-		return err
-	}
-
-	err = p.parseRouter(entireModel)
-	if err != nil {
-		return err
-	}
-
-	err = p.parseHandler(entireModel)
-	if err != nil {
-		return err
-	}
-
-	err = p.parseService(entireModel)
-	if err != nil {
-		return err
-	}
-
-	err = p.parseConverter(entireModel)
+	err := p.ParseModel(entireModel)
 	if err != nil {
 		return err
 	}
@@ -58,7 +30,41 @@ func (p *serverParser) Parse(entireModel *EntireModel) error {
 	return nil
 }
 
-func (g *serverParser) parseDal(entireModel *EntireModel) error {
+func (p *serverParser) Parse(entireModel *EntireModel) error {
+	err := p.ParseDal(entireModel)
+	if err != nil {
+		return err
+	}
+
+	err = p.ParseEnum(entireModel)
+	if err != nil {
+		return err
+	}
+
+	err = p.ParseRouter(entireModel)
+	if err != nil {
+		return err
+	}
+
+	err = p.ParseHandler(entireModel)
+	if err != nil {
+		return err
+	}
+
+	err = p.ParseService(entireModel)
+	if err != nil {
+		return err
+	}
+
+	err = p.ParseConverter(entireModel)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (g *serverParser) ParseDal(entireModel *EntireModel) error {
 	if len(entireModel.Dbs) == 0 {
 		return nil
 	}
@@ -101,7 +107,7 @@ func (g *serverParser) parseDal(entireModel *EntireModel) error {
 	return nil
 }
 
-func (g *serverParser) parseEnum(entireModel *EntireModel) error {
+func (g *serverParser) ParseEnum(entireModel *EntireModel) error {
 	if len(entireModel.Enums) == 0 {
 		return nil
 	}
@@ -139,7 +145,7 @@ func (g *serverParser) parseEnum(entireModel *EntireModel) error {
 	return nil
 }
 
-func (g *serverParser) parseModel(entireModel *EntireModel) error {
+func (g *serverParser) ParseModel(entireModel *EntireModel) error {
 	if len(entireModel.Requests) == 0 && len(entireModel.Responses) == 0 {
 		return nil
 	}
@@ -168,7 +174,7 @@ func (g *serverParser) parseModel(entireModel *EntireModel) error {
 	return nil
 }
 
-func (g *serverParser) parseConverter(entireModel *EntireModel) error {
+func (g *serverParser) ParseConverter(entireModel *EntireModel) error {
 	if len(entireModel.Converters) == 0 {
 		return nil
 	}
@@ -239,7 +245,7 @@ func (g *serverParser) parseConverter(entireModel *EntireModel) error {
 	return nil
 }
 
-func (g *serverParser) parseService(entireModel *EntireModel) error {
+func (g *serverParser) ParseService(entireModel *EntireModel) error {
 	if len(entireModel.Interfaces) == 0 {
 		return nil
 	}
@@ -283,7 +289,7 @@ func (g *serverParser) parseService(entireModel *EntireModel) error {
 	return nil
 }
 
-func (g *serverParser) parseHandler(entireModel *EntireModel) error {
+func (g *serverParser) ParseHandler(entireModel *EntireModel) error {
 	if len(entireModel.Interfaces) == 0 {
 		return nil
 	}
@@ -327,7 +333,7 @@ func (g *serverParser) parseHandler(entireModel *EntireModel) error {
 	return nil
 }
 
-func (g *serverParser) parseRouter(entireModel *EntireModel) error {
+func (g *serverParser) ParseRouter(entireModel *EntireModel) error {
 	if len(entireModel.Interfaces) == 0 {
 		return nil
 	}

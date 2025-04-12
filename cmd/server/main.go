@@ -1,11 +1,11 @@
 package main
 
 import (
-	"dgen/internal"
+	"github.com/darwinOrg/go-codegen/parser"
 )
 
 func main() {
-	entireModel := internal.InitEntireModel()
+	entireModel := parser.InitEntireModel()
 	entireModel.Fill(entireModel.Export.ServerPackagePrefix)
-	_ = internal.ServerParser.Parse(entireModel)
+	_ = parser.ServerParser.ParseAll(entireModel)
 }

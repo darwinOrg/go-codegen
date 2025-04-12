@@ -1,8 +1,8 @@
 package main
 
 import (
-	"dgen/internal"
-	"dgen/internal/idl/transfer"
+	"github.com/darwinOrg/go-codegen/parser"
+	"github.com/darwinOrg/go-codegen/parser/idl/transfer"
 	dgcoll "github.com/darwinOrg/go-common/collection"
 	"github.com/darwinOrg/go-common/utils"
 	"github.com/iancoleman/strcase"
@@ -27,10 +27,10 @@ func main() {
 	queryRelatedKeywords := []string{"Query", "Search", "List", "query", "search", "list"}
 	detailRelatedKeywords := []string{"Get", "Detail", "get", "detail"}
 
-	entireModel := &internal.EntireModel{}
+	entireModel := &parser.EntireModel{}
 
 	for _, serviceDefine := range def.Services {
-		inter := &internal.InterfaceModelData{
+		inter := &parser.InterfaceModelData{
 			Group:        serviceDefine.Name,
 			RoutePrefix:  serviceDefine.RootUrl,
 			ExportClient: strings.Contains(serviceDefine.RootUrl, "/internal/"),
@@ -39,7 +39,7 @@ func main() {
 
 		if len(serviceDefine.Posts) > 0 {
 			for _, postMethod := range serviceDefine.Posts {
-				interfaceModel := &internal.InterfaceModel{
+				interfaceModel := &parser.InterfaceModel{
 					MethodType:   "Post",
 					MethodName:   postMethod.Name,
 					RelativePath: postMethod.Url,
@@ -116,7 +116,7 @@ func main() {
 
 		if len(serviceDefine.Gets) > 0 {
 			for _, getMethod := range serviceDefine.Gets {
-				interfaceModel := &internal.InterfaceModel{
+				interfaceModel := &parser.InterfaceModel{
 					MethodType:   "Get",
 					MethodName:   getMethod.Name,
 					RelativePath: getMethod.Url,
@@ -245,7 +245,7 @@ func main() {
 	_ = utils.WriteFileWithString("output/"+def.Namespace+".cui", utils.MustConvertBeanToJsonString(entireModel))
 }
 
-func convertRequest(def *transfer.Definition, entireModel *internal.EntireModel, requestModelName string) {
+func convertRequest(def *transfer.Definition, entireModel *parser.EntireModel, requestModelName string) {
 	if len(entireModel.Requests) > 0 {
 		for _, request := range entireModel.Requests {
 			if request.Name == requestModelName {
@@ -256,7 +256,7 @@ func convertRequest(def *transfer.Definition, entireModel *internal.EntireModel,
 
 	for _, structDefine := range def.Structs {
 		if structDefine.Name == requestModelName {
-			request := &internal.RequestModelData{
+			request := &parser.RequestModelData{
 				Name: structDefine.Name,
 			}
 			entireModel.Requests = append(entireModel.Requests, request)
@@ -267,7 +267,7 @@ func convertRequest(def *transfer.Definition, entireModel *internal.EntireModel,
 
 			if len(structDefine.Fields) > 0 {
 				for _, field := range structDefine.Fields {
-					rm := &internal.RequestModel{
+					rm := &parser.RequestModel{
 						FieldName: field.Name,
 						IsArray:   field.Tp.IsList,
 						Nullable:  true,
@@ -311,7 +311,7 @@ func convertRequest(def *transfer.Definition, entireModel *internal.EntireModel,
 	}
 }
 
-func convertResponse(def *transfer.Definition, entireModel *internal.EntireModel, responseModelName string) {
+func convertResponse(def *transfer.Definition, entireModel *parser.EntireModel, responseModelName string) {
 	if len(entireModel.Responses) > 0 {
 		for _, response := range entireModel.Responses {
 			if response.Name == responseModelName {
@@ -322,7 +322,7 @@ func convertResponse(def *transfer.Definition, entireModel *internal.EntireModel
 
 	for _, structDefine := range def.Structs {
 		if structDefine.Name == responseModelName {
-			response := &internal.ResponseModelData{
+			response := &parser.ResponseModelData{
 				Name:       structDefine.Name,
 				ExtendName: structDefine.Extends,
 			}
@@ -330,7 +330,7 @@ func convertResponse(def *transfer.Definition, entireModel *internal.EntireModel
 
 			if len(structDefine.Fields) > 0 {
 				for _, field := range structDefine.Fields {
-					rm := &internal.ResponseModel{
+					rm := &parser.ResponseModel{
 						FieldName: field.Name,
 						IsArray:   field.Tp.IsList,
 						Nullable:  true,

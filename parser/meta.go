@@ -1,8 +1,8 @@
-package internal
+package parser
 
 import (
-	"dgen/pkg"
 	"fmt"
+	"github.com/darwinOrg/go-codegen/pkg"
 	dgcoll "github.com/darwinOrg/go-common/collection"
 	"github.com/darwinOrg/go-common/model"
 	"github.com/iancoleman/strcase"

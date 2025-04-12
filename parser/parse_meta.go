@@ -1,7 +1,7 @@
-package internal
+package parser
 
 import (
-	_default "dgen/tpl/default"
+	_default "github.com/darwinOrg/go-codegen/tpl/default"
 	"github.com/iancoleman/strcase"
 	"io/fs"
 	"os"

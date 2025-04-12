@@ -1,9 +1,9 @@
 package main
 
 import (
-	"dgen/internal"
 	"encoding/json"
 	"fmt"
+	"github.com/darwinOrg/go-codegen/parser"
 	dglogger "github.com/darwinOrg/go-logger"
 	"github.com/darwinOrg/go-swagger"
 	"log"
@@ -17,9 +17,9 @@ func main() {
 	}
 	dglogger.GlobalDgLogger = dglogger.NewDgLogger(dglogger.WarnLevel, dglogger.DefaultTimestampFormat, os.Stdout)
 
-	entireModel := internal.InitEntireModel()
+	entireModel := parser.InitEntireModel()
 	entireModel.Fill(entireModel.Export.ServerPackagePrefix)
-	swaggerProps := internal.BuildSwaggerProps(entireModel)
+	swaggerProps := parser.BuildSwaggerProps(entireModel)
 	swaggerJsonBytes, err := json.MarshalIndent(swaggerProps, "", "  ")
 	if err != nil {
 		log.Printf("json marshal error: %v", err)

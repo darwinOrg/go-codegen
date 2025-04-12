@@ -1,11 +1,11 @@
-module dgen
+module github.com/darwinOrg/go-codegen
 
 go 1.23.1
 
 require (
 	github.com/antlr4-go/antlr/v4 v4.13.1
 	github.com/darwinOrg/daog-ext v0.0.10
-	github.com/darwinOrg/go-common v0.1.82
+	github.com/darwinOrg/go-common v0.1.83
 	github.com/darwinOrg/go-httpclient v0.1.25
 	github.com/darwinOrg/go-logger v0.0.9
 	github.com/darwinOrg/go-swagger v0.0.14
