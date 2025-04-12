@@ -41,9 +41,10 @@ func (d *{{.LowerCamelName}}ExtDao) MustGetById(ctx *dgctx.DgContext, tc *daog.T
 }
 
 func (d *{{.LowerCamelName}}ExtDao) Create(ctx *dgctx.DgContext, tc *daog.TransContext, {{.LowerCamelName}} *{{.GoTable}}) (int64, error) {
-	{{$.LowerCamelName}}.CreatedAt = ttypes.NormalDatetime(time.Now())
+	now := ttypes.NormalDatetime(time.Now())
+	{{$.LowerCamelName}}.CreatedAt = now
 	{{$.LowerCamelName}}.CreatedBy = ctx.UserId
-	{{$.LowerCamelName}}.ModifiedAt = ttypes.NormalDatetime(time.Now())
+	{{$.LowerCamelName}}.ModifiedAt = now
 	{{$.LowerCamelName}}.ModifiedBy = ctx.UserId
 
 	_, err := {{.GoTable}}Dao.Insert(tc, {{.LowerCamelName}})

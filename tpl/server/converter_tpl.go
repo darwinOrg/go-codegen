@@ -48,7 +48,6 @@ func (c *{{$.DbTableLowerCamel}}Converter) {{.UpperCamelName}}2Param(req *model.
 	queryParam := &dal.Query{{$.DbTableUpperCamel}}Param {
 		{{range .Models}}{{.FieldName}}: req.{{.FieldName}},
 		{{end}}
-		{{if .IsPage -}}PageParam: req.PageParam,{{end}}
 	}
 
 	return queryParam
@@ -56,12 +55,12 @@ func (c *{{$.DbTableLowerCamel}}Converter) {{.UpperCamelName}}2Param(req *model.
 {{end}}
 {{end -}}
 {{range .Responses}}
-func (c *{{$.DbTableLowerCamel}}Converter) Entity2{{.UpperCamelName}}({{$.DbTableLowerCamel}} *dal.{{$.DbTableUpperCamel}}) *model.{{.UpperCamelName}} {
+func (c *{{$.DbTableLowerCamel}}Converter) Entity2{{.Name}}({{$.DbTableLowerCamel}} *dal.{{$.DbTableUpperCamel}}) *model.{{.Name}} {
 	if {{$.DbTableLowerCamel}} == nil {
-		return &model.{{.UpperCamelName}}{}
+		return &model.{{.Name}}{}
 	}
 
-	return &model.{{.UpperCamelName}}{
+	return &model.{{.Name}}{
 		{{range .Models}}{{.FieldName}}: {{if ne .EnumFieldName ""}}enum.{{.EnumModel}}Map[{{$.DbTableLowerCamel}}.{{.EnumFieldName}}]{{else}}{{$.DbTableLowerCamel}}.{{.FieldName}}{{if .NullableString}}.StringNilAsEmpty(){{end}}{{end}},
 		{{end}}
 	}

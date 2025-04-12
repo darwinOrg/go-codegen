@@ -106,8 +106,9 @@ func (meta *Meta) Leave(in ast.Node) (ast.Node, bool) {
 	return in, true
 }
 
-func (meta *Meta) ConvertToDbModelData() *DbModelData {
+func (meta *Meta) ConvertToDbModelData(sql string) *DbModelData {
 	return &DbModelData{
+		Sql:  sql,
 		Name: meta.TableName,
 		Models: dgcoll.MapToList(meta.Columns, func(column *Column) *DbModel {
 			return &DbModel{

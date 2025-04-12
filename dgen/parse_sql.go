@@ -43,7 +43,7 @@ func ParseToDbModelDataList(sql string) ([]*DbModelData, error) {
 	}
 
 	return dgcoll.MapToList(metas, func(meta *Meta) *DbModelData {
-		return meta.ConvertToDbModelData()
+		return meta.ConvertToDbModelData(sql)
 	}), nil
 }
 
