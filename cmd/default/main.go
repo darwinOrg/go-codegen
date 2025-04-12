@@ -22,7 +22,7 @@ var (
 
 func init() {
 	flag.StringVar(&inputFile, "i", "./scripts/test.sql", "the create tables file")
-	flag.StringVar(&packagePrefix, "p", "dgen/output", "package prefix for every go file")
+	flag.StringVar(&packagePrefix, "p", "github.com/darwinOrg/go-codegen/output", "package prefix for every go file")
 	flag.StringVar(&outputPath, "o", "./output", "output directory")
 }
 
