@@ -106,6 +106,22 @@ func (meta *Meta) Leave(in ast.Node) (ast.Node, bool) {
 	return in, true
 }
 
+func (meta *Meta) ConvertToDbModelData() *DbModelData {
+	return &DbModelData{
+		Name: meta.TableName,
+		Models: dgcoll.MapToList(meta.Columns, func(column *Column) *DbModel {
+			return &DbModel{
+				DbFieldName:    column.DbName,
+				ModelFieldName: column.GoName,
+				DbDataType:     column.DbType,
+				ModelDataType:  column.ModelType,
+				Nullable:       column.IsNull,
+				Remark:         column.Comment,
+			}
+		}),
+	}
+}
+
 func isAuto(def *ast.ColumnDef) bool {
 	for _, op := range def.Options {
 		if ast.ColumnOptionAutoIncrement == op.Tp {

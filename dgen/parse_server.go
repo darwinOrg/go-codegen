@@ -338,7 +338,7 @@ func (g *serverParser) ParseRouter(entireModel *EntireModel) error {
 		return nil
 	}
 
-	routerDir := filepath.Join(entireModel.Export.ServerOutput, "router")
+	routerDir := entireModel.Export.ServerOutput
 	_ = os.MkdirAll(routerDir, fs.ModeDir|fs.ModePerm)
 
 	for _, inter := range entireModel.Interfaces {

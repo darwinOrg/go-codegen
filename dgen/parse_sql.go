@@ -36,6 +36,17 @@ func ParseSql(sql string, packagePrefix string, outputPath string) error {
 	return nil
 }
 
+func ParseToDbModelDataList(sql string) ([]*DbModelData, error) {
+	metas, err := BuildTableMetas(sql)
+	if err != nil {
+		return nil, err
+	}
+
+	return dgcoll.MapToList(metas, func(meta *Meta) *DbModelData {
+		return meta.ConvertToDbModelData()
+	}), nil
+}
+
 func BuildTableMetas(sql string) ([]*Meta, error) {
 	p := parser.New()
 

@@ -8,6 +8,7 @@ import (
 	"github.com/iancoleman/strcase"
 	"os"
 	"path/filepath"
+	"reflect"
 	"strings"
 )
 
@@ -33,19 +34,19 @@ type EntireModel struct {
 	Enums      []*EnumModelData      `json:"enums,omitempty"`
 	Requests   []*RequestModelData   `json:"requests,omitempty"`
 	Responses  []*ResponseModelData  `json:"responses,omitempty"`
+	Converters []*ConverterData      `json:"converters,omitempty"`
 	Interfaces []*InterfaceModelData `json:"interfaces,omitempty"`
 	Export     *ExportConfigData     `json:"export,omitempty"`
 
-	FilePrefix     string           `json:"filePrefix,omitempty"`
-	PackagePrefix  string           `json:"packagePrefix,omitempty"`
-	HasDecimal     bool             `json:"hasDecimal,omitempty"`
-	HasPage        bool             `json:"hasPage,omitempty"`
-	HasQuery       bool             `json:"hasQuery,omitempty"`
-	HasId          bool             `json:"hasId,omitempty"`
-	HasModel       bool             `json:"hasModel,omitempty"`
-	HasProducts    bool             `json:"hasProducts,omitempty"`
-	UpperCamelName string           `json:"upperCamelName,omitempty"`
-	Converters     []*ConverterData `json:"converters,omitempty"`
+	FilePrefix     string `json:"filePrefix,omitempty"`
+	PackagePrefix  string `json:"packagePrefix,omitempty"`
+	HasDecimal     bool   `json:"hasDecimal,omitempty"`
+	HasPage        bool   `json:"hasPage,omitempty"`
+	HasQuery       bool   `json:"hasQuery,omitempty"`
+	HasId          bool   `json:"hasId,omitempty"`
+	HasModel       bool   `json:"hasModel,omitempty"`
+	HasProducts    bool   `json:"hasProducts,omitempty"`
+	UpperCamelName string `json:"upperCamelName,omitempty"`
 }
 
 type DbModel struct {
@@ -172,6 +173,7 @@ type InterfaceModelData struct {
 	PackagePrefix   string `json:"packagePrefix,omitempty"`
 	GroupUpperCamel string `json:"groupUpperCamel,omitempty"`
 	GroupLowerCamel string `json:"groupLowerCamel,omitempty"`
+	GroupSnake      string `json:"groupSnake,omitempty"`
 	HasPage         bool   `json:"hasPage,omitempty"`
 	HasQuery        bool   `json:"hasQuery,omitempty"`
 	HasId           bool   `json:"hasId,omitempty"`
@@ -361,6 +363,7 @@ func (m *EntireModel) FillInterfaces() {
 	for _, inter := range m.Interfaces {
 		inter.GroupUpperCamel = strcase.ToCamel(inter.Group)
 		inter.GroupLowerCamel = strcase.ToLowerCamel(inter.Group)
+		inter.GroupSnake = strcase.ToSnake(inter.Group)
 
 		for _, model := range inter.Models {
 			model.RelativePath = strings.TrimPrefix(model.RelativePath, "/")
@@ -537,4 +540,71 @@ func (m *EntireModel) FillPackagePrefix(packagePrefix string) {
 			converter.PackagePrefix = packagePrefix
 		}
 	}
+}
+
+func ReflectToRequestModelData(obj any) *RequestModelData {
+	tpe := reflect.TypeOf(obj)
+	for tpe.Kind() == reflect.Pointer {
+		tpe = tpe.Elem()
+	}
+	cnt := tpe.NumField()
+
+	rmd := &RequestModelData{
+		Name:           tpe.Name(),
+		UpperCamelName: strcase.ToCamel(tpe.Name()),
+	}
+
+	for i := 0; i < cnt; i++ {
+		field := tpe.Field(i)
+		tag := field.Tag
+
+		rm := &RequestModel{
+			FieldName:      field.Name,
+			DataType:       field.Type.Name(),
+			IsPointer:      field.Type.Kind() == reflect.Pointer,
+			IsArray:        field.Type.Kind() == reflect.Slice,
+			Nullable:       strings.Contains(tag.Get("binding"), "required"),
+			VerifyRules:    tag.Get("binding"),
+			Remark:         tag.Get("remark"),
+			UpperCamelName: strcase.ToCamel(field.Name),
+			LowerCamelName: strcase.ToLowerCamel(field.Name),
+		}
+
+		rmd.Models = append(rmd.Models, rm)
+	}
+
+	return rmd
+}
+
+func ReflectToResponseModelData(obj any) *ResponseModelData {
+	tpe := reflect.TypeOf(obj)
+	for tpe.Kind() == reflect.Pointer {
+		tpe = tpe.Elem()
+	}
+	cnt := tpe.NumField()
+
+	rmd := &ResponseModelData{
+		Name:           tpe.Name(),
+		UpperCamelName: strcase.ToCamel(tpe.Name()),
+	}
+
+	for i := 0; i < cnt; i++ {
+		field := tpe.Field(i)
+		tag := field.Tag
+
+		rm := &ResponseModel{
+			FieldName:      field.Name,
+			DataType:       field.Type.Name(),
+			IsPointer:      field.Type.Kind() == reflect.Pointer,
+			IsArray:        field.Type.Kind() == reflect.Slice,
+			Nullable:       strings.Contains(tag.Get("binding"), "required"),
+			Remark:         tag.Get("remark"),
+			UpperCamelName: strcase.ToCamel(field.Name),
+			LowerCamelName: strcase.ToLowerCamel(field.Name),
+		}
+
+		rmd.Models = append(rmd.Models, rm)
+	}
+
+	return rmd
 }
