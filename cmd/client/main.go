@@ -1,14 +1,14 @@
 package main
 
 import (
-	"github.com/darwinOrg/go-codegen/parser"
+	"github.com/darwinOrg/go-codegen/dgen"
 	dgcoll "github.com/darwinOrg/go-common/collection"
 )
 
 func main() {
-	entireModel := parser.InitEntireModel()
+	entireModel := dgen.InitEntireModel()
 
-	interfaces := dgcoll.FilterList(entireModel.Interfaces, func(item *parser.InterfaceModelData) bool {
+	interfaces := dgcoll.FilterList(entireModel.Interfaces, func(item *dgen.InterfaceModelData) bool {
 		return item.ExportClient
 	})
 	if len(interfaces) == 0 {
@@ -16,8 +16,8 @@ func main() {
 	}
 	entireModel.Interfaces = interfaces
 
-	requestModelNames := dgcoll.FlatMapToSet(interfaces, func(inter *parser.InterfaceModelData) []string {
-		return dgcoll.MapToSet(inter.Models, func(interfaceModel *parser.InterfaceModel) string {
+	requestModelNames := dgcoll.FlatMapToSet(interfaces, func(inter *dgen.InterfaceModelData) []string {
+		return dgcoll.MapToSet(inter.Models, func(interfaceModel *dgen.InterfaceModel) string {
 			return interfaceModel.RequestModelName
 		})
 	})
@@ -25,15 +25,15 @@ func main() {
 		return requestModelName != "" && requestModelName != "Id"
 	})
 	if len(requestModelNames) > 0 {
-		entireModel.Requests = dgcoll.FilterList(entireModel.Requests, func(requestModel *parser.RequestModelData) bool {
+		entireModel.Requests = dgcoll.FilterList(entireModel.Requests, func(requestModel *dgen.RequestModelData) bool {
 			return dgcoll.Contains(requestModelNames, requestModel.Name)
 		})
 	} else {
-		entireModel.Requests = []*parser.RequestModelData{}
+		entireModel.Requests = []*dgen.RequestModelData{}
 	}
 
-	responseModelNames := dgcoll.FlatMapToSet(interfaces, func(inter *parser.InterfaceModelData) []string {
-		return dgcoll.MapToSet(inter.Models, func(interfaceModel *parser.InterfaceModel) string {
+	responseModelNames := dgcoll.FlatMapToSet(interfaces, func(inter *dgen.InterfaceModelData) []string {
+		return dgcoll.MapToSet(inter.Models, func(interfaceModel *dgen.InterfaceModel) string {
 			return interfaceModel.ResponseModelName
 		})
 	})
@@ -41,13 +41,13 @@ func main() {
 		return responseModelName != ""
 	})
 	if len(responseModelNames) > 0 {
-		entireModel.Responses = dgcoll.FilterList(entireModel.Responses, func(responseModel *parser.ResponseModelData) bool {
+		entireModel.Responses = dgcoll.FilterList(entireModel.Responses, func(responseModel *dgen.ResponseModelData) bool {
 			return dgcoll.Contains(responseModelNames, responseModel.Name)
 		})
 	} else {
-		entireModel.Responses = []*parser.ResponseModelData{}
+		entireModel.Responses = []*dgen.ResponseModelData{}
 	}
 
 	entireModel.Fill(entireModel.Export.ClientPackagePrefix)
-	_ = parser.ClientParser.Parse(entireModel)
+	_ = dgen.ClientParser.Parse(entireModel)
 }

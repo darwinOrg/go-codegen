@@ -1,4 +1,4 @@
-package parser
+package dgen
 
 import (
 	_client "github.com/darwinOrg/go-codegen/tpl/client"

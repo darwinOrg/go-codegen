@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	_ "github.com/darwinOrg/daog-ext"
-	"github.com/darwinOrg/go-codegen/parser"
+	"github.com/darwinOrg/go-codegen/dgen"
 	dgcoll "github.com/darwinOrg/go-common/collection"
 	"github.com/darwinOrg/go-common/model"
 	"github.com/darwinOrg/go-common/utils"
@@ -27,7 +27,7 @@ func main() {
 	}
 	sql := string(data)
 
-	metas, err := parser.BuildTableMetas(sql)
+	metas, err := dgen.BuildTableMetas(sql)
 	if err != nil {
 		os.Exit(1)
 	}
@@ -35,17 +35,17 @@ func main() {
 		os.Exit(1)
 	}
 
-	entireModel := &parser.EntireModel{}
+	entireModel := &dgen.EntireModel{}
 
 	for _, meta := range metas {
 		enumMap := meta.EnumMap
 
 		for column, keyValues := range enumMap {
-			entireModel.Enums = append(entireModel.Enums, &parser.EnumModelData{
+			entireModel.Enums = append(entireModel.Enums, &dgen.EnumModelData{
 				Name:     meta.GoTable + column.GoName,
 				DataType: adjustDbType(column.DbType),
-				Models: dgcoll.MapToList(keyValues, func(keyValue *model.KeyValuePair[string, string]) *parser.EnumModel {
-					return &parser.EnumModel{
+				Models: dgcoll.MapToList(keyValues, func(keyValue *model.KeyValuePair[string, string]) *dgen.EnumModel {
+					return &dgen.EnumModel{
 						Code:  meta.GoTable + column.GoName + "_" + keyValue.Key,
 						Value: keyValue.Key,
 						Name:  keyValue.Value,
@@ -54,10 +54,10 @@ func main() {
 			})
 		}
 
-		entireModel.Requests = append(entireModel.Requests, &parser.RequestModelData{
+		entireModel.Requests = append(entireModel.Requests, &dgen.RequestModelData{
 			Name: "Create" + meta.GoTable + "Req",
-			Models: dgcoll.MapToList(meta.CreateColumns, func(column *parser.Column) *parser.RequestModel {
-				md := &parser.RequestModel{
+			Models: dgcoll.MapToList(meta.CreateColumns, func(column *dgen.Column) *dgen.RequestModel {
+				md := &dgen.RequestModel{
 					FieldName: column.GoName,
 					DataType:  adjustDbType(column.DbType),
 					Nullable:  column.IsNull,
@@ -72,10 +72,10 @@ func main() {
 			}),
 		})
 
-		entireModel.Requests = append(entireModel.Requests, &parser.RequestModelData{
+		entireModel.Requests = append(entireModel.Requests, &dgen.RequestModelData{
 			Name: "Modify" + meta.GoTable + "Req",
-			Models: dgcoll.MapToList(meta.ModifyColumns, func(column *parser.Column) *parser.RequestModel {
-				requestModel := &parser.RequestModel{
+			Models: dgcoll.MapToList(meta.ModifyColumns, func(column *dgen.Column) *dgen.RequestModel {
+				requestModel := &dgen.RequestModel{
 					FieldName: column.GoName,
 					DataType:  adjustDbType(column.DbType),
 					Nullable:  column.IsNull,
@@ -90,12 +90,12 @@ func main() {
 			}),
 		})
 
-		entireModel.Requests = append(entireModel.Requests, &parser.RequestModelData{
+		entireModel.Requests = append(entireModel.Requests, &dgen.RequestModelData{
 			Name: "Query" + meta.GoTable + "Req",
-			Models: dgcoll.FilterAndMapToList(meta.QueryColumns, func(column *parser.Column) bool {
+			Models: dgcoll.FilterAndMapToList(meta.QueryColumns, func(column *dgen.Column) bool {
 				return column.DbName != "id" && !column.IsNull
-			}, func(column *parser.Column) *parser.RequestModel {
-				requestModel := &parser.RequestModel{
+			}, func(column *dgen.Column) *dgen.RequestModel {
+				requestModel := &dgen.RequestModel{
 					FieldName: column.GoName,
 					DataType:  adjustDbType(column.DbType),
 					Nullable:  true,
@@ -110,10 +110,10 @@ func main() {
 			}),
 		})
 
-		entireModel.Responses = append(entireModel.Responses, &parser.ResponseModelData{
+		entireModel.Responses = append(entireModel.Responses, &dgen.ResponseModelData{
 			Name: meta.GoTable + "ListResp",
-			Models: dgcoll.FlatMapToList(meta.QueryColumns, func(column *parser.Column) []*parser.ResponseModel {
-				requestModel := &parser.ResponseModel{
+			Models: dgcoll.FlatMapToList(meta.QueryColumns, func(column *dgen.Column) []*dgen.ResponseModel {
+				requestModel := &dgen.ResponseModel{
 					FieldName: column.GoName,
 					DataType:  adjustDbType(column.DbType),
 					Nullable:  column.IsNull,
@@ -121,10 +121,10 @@ func main() {
 				}
 
 				if !column.HasEnum {
-					return []*parser.ResponseModel{requestModel}
+					return []*dgen.ResponseModel{requestModel}
 				}
 
-				return []*parser.ResponseModel{requestModel, {
+				return []*dgen.ResponseModel{requestModel, {
 					FieldName: column.GoName + "Name",
 					DataType:  "string",
 					Nullable:  column.IsNull,
@@ -134,10 +134,10 @@ func main() {
 			}),
 		})
 
-		entireModel.Responses = append(entireModel.Responses, &parser.ResponseModelData{
+		entireModel.Responses = append(entireModel.Responses, &dgen.ResponseModelData{
 			Name: meta.GoTable + "DetailResp",
-			Models: dgcoll.FlatMapToList(meta.QueryColumns, func(column *parser.Column) []*parser.ResponseModel {
-				requestModel := &parser.ResponseModel{
+			Models: dgcoll.FlatMapToList(meta.QueryColumns, func(column *dgen.Column) []*dgen.ResponseModel {
+				requestModel := &dgen.ResponseModel{
 					FieldName: column.GoName,
 					DataType:  adjustDbType(column.DbType),
 					Nullable:  column.IsNull,
@@ -145,10 +145,10 @@ func main() {
 				}
 
 				if !column.HasEnum {
-					return []*parser.ResponseModel{requestModel}
+					return []*dgen.ResponseModel{requestModel}
 				}
 
-				return []*parser.ResponseModel{requestModel, {
+				return []*dgen.ResponseModel{requestModel, {
 					FieldName: column.GoName + "Name",
 					DataType:  "string",
 					EnumModel: meta.GoTable + column.GoName,
@@ -157,10 +157,10 @@ func main() {
 			}),
 		})
 
-		entireModel.Interfaces = append(entireModel.Interfaces, &parser.InterfaceModelData{
+		entireModel.Interfaces = append(entireModel.Interfaces, &dgen.InterfaceModelData{
 			Group:       meta.GoTable,
 			RoutePrefix: "/api/" + meta.KebabName + "/v1",
-			Models: []*parser.InterfaceModel{
+			Models: []*dgen.InterfaceModel{
 				{
 					InterfaceType:    "新建",
 					MethodType:       "Post",

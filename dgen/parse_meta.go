@@ -1,4 +1,4 @@
-package parser
+package dgen
 
 import (
 	_default "github.com/darwinOrg/go-codegen/tpl/default"
