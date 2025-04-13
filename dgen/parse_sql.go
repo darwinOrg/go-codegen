@@ -4,6 +4,7 @@ import (
 	"fmt"
 	dgcoll "github.com/darwinOrg/go-common/collection"
 	"github.com/darwinOrg/go-common/model"
+	"github.com/darwinOrg/go-common/utils"
 	"github.com/pingcap/tidb/parser"
 	"github.com/pingcap/tidb/parser/ast"
 	_ "github.com/pingcap/tidb/parser/test_driver"
@@ -36,7 +37,8 @@ func ParseSql(sql string, packagePrefix string, outputPath string) error {
 	return nil
 }
 
-func ParseToDbModelDataList(sql string) ([]*DbModelData, error) {
+func ParseToDbModelDataList(sqlFile string) ([]*DbModelData, error) {
+	sql := utils.MustReadFileString(sqlFile)
 	metas, err := BuildTableMetas(sql)
 	if err != nil {
 		return nil, err
