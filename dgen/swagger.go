@@ -3,6 +3,7 @@ package dgen
 import (
 	"fmt"
 	"github.com/darwinOrg/go-common/utils"
+	"github.com/darwinOrg/go-swagger"
 	"github.com/go-openapi/spec"
 	"net/http"
 	"strings"
@@ -11,6 +12,21 @@ import (
 const (
 	contentTypeJson = "application/json"
 )
+
+func SyncToApifox(entireModel *EntireModel, accessToken, projectId string) {
+	swaggerProps := BuildSwaggerProps(entireModel)
+	swaggerJsonBytes := utils.MustConvertBeanToJsonStringPretty(swaggerProps)
+
+	swagger.SyncSwaggerJsonBytesToApifox(&swagger.SyncToApifoxRequest{
+		AccessToken:         accessToken,
+		ProjectId:           projectId,
+		ApiOverwriteMode:    swagger.ApiOverwriteModeMethodAndPath,
+		SchemaOverwriteMode: swagger.SchemaOverwriteModeBoth,
+		SyncApiFolder:       false,
+		ImportBasePath:      false,
+		ApiFolderPath:       entireModel.Export.ApifoxOutput,
+	}, []byte(swaggerJsonBytes))
+}
 
 func BuildSwaggerProps(entireModel *EntireModel) spec.SwaggerProps {
 	return spec.SwaggerProps{

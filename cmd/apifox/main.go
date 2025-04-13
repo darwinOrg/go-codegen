@@ -1,12 +1,9 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"github.com/darwinOrg/go-codegen/dgen"
 	dglogger "github.com/darwinOrg/go-logger"
-	"github.com/darwinOrg/go-swagger"
-	"log"
 	"os"
 )
 
@@ -19,19 +16,6 @@ func main() {
 
 	entireModel := dgen.InitEntireModel()
 	entireModel.Fill(entireModel.Export.ServerPackagePrefix)
-	swaggerProps := dgen.BuildSwaggerProps(entireModel)
-	swaggerJsonBytes, err := json.MarshalIndent(swaggerProps, "", "  ")
-	if err != nil {
-		log.Printf("json marshal error: %v", err)
-	}
 
-	swagger.SyncSwaggerJsonBytesToApifox(&swagger.SyncToApifoxRequest{
-		AccessToken:         os.Args[1],
-		ProjectId:           os.Args[2],
-		ApiOverwriteMode:    swagger.ApiOverwriteModeMethodAndPath,
-		SchemaOverwriteMode: swagger.SchemaOverwriteModeBoth,
-		SyncApiFolder:       false,
-		ImportBasePath:      false,
-		ApiFolderPath:       entireModel.Export.ApifoxOutput,
-	}, swaggerJsonBytes)
+	dgen.SyncToApifox(entireModel, os.Args[1], os.Args[2])
 }
