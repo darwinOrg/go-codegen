@@ -2,7 +2,6 @@ package dgen
 
 import (
 	"fmt"
-	"github.com/darwinOrg/go-codegen/pkg"
 	dgcoll "github.com/darwinOrg/go-common/collection"
 	"github.com/darwinOrg/go-common/model"
 	"github.com/iancoleman/strcase"
@@ -155,13 +154,13 @@ func toColumn(def *ast.ColumnDef) *Column {
 	}
 	c.IsNull = isNull
 
-	dbType := pkg.ToDbTypeString(def.Tp.GetType(), def.Tp.GetFlag(), isNull)
+	dbType := ToDbTypeString(def.Tp.GetType(), def.Tp.GetFlag(), isNull)
 	if dbType == "" {
 		log.Printf("%s不能推断出数据库类型\n", c.DbName)
 		return nil
 	}
 	c.DbType = dbType
-	c.ModelType = pkg.AdjustDbType(dbType)
+	c.ModelType = AdjustDbType(dbType)
 
 	return c
 }

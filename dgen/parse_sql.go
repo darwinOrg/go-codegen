@@ -10,11 +10,8 @@ import (
 	_ "github.com/pingcap/tidb/parser/test_driver"
 	"io/fs"
 	"os"
-	"regexp"
 	"strings"
 )
-
-var enumRegexp = regexp.MustCompile(`\(([^)]+)\)`)
 
 func ParseSql(sql string, packagePrefix string, outputPath string) error {
 	metas, err := BuildTableMetas(sql)

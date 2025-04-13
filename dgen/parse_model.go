@@ -2,7 +2,6 @@ package dgen
 
 import (
 	"fmt"
-	"github.com/darwinOrg/go-codegen/pkg"
 	dgcoll "github.com/darwinOrg/go-common/collection"
 	"github.com/darwinOrg/go-common/utils"
 	"github.com/iancoleman/strcase"
@@ -337,7 +336,7 @@ func (m *EntireModel) FillResponses() {
 			columnComment = strings.ReplaceAll(columnComment, "）", ")")
 			columnComment = strings.ReplaceAll(columnComment, "，", ",")
 			columnComment = strings.ReplaceAll(columnComment, "：", ":")
-			if model.EnumModel != "" && pkg.HasEnum(columnComment) {
+			if model.EnumModel != "" && HasEnum(columnComment) {
 				model.EnumTitle = columnComment[:strings.Index(columnComment, "(")]
 				model.EnumRemark = columnComment[strings.Index(columnComment, "(")+1 : len(columnComment)-1]
 			}

@@ -3,7 +3,6 @@ module github.com/darwinOrg/go-codegen
 go 1.23.1
 
 require (
-	github.com/antlr4-go/antlr/v4 v4.13.1
 	github.com/darwinOrg/daog-ext v0.0.10
 	github.com/darwinOrg/go-common v0.1.83
 	github.com/darwinOrg/go-httpclient v0.1.25
@@ -72,7 +71,6 @@ require (
 	go.uber.org/zap v1.27.0 // indirect
 	golang.org/x/arch v0.16.0 // indirect
 	golang.org/x/crypto v0.37.0 // indirect
-	golang.org/x/exp v0.0.0-20250305212735-054e65f0b394 // indirect
 	golang.org/x/net v0.39.0 // indirect
 	golang.org/x/sys v0.32.0 // indirect
 	golang.org/x/text v0.24.0 // indirect

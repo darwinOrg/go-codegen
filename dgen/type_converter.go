@@ -1,4 +1,4 @@
-package pkg
+package dgen
 
 import (
 	"github.com/pingcap/tidb/parser/mysql"

@@ -1,5 +1,7 @@
 package dgen
 
+import "regexp"
+
 const (
 	InterfaceTypePage   = "分页"
 	InterfaceTypeList   = "列表"
@@ -20,3 +22,10 @@ const (
 	LogLevelReturn = "返回响应"
 	LogLevelNone   = "无"
 )
+
+var enumRegexp = regexp.MustCompile(`\(([^)]+)\)`)
+
+func HasEnum(str string) bool {
+	matches := enumRegexp.FindStringSubmatch(str)
+	return len(matches) > 0
+}
