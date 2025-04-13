@@ -115,7 +115,7 @@ func (g *serverParser) ParseEnum(entireModel *EntireModel) error {
 	enumDir := filepath.Join(entireModel.Export.ServerOutput, "enum")
 	_ = os.MkdirAll(enumDir, fs.ModeDir|fs.ModePerm)
 
-	enum := filepath.Join(enumDir, entireModel.FilePrefix+"_enum.go")
+	enum := filepath.Join(enumDir, entireModel.Export.FilePrefix+"_enum.go")
 	if utils.ExistsFile(enum) {
 		fileBytes, err := os.ReadFile(enum)
 		if err != nil {
@@ -153,7 +153,7 @@ func (g *serverParser) ParseModel(entireModel *EntireModel) error {
 	modelDir := filepath.Join(entireModel.Export.ServerOutput, "model")
 	_ = os.MkdirAll(modelDir, fs.ModeDir|fs.ModePerm)
 
-	model := filepath.Join(modelDir, entireModel.FilePrefix+"_model.go")
+	model := filepath.Join(modelDir, entireModel.Export.FilePrefix+"_model.go")
 	err := parseNewFile(model, "model", _server.ModelTpl, entireModel)
 	if err != nil {
 		return err

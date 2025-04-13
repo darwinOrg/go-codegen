@@ -38,7 +38,6 @@ type EntireModel struct {
 	Interfaces []*InterfaceModelData `json:"interfaces,omitempty"`
 	Export     *ExportConfigData     `json:"export,omitempty"`
 
-	FilePrefix     string `json:"filePrefix,omitempty"`
 	PackagePrefix  string `json:"packagePrefix,omitempty"`
 	HasDecimal     bool   `json:"hasDecimal,omitempty"`
 	HasPage        bool   `json:"hasPage,omitempty"`
@@ -183,6 +182,7 @@ type InterfaceModelData struct {
 }
 
 type ExportConfigData struct {
+	FilePrefix          string `json:"filePrefix,omitempty"`
 	ServerOutput        string `json:"serverOutput,omitempty"`
 	ServerPackagePrefix string `json:"serverPackagePrefix,omitempty"`
 	ClientOutput        string `json:"clientOutput,omitempty"`
@@ -219,8 +219,9 @@ func InitEntireModel() *EntireModel {
 
 	filenameWithExt := filepath.Base(inputFile)
 	filename := strings.TrimSuffix(filenameWithExt, filepath.Ext(inputFile))
-	entireModel.FilePrefix = strcase.ToSnake(filename)
 	entireModel.UpperCamelName = strcase.ToCamel(filename)
+
+	entireModel.Export.FilePrefix = strcase.ToSnake(filename)
 
 	if !strings.HasPrefix(entireModel.Export.ServerOutput, "/") {
 		entireModel.Export.ServerOutput = filepath.Join(filepath.Dir(inputFile), entireModel.Export.ServerOutput)
