@@ -12,14 +12,6 @@ import (
 )
 
 var (
-	productMap = map[string]string{
-		"RPA机器人":  "nvwa_enum.Product.RPA",
-		"AI智能面试":  "nvwa_enum.Product.AsyncInterview",
-		"金牌面试官":   "nvwa_enum.Product.OnlineInterview",
-		"需求沟通助手":  "nvwa_enum.Product.RequirementAssistant",
-		"候选人沟通助手": "nvwa_enum.Product.RPA",
-		"人才库":     "nvwa_enum.Product.CandidateAssistant",
-	}
 	logLevelMap = map[string]string{
 		LogLevelAll:    "wrapper.LOG_LEVEL_ALL",
 		LogLevelParam:  "wrapper.LOG_LEVEL_PARAM",
@@ -43,7 +35,6 @@ type EntireModel struct {
 	HasQuery       bool   `json:"hasQuery,omitempty"`
 	HasId          bool   `json:"hasId,omitempty"`
 	HasModel       bool   `json:"hasModel,omitempty"`
-	HasProducts    bool   `json:"hasProducts,omitempty"`
 	UpperCamelName string `json:"upperCamelName,omitempty"`
 }
 
@@ -145,7 +136,6 @@ type InterfaceModel struct {
 	ResponseModelName string   `json:"responseModelName,omitempty"`
 	NonLogin          bool     `json:"nonLogin,omitempty"`
 	AllowRoles        []string `json:"allowRoles,omitempty"`
-	AllowProducts     []string `json:"allowProducts,omitempty"`
 	LogLevel          string   `json:"logLevel,omitempty"`
 	NotLogSQL         bool     `json:"notLogSQL,omitempty"`
 	Remark            string   `json:"remark,omitempty"`
@@ -176,7 +166,6 @@ type InterfaceModelData struct {
 	HasQuery        bool   `json:"hasQuery,omitempty"`
 	HasId           bool   `json:"hasId,omitempty"`
 	HasModel        bool   `json:"hasModel,omitempty"`
-	HasProducts     bool   `json:"hasProducts,omitempty"`
 	HasDbTable      bool   `json:"hasDbTable,omitempty"`
 }
 
@@ -433,15 +422,6 @@ func (m *EntireModel) FillInterfaces() {
 				}
 			} else {
 				model.ResponseModelNameExp = "*result.Void"
-			}
-
-			if len(model.AllowProducts) > 0 {
-				products := dgcoll.MapToList(model.AllowProducts, func(name string) string {
-					return productMap[name]
-				})
-				model.AllowProductsExp = "[]int{" + strings.Join(products, ",") + "}"
-				inter.HasProducts = true
-				m.HasProducts = true
 			}
 
 			if model.LogLevel != "" {
