@@ -558,6 +558,12 @@ func (m *EntireModel) FillPackagePrefix(packagePrefix string) {
 	}
 }
 
+func BatchReflectToRequestModelData(objs []any) []*RequestModelData {
+	return dgcoll.MapToList(objs, func(obj any) *RequestModelData {
+		return ReflectToRequestModelData(obj)
+	})
+}
+
 func ReflectToRequestModelData(obj any) *RequestModelData {
 	tpe := reflect.TypeOf(obj)
 	for tpe.Kind() == reflect.Pointer {
@@ -590,6 +596,12 @@ func ReflectToRequestModelData(obj any) *RequestModelData {
 	}
 
 	return rmd
+}
+
+func BatchReflectToResponseModelData(objs []any) []*ResponseModelData {
+	return dgcoll.MapToList(objs, func(obj any) *ResponseModelData {
+		return ReflectToResponseModelData(obj)
+	})
 }
 
 func ReflectToResponseModelData(obj any) *ResponseModelData {
