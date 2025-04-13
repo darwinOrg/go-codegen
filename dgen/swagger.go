@@ -70,7 +70,7 @@ func buildPaths(entireModel *EntireModel) *spec.Paths {
 func buildGetParameters(interfaceModel *InterfaceModel) []spec.Parameter {
 	var parameters []spec.Parameter
 
-	if interfaceModel.InterfaceType == "分页" {
+	if interfaceModel.InterfaceType == InterfaceTypePage {
 		pageNoParam := *spec.QueryParam("pageNo")
 		pageNoParam.Required = true
 		pageNoParam.Description = "页码"
@@ -131,7 +131,7 @@ func createPostRequestSchemaForInterface(interfaceModel *InterfaceModel) *spec.S
 	schema.Type = []string{"object"}
 	schema.Properties = make(map[string]spec.Schema)
 
-	if interfaceModel.InterfaceType == "分页" {
+	if interfaceModel.InterfaceType == InterfaceTypePage {
 		pageNoProperty := &spec.Schema{}
 		pageNoProperty.Type = []string{"integer"}
 		pageNoProperty.Description = "页码"
@@ -265,7 +265,7 @@ func createResponseSchemaForInterface(interfaceModel *InterfaceModel) *spec.Sche
 	var dataProperty *spec.Schema
 	modelSchema := createResponseModelSchema(interfaceModel)
 
-	if interfaceModel.InterfaceType == "分页" {
+	if interfaceModel.InterfaceType == InterfaceTypePage {
 		dataProperty = &spec.Schema{}
 		dataProperty.Type = []string{"object"}
 
@@ -288,7 +288,7 @@ func createResponseSchemaForInterface(interfaceModel *InterfaceModel) *spec.Sche
 		}
 
 		dataProperty.Required = []string{"pageNo", "pageSize", "totalCount", "totalPages"}
-	} else if interfaceModel.InterfaceType == "列表" {
+	} else if interfaceModel.InterfaceType == InterfaceTypeList {
 		dataProperty = &spec.Schema{}
 		dataProperty.Type = []string{"array"}
 		dataProperty.Items = &spec.SchemaOrArray{Schema: modelSchema}

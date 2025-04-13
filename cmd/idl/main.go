@@ -49,16 +49,16 @@ func main() {
 				inter.Models = append(inter.Models, interfaceModel)
 
 				if postMethod.IsPager {
-					interfaceModel.InterfaceType = "分页"
-					interfaceModel.LogLevel = "请求参数"
+					interfaceModel.InterfaceType = dgen.InterfaceTypePage
+					interfaceModel.LogLevel = dgen.LogLevelParam
 				} else if postMethod.IsList {
-					interfaceModel.InterfaceType = "列表"
-					interfaceModel.LogLevel = "请求参数"
+					interfaceModel.InterfaceType = dgen.InterfaceTypeList
+					interfaceModel.LogLevel = dgen.LogLevelParam
 				} else {
 					for _, createRelatedKeyword := range createRelatedKeywords {
 						if strings.Contains(postMethod.Name, createRelatedKeyword) {
-							interfaceModel.InterfaceType = "新建"
-							interfaceModel.LogLevel = "全部"
+							interfaceModel.InterfaceType = dgen.InterfaceTypeCreate
+							interfaceModel.LogLevel = dgen.LogLevelAll
 							break
 						}
 					}
@@ -66,8 +66,8 @@ func main() {
 					if interfaceModel.InterfaceType == "" {
 						for _, modifyRelatedKeyword := range modifyRelatedKeywords {
 							if strings.Contains(postMethod.Name, modifyRelatedKeyword) {
-								interfaceModel.InterfaceType = "修改"
-								interfaceModel.LogLevel = "全部"
+								interfaceModel.InterfaceType = dgen.InterfaceTypeModify
+								interfaceModel.LogLevel = dgen.LogLevelAll
 								break
 							}
 						}
@@ -76,8 +76,8 @@ func main() {
 					if interfaceModel.InterfaceType == "" {
 						for _, deleteRelatedKeyword := range deleteRelatedKeywords {
 							if strings.Contains(postMethod.Name, deleteRelatedKeyword) {
-								interfaceModel.InterfaceType = "删除"
-								interfaceModel.LogLevel = "全部"
+								interfaceModel.InterfaceType = dgen.InterfaceTypeDelete
+								interfaceModel.LogLevel = dgen.LogLevelAll
 								break
 							}
 						}
@@ -86,8 +86,8 @@ func main() {
 					if interfaceModel.InterfaceType == "" {
 						for _, queryRelatedKeyword := range queryRelatedKeywords {
 							if strings.Contains(postMethod.Name, queryRelatedKeyword) {
-								interfaceModel.InterfaceType = "列表"
-								interfaceModel.LogLevel = "请求参数"
+								interfaceModel.InterfaceType = dgen.InterfaceTypeList
+								interfaceModel.LogLevel = dgen.LogLevelParam
 								break
 							}
 						}
@@ -96,16 +96,16 @@ func main() {
 					if interfaceModel.InterfaceType == "" {
 						for _, detailRelatedKeyword := range detailRelatedKeywords {
 							if strings.Contains(postMethod.Name, detailRelatedKeyword) {
-								interfaceModel.InterfaceType = "详情"
-								interfaceModel.LogLevel = "请求参数"
+								interfaceModel.InterfaceType = dgen.InterfaceTypeDetail
+								interfaceModel.LogLevel = dgen.LogLevelParam
 								break
 							}
 						}
 					}
 
 					if interfaceModel.InterfaceType == "" {
-						interfaceModel.InterfaceType = "修改"
-						interfaceModel.LogLevel = "全部"
+						interfaceModel.InterfaceType = dgen.InterfaceTypeModify
+						interfaceModel.LogLevel = dgen.LogLevelAll
 					}
 				}
 
@@ -126,16 +126,16 @@ func main() {
 				inter.Models = append(inter.Models, interfaceModel)
 
 				if getMethod.IsPager {
-					interfaceModel.InterfaceType = "分页"
-					interfaceModel.LogLevel = "请求参数"
+					interfaceModel.InterfaceType = dgen.InterfaceTypePage
+					interfaceModel.LogLevel = dgen.LogLevelParam
 				} else if getMethod.IsList {
-					interfaceModel.InterfaceType = "列表"
-					interfaceModel.LogLevel = "请求参数"
+					interfaceModel.InterfaceType = dgen.InterfaceTypeList
+					interfaceModel.LogLevel = dgen.LogLevelParam
 				} else {
 					for _, createRelatedKeyword := range createRelatedKeywords {
 						if strings.Contains(getMethod.Name, createRelatedKeyword) {
-							interfaceModel.InterfaceType = "新建"
-							interfaceModel.LogLevel = "全部"
+							interfaceModel.InterfaceType = dgen.InterfaceTypeCreate
+							interfaceModel.LogLevel = dgen.LogLevelAll
 							break
 						}
 					}
@@ -143,8 +143,8 @@ func main() {
 					if interfaceModel.InterfaceType == "" {
 						for _, modifyRelatedKeyword := range modifyRelatedKeywords {
 							if strings.Contains(getMethod.Name, modifyRelatedKeyword) {
-								interfaceModel.InterfaceType = "修改"
-								interfaceModel.LogLevel = "全部"
+								interfaceModel.InterfaceType = dgen.InterfaceTypeModify
+								interfaceModel.LogLevel = dgen.LogLevelAll
 								break
 							}
 						}
@@ -153,8 +153,8 @@ func main() {
 					if interfaceModel.InterfaceType == "" {
 						for _, deleteRelatedKeyword := range deleteRelatedKeywords {
 							if strings.Contains(getMethod.Name, deleteRelatedKeyword) {
-								interfaceModel.InterfaceType = "删除"
-								interfaceModel.LogLevel = "全部"
+								interfaceModel.InterfaceType = dgen.InterfaceTypeDelete
+								interfaceModel.LogLevel = dgen.LogLevelAll
 								break
 							}
 						}
@@ -163,8 +163,8 @@ func main() {
 					if interfaceModel.InterfaceType == "" {
 						for _, queryRelatedKeyword := range queryRelatedKeywords {
 							if strings.Contains(getMethod.Name, queryRelatedKeyword) {
-								interfaceModel.InterfaceType = "列表"
-								interfaceModel.LogLevel = "请求参数"
+								interfaceModel.InterfaceType = dgen.InterfaceTypeList
+								interfaceModel.LogLevel = dgen.LogLevelParam
 								break
 							}
 						}
@@ -173,16 +173,16 @@ func main() {
 					if interfaceModel.InterfaceType == "" {
 						for _, detailRelatedKeyword := range detailRelatedKeywords {
 							if strings.Contains(getMethod.Name, detailRelatedKeyword) {
-								interfaceModel.InterfaceType = "详情"
-								interfaceModel.LogLevel = "请求参数"
+								interfaceModel.InterfaceType = dgen.InterfaceTypeDetail
+								interfaceModel.LogLevel = dgen.LogLevelParam
 								break
 							}
 						}
 					}
 
 					if interfaceModel.InterfaceType == "" {
-						interfaceModel.InterfaceType = "详情"
-						interfaceModel.LogLevel = "请求参数"
+						interfaceModel.InterfaceType = dgen.InterfaceTypeDetail
+						interfaceModel.LogLevel = dgen.LogLevelParam
 					}
 				}
 

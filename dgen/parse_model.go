@@ -22,10 +22,10 @@ var (
 		"人才库":     "nvwa_enum.Product.CandidateAssistant",
 	}
 	logLevelMap = map[string]string{
-		"全部":   "wrapper.LOG_LEVEL_ALL",
-		"请求参数": "wrapper.LOG_LEVEL_PARAM",
-		"返回响应": "wrapper.LOG_LEVEL_RETURN",
-		"无":    "wrapper.LOG_LEVEL_NONE",
+		LogLevelAll:    "wrapper.LOG_LEVEL_ALL",
+		LogLevelParam:  "wrapper.LOG_LEVEL_PARAM",
+		LogLevelReturn: "wrapper.LOG_LEVEL_RETURN",
+		LogLevelNone:   "wrapper.LOG_LEVEL_NONE",
 	}
 )
 
@@ -225,8 +225,15 @@ func InitEntireModel() *EntireModel {
 	if !strings.HasPrefix(entireModel.Export.ServerOutput, "/") {
 		entireModel.Export.ServerOutput = filepath.Join(filepath.Dir(inputFile), entireModel.Export.ServerOutput)
 	}
+	if entireModel.Export.ServerOutput == "" {
+		entireModel.Export.ServerOutput = "."
+	}
+
 	if !strings.HasPrefix(entireModel.Export.ClientOutput, "/") {
 		entireModel.Export.ClientOutput = filepath.Join(filepath.Dir(inputFile), entireModel.Export.ClientOutput)
+	}
+	if entireModel.Export.ClientOutput == "" {
+		entireModel.Export.ClientOutput = "."
 	}
 
 	return entireModel
@@ -368,11 +375,15 @@ func (m *EntireModel) FillInterfaces() {
 		for _, model := range inter.Models {
 			model.RelativePath = strings.TrimPrefix(model.RelativePath, "/")
 
-			if model.InterfaceType == "分页" {
+			if model.MethodType == "" {
+				model.MethodType = MethodTypePost
+			}
+
+			if model.InterfaceType == InterfaceTypePage {
 				inter.HasPage = true
 			}
 
-			if model.InterfaceType == "分页" || model.InterfaceType == "列表" {
+			if model.InterfaceType == InterfaceTypePage || model.InterfaceType == InterfaceTypeList {
 				m.HasQuery = true
 				inter.HasQuery = true
 			}
@@ -392,12 +403,12 @@ func (m *EntireModel) FillInterfaces() {
 					if request.Name == model.RequestModelName {
 						model.RequestModelData = request
 
-						if model.InterfaceType == "分页" {
+						if model.InterfaceType == InterfaceTypePage {
 							request.IsPage = true
 							request.IsPageOrList = true
 							m.HasPage = true
 							inter.HasPage = true
-						} else if model.InterfaceType == "列表" {
+						} else if model.InterfaceType == InterfaceTypeList {
 							request.IsPageOrList = true
 						}
 					}
@@ -410,9 +421,9 @@ func (m *EntireModel) FillInterfaces() {
 					if model.ResponseModelName == response.Name {
 						model.ResponseModelData = response
 						model.ResponseModelHasPointer = true
-						if model.InterfaceType == "分页" {
+						if model.InterfaceType == InterfaceTypePage {
 							model.ResponseModelNameExp = "*page.PageList[model." + model.ResponseModelName + "]"
-						} else if model.InterfaceType == "列表" {
+						} else if model.InterfaceType == InterfaceTypeList {
 							model.ResponseModelNameExp = "[]*model." + model.ResponseModelName
 						} else {
 							model.ResponseModelNameExp = "*model." + model.ResponseModelName
@@ -598,14 +609,13 @@ func ReflectToResponseModelData(obj any) *ResponseModelData {
 		tag := field.Tag
 
 		rm := &ResponseModel{
-			FieldName:      field.Name,
-			DataType:       field.Type.Name(),
-			IsPointer:      field.Type.Kind() == reflect.Pointer,
-			IsArray:        field.Type.Kind() == reflect.Slice,
-			Nullable:       strings.Contains(tag.Get("binding"), "required"),
-			Remark:         tag.Get("remark"),
-			UpperCamelName: strcase.ToCamel(field.Name),
-			LowerCamelName: strcase.ToLowerCamel(field.Name),
+			FieldName:  field.Name,
+			DataType:   field.Type.Name(),
+			IsPointer:  field.Type.Kind() == reflect.Pointer,
+			IsArray:    field.Type.Kind() == reflect.Slice,
+			Nullable:   strings.Contains(tag.Get("binding"), "required"),
+			IsMediaUrl: tag.Get("appendUid") != "",
+			Remark:     tag.Get("remark"),
 		}
 
 		rmd.Models = append(rmd.Models, rm)
