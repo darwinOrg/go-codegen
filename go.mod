@@ -4,7 +4,8 @@ go 1.23.1
 
 require (
 	github.com/darwinOrg/daog-ext v0.0.10
-	github.com/darwinOrg/go-common v0.1.83
+	github.com/darwinOrg/go-common v0.1.84
+	github.com/darwinOrg/go-config v0.0.14
 	github.com/darwinOrg/go-httpclient v0.1.25
 	github.com/darwinOrg/go-logger v0.0.9
 	github.com/darwinOrg/go-swagger v0.0.14
@@ -26,7 +27,6 @@ require (
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/cloudwego/base64x v0.1.5 // indirect
 	github.com/cznic/mathutil v0.0.0-20181122101859-297441e03548 // indirect
-	github.com/darwinOrg/go-config v0.0.14 // indirect
 	github.com/darwinOrg/go-monitor v0.0.7 // indirect
 	github.com/darwinOrg/go-validator-ext v0.0.9 // indirect
 	github.com/fsnotify/fsnotify v1.9.0 // indirect

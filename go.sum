@@ -22,8 +22,8 @@ github.com/cznic/mathutil v0.0.0-20181122101859-297441e03548 h1:iwZdTE0PVqJCos1v
 github.com/cznic/mathutil v0.0.0-20181122101859-297441e03548/go.mod h1:e6NPNENfs9mPDVNRekM7lKScauxd5kXTr1Mfyig6TDM=
 github.com/darwinOrg/daog-ext v0.0.10 h1:QJe42AONyRJtDK5YHa+Yjt4rsuJAgT6dJx+fygrTc/g=
 github.com/darwinOrg/daog-ext v0.0.10/go.mod h1:5HIBwN0WeNPzbZcfEKTT1NrxfmqdfTPBZZEDPGVD6rs=
-github.com/darwinOrg/go-common v0.1.83 h1:YIN+JQ2xCQijFHLh5TblV9NgRYT9G5BvjtItctW2b/c=
-github.com/darwinOrg/go-common v0.1.83/go.mod h1:pItL/4ZV0bU64N2qD9ACpvDlYjeomAbheIzPXKqbb88=
+github.com/darwinOrg/go-common v0.1.84 h1:62WRjjyMLQ3GiAn8q4P+3YiqGc75kMImoU9Y32Oe/4c=
+github.com/darwinOrg/go-common v0.1.84/go.mod h1:pItL/4ZV0bU64N2qD9ACpvDlYjeomAbheIzPXKqbb88=
 github.com/darwinOrg/go-config v0.0.14 h1:8qCOBZqAfVgR55NcHn7oV8ZmpBD83rw8OmoHfhpVjKE=
 github.com/darwinOrg/go-config v0.0.14/go.mod h1:8dIWdcsNkhRwgC75W3D/MrsVDvdPv2edCu4Pxh2Cs94=
 github.com/darwinOrg/go-httpclient v0.1.25 h1:7FQ0ohAcRNN6NZqSJi2xPam6HjnMT+DarnuD51SleDE=
@@ -41,6 +41,8 @@ github.com/darwinOrg/go-web v0.1.44/go.mod h1:gIAwASicHeyPpc2Jm6494waD0KgrYqUWvS
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
+github.com/frankban/quicktest v1.14.6 h1:7Xjx+VpznH+oBnejlPUj8oUpdxnVs4f8XU8WnHkI4W8=
+github.com/frankban/quicktest v1.14.6/go.mod h1:4ptaffx2x8+WTWXmUCuVU6aPUX1/Mz7zb5vbUoiM6w0=
 github.com/fsnotify/fsnotify v1.9.0 h1:2Ml+OJNzbYCTzsxtv8vKSFD9PbJjmhYF14k/jKC7S9k=
 github.com/fsnotify/fsnotify v1.9.0/go.mod h1:8jBTzvmWwFyi3Pb8djgCCO5IBqzKJ/Jwo8TRcHyHii0=
 github.com/gabriel-vasile/mimetype v1.4.8 h1:FfZ3gj38NjllZIeJAmMhr+qKL8Wu+nOoI3GqacKw1NM=

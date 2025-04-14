@@ -89,7 +89,7 @@ func (s *{{$.GroupLowerCamel}}Service) {{.MethodNameExp}}(ctx *dgctx.DgContext, 
 		// TODO
 		return {{if ne .ResponseModelName ""}}nil, {{end}}err
 	})
-	{{- else}}
+	{{- else if eq .InterfaceType "其它"}}
 	return daogext.Write{{if ne .ResponseModelName ""}}WithResult{{end}}(ctx, func(tc *daog.TransContext) {{if ne .ResponseModelName ""}}({{.ResponseModelNameExp}}, error){{else}}error{{end}} {
 		// {{.DbTableLowerCamel}}, err := dal.{{.DbTableUpperCamel}}ExtDao.MustGetById(ctx, tc, req.Id)
 		_, err := dal.{{.DbTableUpperCamel}}ExtDao.MustGetById(ctx, tc, req.Id)
@@ -99,7 +99,8 @@ func (s *{{$.GroupLowerCamel}}Service) {{.MethodNameExp}}(ctx *dgctx.DgContext, 
 
 		// TODO
 		return {{if ne .ResponseModelName ""}}nil, {{end}}err
-	}){{end}}
+	})
+	{{end}}
 }
 {{end}}
 `
