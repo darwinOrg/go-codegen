@@ -9,17 +9,7 @@ import (
 )
 
 func parseMeta(targetPath string, meta *Meta) error {
-	err := parseMetaDAL(targetPath, meta)
-	if err != nil {
-		return err
-	}
-
-	err = parseMetaEnum(targetPath, meta)
-	if err != nil {
-		return err
-	}
-
-	err = parseMetaModel(targetPath, meta)
+	err := preParseMeta(targetPath, meta)
 	if err != nil {
 		return err
 	}
@@ -40,6 +30,25 @@ func parseMeta(targetPath string, meta *Meta) error {
 	}
 
 	err = parseMetaRouter(targetPath, meta)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func preParseMeta(targetPath string, meta *Meta) error {
+	err := parseMetaDAL(targetPath, meta)
+	if err != nil {
+		return err
+	}
+
+	err = parseMetaEnum(targetPath, meta)
+	if err != nil {
+		return err
+	}
+
+	err = parseMetaModel(targetPath, meta)
 	if err != nil {
 		return err
 	}

@@ -34,6 +34,27 @@ func ParseSql(sql string, packagePrefix string, outputPath string) error {
 	return nil
 }
 
+func PreParseSql(sql string, packagePrefix string, outputPath string) error {
+	metas, err := BuildTableMetas(sql)
+	if err != nil {
+		return err
+	}
+	if len(metas) == 0 {
+		return nil
+	}
+
+	_ = os.Mkdir(outputPath, fs.ModeDir|fs.ModePerm)
+
+	for _, meta := range metas {
+		meta.PackagePrefix = packagePrefix
+		if preParseMeta(outputPath, meta) != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 func ParseToDbModelDataList(sqlFile string) ([]*DbModelData, error) {
 	sql := utils.MustReadFileString(sqlFile)
 	metas, err := BuildTableMetas(sql)
