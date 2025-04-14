@@ -569,7 +569,7 @@ func ReflectToRequestModelData(obj any) *RequestModelData {
 			DataType:       field.Type.Name(),
 			IsPointer:      field.Type.Kind() == reflect.Pointer,
 			IsArray:        field.Type.Kind() == reflect.Slice,
-			Nullable:       strings.Contains(tag.Get("binding"), "required"),
+			Nullable:       !strings.Contains(tag.Get("binding"), "required"),
 			VerifyRules:    tag.Get("binding"),
 			Remark:         tag.Get("remark"),
 			UpperCamelName: strcase.ToCamel(field.Name),
@@ -609,7 +609,7 @@ func ReflectToResponseModelData(obj any) *ResponseModelData {
 			DataType:   field.Type.Name(),
 			IsPointer:  field.Type.Kind() == reflect.Pointer,
 			IsArray:    field.Type.Kind() == reflect.Slice,
-			Nullable:   strings.Contains(tag.Get("binding"), "required"),
+			Nullable:   !strings.Contains(tag.Get("binding"), "required"),
 			IsMediaUrl: tag.Get("appendUid") != "",
 			Remark:     tag.Get("remark"),
 		}
