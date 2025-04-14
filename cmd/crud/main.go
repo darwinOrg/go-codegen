@@ -42,11 +42,11 @@ func main() {
 
 		for column, keyValues := range enumMap {
 			entireModel.Enums = append(entireModel.Enums, &dgen.EnumModelData{
-				Name:     meta.GoTable + column.GoName,
+				Name:     column.GoName,
 				DataType: adjustDbType(column.DbType),
 				Models: dgcoll.MapToList(keyValues, func(keyValue *model.KeyValuePair[string, string]) *dgen.EnumModel {
 					return &dgen.EnumModel{
-						Code:  meta.GoTable + column.GoName + "_" + keyValue.Key,
+						Code:  column.GoName + "_" + keyValue.Key,
 						Value: keyValue.Key,
 						Name:  keyValue.Value,
 					}
