@@ -3,15 +3,23 @@ package dgen
 import (
 	"fmt"
 	"github.com/darwinOrg/go-common/utils"
+	dgcfg "github.com/darwinOrg/go-config"
 	"github.com/darwinOrg/go-swagger"
 	"github.com/go-openapi/spec"
 	"net/http"
+	"os"
 	"strings"
 )
 
 const (
 	contentTypeJson = "application/json"
 )
+
+func SyncToApifoxDefault(entireModel *EntireModel) {
+	dgcfg.LoadDotEnv(dgcfg.MustConfRoot())
+
+	SyncToApifox(entireModel, os.Getenv("APIFOX_ACCESS_TOKEN"), os.Getenv("APIFOX_PROJECT_ID"))
+}
 
 func SyncToApifox(entireModel *EntireModel, accessToken, projectId string) {
 	swaggerProps := BuildSwaggerProps(entireModel)
