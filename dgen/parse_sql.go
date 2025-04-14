@@ -34,7 +34,8 @@ func ParseSql(sql string, packagePrefix string, outputPath string) error {
 	return nil
 }
 
-func PreParseSql(sql string, packagePrefix string, outputPath string) error {
+func PreParseSqlFile(sqlFile string, packagePrefix string, outputPath string) error {
+	sql := utils.MustReadFileString(sqlFile)
 	metas, err := BuildTableMetas(sql)
 	if err != nil {
 		return err
