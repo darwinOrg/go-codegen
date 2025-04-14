@@ -105,6 +105,14 @@ func buildGetParameters(interfaceModel *InterfaceModel) []spec.Parameter {
 
 		parameters = append(parameters, p)
 		return parameters
+	} else if interfaceModel.RequestModelName == RequestModelIds {
+		p := *spec.QueryParam("ids")
+		p.Required = true
+		p.Description = "id列表"
+		p.Type = "array"
+
+		parameters = append(parameters, p)
+		return parameters
 	}
 
 	if interfaceModel.RequestModelData == nil || len(interfaceModel.RequestModelData.Models) == 0 {
@@ -165,8 +173,23 @@ func createPostRequestSchemaForInterface(interfaceModel *InterfaceModel) *spec.S
 		idProperty := &spec.Schema{}
 		idProperty.Type = []string{"integer"}
 		idProperty.Description = "id"
+
 		schema.Properties["id"] = *idProperty
 		schema.Required = append(schema.Required, "id")
+
+		return schema
+	} else if interfaceModel.RequestModelName == RequestModelIds {
+		idProperty := &spec.Schema{}
+		idProperty.Type = []string{"integer"}
+		idProperty.Description = "id"
+
+		idsProperty := &spec.Schema{}
+		idsProperty.Type = []string{"array"}
+		idsProperty.Description = "id列表"
+		idsProperty.Items = &spec.SchemaOrArray{Schema: idProperty}
+
+		schema.Properties["ids"] = *idsProperty
+		schema.Required = append(schema.Required, "ids")
 
 		return schema
 	}

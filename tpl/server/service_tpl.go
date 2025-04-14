@@ -80,7 +80,8 @@ func (s *{{$.GroupLowerCamel}}Service) {{.MethodNameExp}}(ctx *dgctx.DgContext, 
 	})
 	{{- else if eq .InterfaceType "只读"}}
 	return daogext.Readonly{{if ne .ResponseModelName ""}}WithResult{{end}}(ctx, func(tc *daog.TransContext) {{if ne .ResponseModelName ""}}({{.ResponseModelNameExp}}, error){{else}}error{{end}} {
-		{{.DbTableLowerCamel}}, err := dal.{{.DbTableUpperCamel}}ExtDao.MustGetById(ctx, tc, req.Id)
+		// {{.DbTableLowerCamel}}, err := dal.{{.DbTableUpperCamel}}ExtDao.MustGetById(ctx, tc, req.Id)
+		_, err := dal.{{.DbTableUpperCamel}}ExtDao.MustGetById(ctx, tc, req.Id)
 		if err != nil {
 			return {{if ne .ResponseModelName ""}}nil, {{end}}err
 		}
@@ -90,7 +91,8 @@ func (s *{{$.GroupLowerCamel}}Service) {{.MethodNameExp}}(ctx *dgctx.DgContext, 
 	})
 	{{- else}}
 	return daogext.Write{{if ne .ResponseModelName ""}}WithResult{{end}}(ctx, func(tc *daog.TransContext) {{if ne .ResponseModelName ""}}({{.ResponseModelNameExp}}, error){{else}}error{{end}} {
-		{{.DbTableLowerCamel}}, err := dal.{{.DbTableUpperCamel}}ExtDao.MustGetById(ctx, tc, req.Id)
+		// {{.DbTableLowerCamel}}, err := dal.{{.DbTableUpperCamel}}ExtDao.MustGetById(ctx, tc, req.Id)
+		_, err := dal.{{.DbTableUpperCamel}}ExtDao.MustGetById(ctx, tc, req.Id)
 		if err != nil {
 			return {{if ne .ResponseModelName ""}}nil, {{end}}err
 		}
