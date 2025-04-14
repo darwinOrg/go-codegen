@@ -28,12 +28,12 @@ func (s *{{$.GroupLowerCamel}}Service) {{.MethodNameExp}}(ctx *dgctx.DgContext, 
 	// TODO
 	return {{if ne .ResponseModelName ""}}nil, {{end}}nil
 	{{- else if eq .InterfaceType "新建"}}
-	return daogext.WriteWithResult(ctx, func(tc *daog.TransContext) {{if ne .ResponseModelName ""}}({{.ResponseModelNameExp}}, error){{else}}(int64, error){{end}} {
+	return daogext.Write{{if ne .ResponseModelName ""}}(ctx, func(tc *daog.TransContext) {{if ne .ResponseModelName ""}}({{.ResponseModelNameExp}}, error){{else}}(int64, error){{end}} {
 		{{.DbTableLowerCamel}} := converter.{{.DbTableUpperCamel}}Converter.{{.RequestModelName}}2Entity(req)
 		return dal.{{.DbTableUpperCamel}}ExtDao.Create(ctx, tc, {{.DbTableLowerCamel}})
 	})
 	{{- else if eq .InterfaceType "修改"}}
-	return daogext.Write(ctx, func(tc *daog.TransContext) {{if ne .ResponseModelName ""}}({{.ResponseModelNameExp}}, error){{else}}error{{end}} {
+	return daogext.Write{{if ne .ResponseModelName ""}}WithResult{{end}}(ctx, func(tc *daog.TransContext) {{if ne .ResponseModelName ""}}({{.ResponseModelNameExp}}, error){{else}}error{{end}} {
 		{{.DbTableLowerCamel}}, err := dal.{{.DbTableUpperCamel}}ExtDao.MustGetById(ctx, tc, req.Id)
 		if err != nil {
 			return err
@@ -43,7 +43,7 @@ func (s *{{$.GroupLowerCamel}}Service) {{.MethodNameExp}}(ctx *dgctx.DgContext, 
 		return dal.{{.DbTableUpperCamel}}ExtDao.Modify(ctx, tc, {{.DbTableLowerCamel}})
 	})
 	{{- else if eq .InterfaceType "删除"}}
-	return daogext.Write(ctx, func(tc *daog.TransContext) {{if ne .ResponseModelName ""}}({{.ResponseModelNameExp}}, error){{else}}error{{end}} {
+	return daogext.Write{{if ne .ResponseModelName ""}}WithResult{{end}}(ctx, func(tc *daog.TransContext) {{if ne .ResponseModelName ""}}({{.ResponseModelNameExp}}, error){{else}}error{{end}} {
 		return dal.{{.DbTableUpperCamel}}ExtDao.DeleteById(ctx, tc, req.Id)
 	})
 	{{- else if eq .InterfaceType "分页"}}
@@ -77,6 +77,26 @@ func (s *{{$.GroupLowerCamel}}Service) {{.MethodNameExp}}(ctx *dgctx.DgContext, 
 
 		detailModel := converter.{{.DbTableUpperCamel}}Converter.Entity2{{.ResponseModelName}}({{.DbTableLowerCamel}})
 		return detailModel, nil
+	})
+	{{- else if eq .InterfaceType "只读"}}
+	return daogext.Readonly{{if ne .ResponseModelName ""}}WithResult{{end}}(ctx, func(tc *daog.TransContext) {{if ne .ResponseModelName ""}}({{.ResponseModelNameExp}}, error){{else}}error{{end}} {
+		{{.DbTableLowerCamel}}, err := dal.{{.DbTableUpperCamel}}ExtDao.MustGetById(ctx, tc, req.Id)
+		if err != nil {
+			return {{if ne .ResponseModelName ""}}nil, {{end}}err
+		}
+
+		// TODO
+		return {{if ne .ResponseModelName ""}}nil, {{end}}err
+	})
+	{{- else}}
+	return daogext.Write{{if ne .ResponseModelName ""}}WithResult{{end}}(ctx, func(tc *daog.TransContext) {{if ne .ResponseModelName ""}}({{.ResponseModelNameExp}}, error){{else}}error{{end}} {
+		{{.DbTableLowerCamel}}, err := dal.{{.DbTableUpperCamel}}ExtDao.MustGetById(ctx, tc, req.Id)
+		if err != nil {
+			return {{if ne .ResponseModelName ""}}nil, {{end}}err
+		}
+
+		// TODO
+		return {{if ne .ResponseModelName ""}}nil, {{end}}err
 	}){{end}}
 }
 {{end}}

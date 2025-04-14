@@ -3,12 +3,14 @@ package dgen
 import "regexp"
 
 const (
-	InterfaceTypePage   = "分页"
-	InterfaceTypeList   = "列表"
-	InterfaceTypeCreate = "新建"
-	InterfaceTypeModify = "修改"
-	InterfaceTypeDelete = "删除"
-	InterfaceTypeDetail = "详情"
+	InterfaceTypePage     = "分页"
+	InterfaceTypeList     = "列表"
+	InterfaceTypeCreate   = "新建"
+	InterfaceTypeModify   = "修改"
+	InterfaceTypeDelete   = "删除"
+	InterfaceTypeDetail   = "详情"
+	InterfaceTypeReadOnly = "只读"
+	InterfaceTypeOther    = "其它"
 )
 
 const (
@@ -24,7 +26,8 @@ const (
 )
 
 const (
-	RequestModelId = "Id"
+	RequestModelId  = "Id"
+	RequestModelIds = "Ids"
 )
 
 var enumRegexp = regexp.MustCompile(`\(([^)]+)\)`)
