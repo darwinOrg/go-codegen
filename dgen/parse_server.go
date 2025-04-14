@@ -20,14 +20,12 @@ type serverParser struct {
 }
 
 func (p *serverParser) ParseAll(entireModel *EntireModel) error {
-	p.Parse(entireModel)
-
-	err := p.ParseModel(entireModel)
+	err := p.Parse(entireModel)
 	if err != nil {
 		return err
 	}
 
-	return nil
+	return p.ParseModel(entireModel)
 }
 
 func (p *serverParser) Parse(entireModel *EntireModel) error {

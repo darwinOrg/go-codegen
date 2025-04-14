@@ -26,7 +26,7 @@ func (h *{{$.GroupLowerCamel}}Handler) {{.MethodNameExp}}(_ *gin.Context, ctx *d
 	}
 	return result.Success[{{.ResponseModelNameExp}}](resp)
 	{{- else}}
-	err := service.{{$.Group}}Service.{{.MethodNameExp}}(ctx, req)
+	err := service.{{$.GroupUpperCamel}}Service.{{.MethodNameExp}}(ctx, req)
 	if err != nil {
 		return result.SimpleFailByError(err)
 	}
