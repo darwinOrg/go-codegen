@@ -22,7 +22,7 @@ func main() {
 		})
 	})
 	requestModelNames = dgcoll.FilterList(requestModelNames, func(requestModelName string) bool {
-		return requestModelName != "" && requestModelName != "Id"
+		return requestModelName != "" && requestModelName != dgen.RequestModelId
 	})
 	if len(requestModelNames) > 0 {
 		entireModel.Requests = dgcoll.FilterList(entireModel.Requests, func(requestModel *dgen.RequestModelData) bool {

@@ -135,9 +135,6 @@ func (d *{{.LowerCamelName}}ExtDao) BuildMatcher(param *Query{{.GoTable}}Param) 
 	return matcher
 }
 
-func Get{{.GoTable}}Id({{.LowerCamelName}} *{{.GoTable}}) int64 {
-	return {{.LowerCamelName}}.Id
-}
 `
 
 func init() {

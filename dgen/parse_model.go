@@ -286,7 +286,7 @@ func (m *EntireModel) FillRequests() {
 				m.HasDecimal = true
 			}
 
-			if model.DataType == "Id" {
+			if model.DataType == RequestModelId {
 				m.HasId = true
 			}
 
@@ -377,7 +377,7 @@ func (m *EntireModel) FillInterfaces() {
 				inter.HasQuery = true
 			}
 
-			if model.RequestModelName == "Id" {
+			if model.RequestModelName == RequestModelId {
 				m.HasId = true
 				inter.HasId = true
 				model.RequestModelNameExp = "cm.IdReq"
@@ -437,7 +437,7 @@ func (m *EntireModel) FillInterfaces() {
 			model.DbTableUpperCamel = strcase.ToCamel(model.DbModelName)
 			model.DbTableLowerCamel = strcase.ToLowerCamel(model.DbModelName)
 
-			if (model.RequestModelName != "" && model.RequestModelName != "Id") || model.ResponseModelName != "" {
+			if (model.RequestModelName != "" && model.RequestModelName != RequestModelId) || model.ResponseModelName != "" {
 				inter.HasModel = true
 			}
 			if model.DbModelName != "" {

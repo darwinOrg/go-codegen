@@ -98,7 +98,7 @@ func buildGetParameters(interfaceModel *InterfaceModel) []spec.Parameter {
 		parameters = append(parameters, pageNoParam, pageSizeParam)
 	}
 
-	if interfaceModel.RequestModelName == "Id" {
+	if interfaceModel.RequestModelName == RequestModelId {
 		p := *spec.QueryParam("id")
 		p.Required = true
 		p.Description = "id"
@@ -161,7 +161,7 @@ func createPostRequestSchemaForInterface(interfaceModel *InterfaceModel) *spec.S
 		schema.Required = append(schema.Required, "pageNo", "pageSize")
 	}
 
-	if interfaceModel.RequestModelName == "Id" {
+	if interfaceModel.RequestModelName == RequestModelId {
 		idProperty := &spec.Schema{}
 		idProperty.Type = []string{"integer"}
 		idProperty.Description = "id"

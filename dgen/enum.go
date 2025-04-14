@@ -23,6 +23,10 @@ const (
 	LogLevelNone   = "无"
 )
 
+const (
+	RequestModelId = "Id"
+)
+
 var enumRegexp = regexp.MustCompile(`\(([^)]+)\)`)
 
 func HasEnum(str string) bool {
