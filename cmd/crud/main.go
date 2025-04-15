@@ -46,7 +46,7 @@ func main() {
 				DataType: adjustDbType(column.DbType),
 				Models: dgcoll.MapToList(keyValues, func(keyValue *model.KeyValuePair[string, string]) *dgen.EnumModel {
 					return &dgen.EnumModel{
-						Code:  column.GoName + "_" + keyValue.Key,
+						Code:  column.GoName + keyValue.Key,
 						Value: keyValue.Key,
 						Name:  keyValue.Value,
 					}
