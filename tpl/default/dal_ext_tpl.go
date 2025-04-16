@@ -27,6 +27,16 @@ type Query{{.GoTable}}Param struct {
 	*page.PageParam
 }
 
+func (d *{{.LowerCamelName}}ExtDao) GetById(ctx *dgctx.DgContext, tc *daog.TransContext, id int64) (*{{.GoTable}}, error) {
+	{{.LowerCamelName}}, err := {{.GoTable}}Dao.GetById(tc, id)
+	if err != nil {
+		dglogger.Errorf(ctx, "{{.GoTable}}Dao.GetById error: %v", err)
+		return nil, dgerr.SYSTEM_ERROR
+	}
+
+	return {{.LowerCamelName}}, nil
+}
+
 func (d *{{.LowerCamelName}}ExtDao) MustGetById(ctx *dgctx.DgContext, tc *daog.TransContext, id int64) (*{{.GoTable}}, error) {
 	{{.LowerCamelName}}, err := {{.GoTable}}Dao.GetById(tc, id)
 	if err != nil {
@@ -133,6 +143,16 @@ func (d *{{.LowerCamelName}}ExtDao) BuildMatcher(param *Query{{.GoTable}}Param) 
 	{{- end }}
 
 	return matcher
+}
+
+func (d *{{.LowerCamelName}}ExtDao) updateById(ctx *dgctx.DgContext, tc *daog.TransContext, {{.LowerCamelName}} *{{.GoTable}}, modifier daog.Modifier) error {
+	_, err := {{.GoTable}}Dao.UpdateById(tc, modifier, {{.LowerCamelName}}.Id)
+	if err != nil {
+		dglogger.Errorf(ctx, "{{.GoTable}}Dao.UpdateById error: %v", err)
+		return dgerr.SYSTEM_ERROR
+	}
+
+	return nil
 }
 
 `

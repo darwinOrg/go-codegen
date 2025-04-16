@@ -1,5 +1,7 @@
 package _default
 
+import "strings"
+
 var DalMainTpl = `package dal
 
 import (
@@ -42,7 +44,11 @@ var {{.GoTable}}Dao daog.QuickDao[{{.GoTable}}] = &struct {
 }
 
 type {{.GoTable}} struct {
-    {{range .Columns}}{{.GoName}} {{.DbType}}
+    {{range .Columns}}{{.GoName}} {{.DbType}} ###json:"{{.LowerCamelName}}" remark:"{{.Comment}}"###
     {{end}}
 }
 `
+
+func init() {
+	DalMainTpl = strings.ReplaceAll(DalMainTpl, "###", "`")
+}
