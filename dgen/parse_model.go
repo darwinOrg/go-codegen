@@ -161,7 +161,6 @@ type InterfaceModelData struct {
 	PackagePrefix   string `json:"packagePrefix,omitempty"`
 	GroupUpperCamel string `json:"groupUpperCamel,omitempty"`
 	GroupLowerCamel string `json:"groupLowerCamel,omitempty"`
-	GroupSnake      string `json:"groupSnake,omitempty"`
 	HasPage         bool   `json:"hasPage,omitempty"`
 	HasQuery        bool   `json:"hasQuery,omitempty"`
 	HasId           bool   `json:"hasId,omitempty"`
@@ -359,7 +358,6 @@ func (m *EntireModel) FillInterfaces() {
 	for _, inter := range m.Interfaces {
 		inter.GroupUpperCamel = strcase.ToCamel(inter.Group)
 		inter.GroupLowerCamel = strcase.ToLowerCamel(inter.Group)
-		inter.GroupSnake = strcase.ToSnake(inter.Group)
 
 		for _, model := range inter.Models {
 			model.RelativePath = strings.TrimPrefix(model.RelativePath, "/")

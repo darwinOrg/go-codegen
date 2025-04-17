@@ -1,6 +1,6 @@
 package _server
 
-var RouterTpl = `package {{.GroupSnake}}
+var RouterTpl = `package router
 
 import (
 	"{{.PackagePrefix}}/handler"
