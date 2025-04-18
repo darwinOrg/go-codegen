@@ -563,15 +563,15 @@ func ReflectToRequestModelData(obj any) *RequestModelData {
 		tag := field.Tag
 
 		rm := &RequestModel{
-			FieldName:      field.Name,
-			DataType:       field.Type.Name(),
-			IsPointer:      field.Type.Kind() == reflect.Pointer,
-			IsArray:        field.Type.Kind() == reflect.Slice,
-			Nullable:       !strings.Contains(tag.Get("binding"), "required"),
-			VerifyRules:    tag.Get("binding"),
-			Remark:         tag.Get("remark"),
-			UpperCamelName: strcase.ToCamel(field.Name),
-			LowerCamelName: strcase.ToLowerCamel(field.Name),
+			FieldName:        field.Name,
+			DataType:         field.Type.Name(),
+			IsPointer:        field.Type.Kind() == reflect.Pointer,
+			IsArray:          field.Type.Kind() == reflect.Slice,
+			Nullable:         !strings.Contains(tag.Get("binding"), "required"),
+			VerifyRules:      tag.Get("binding"),
+			EnumModel:        tag.Get("enum"),
+			Remark:           tag.Get("remark"),
+			RequestModelData: rmd,
 		}
 
 		rmd.Models = append(rmd.Models, rm)
@@ -603,13 +603,15 @@ func ReflectToResponseModelData(obj any) *ResponseModelData {
 		tag := field.Tag
 
 		rm := &ResponseModel{
-			FieldName:  field.Name,
-			DataType:   field.Type.Name(),
-			IsPointer:  field.Type.Kind() == reflect.Pointer,
-			IsArray:    field.Type.Kind() == reflect.Slice,
-			Nullable:   !strings.Contains(tag.Get("binding"), "required"),
-			IsMediaUrl: tag.Get("appendUid") != "",
-			Remark:     tag.Get("remark"),
+			FieldName:         field.Name,
+			DataType:          field.Type.Name(),
+			IsPointer:         field.Type.Kind() == reflect.Pointer,
+			IsArray:           field.Type.Kind() == reflect.Slice,
+			Nullable:          !strings.Contains(tag.Get("binding"), "required"),
+			IsMediaUrl:        tag.Get("appendUid") != "",
+			EnumModel:         tag.Get("enum"),
+			Remark:            tag.Get("remark"),
+			ResponseModelData: rmd,
 		}
 
 		rmd.Models = append(rmd.Models, rm)
