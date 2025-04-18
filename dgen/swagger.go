@@ -42,7 +42,7 @@ func BuildSwaggerProps(entireModel *EntireModel) spec.SwaggerProps {
 		return dgcoll.MapToList(imd.Models, func(im *InterfaceModel) *wrapper.RequestApi {
 			return &wrapper.RequestApi{
 				Method:         im.MethodType,
-				BasePath:       imd.Group,
+				BasePath:       imd.RoutePrefix,
 				RelativePath:   im.RelativePath,
 				Remark:         im.Remark,
 				RequestObject:  im.RequestModelObject,

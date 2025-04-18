@@ -230,18 +230,53 @@ func InitEntireModel() *EntireModel {
 }
 
 func (m *EntireModel) Fill(packagePrefix string) {
+	interfaceModels := dgcoll.FlatMapToList(m.Interfaces, func(interfaceModel *InterfaceModelData) []*InterfaceModel {
+		return interfaceModel.Models
+	})
+
+	if m.Requests == nil {
+		objs := dgcoll.FilterAndMapToList(interfaceModels, func(interfaceModel *InterfaceModel) bool {
+			return interfaceModel.RequestModelObject != nil
+		}, func(interfaceModel *InterfaceModel) any {
+			return interfaceModel.RequestModelObject
+		})
+		objMap := dgcoll.Trans2Map(objs, func(obj any) string {
+			tpe := reflect.TypeOf(obj)
+			if tpe.Kind() == reflect.Ptr {
+				return tpe.Elem().Name()
+			} else {
+				return tpe.Name()
+			}
+		})
+
+		m.Requests = BatchReflectToRequestModelData(dgcoll.ExtractMapValues(objMap))
+	}
+
+	if m.Responses == nil {
+		objs := dgcoll.FilterAndMapToList(interfaceModels, func(interfaceModel *InterfaceModel) bool {
+			return interfaceModel.ResponseModelObject != nil
+		}, func(interfaceModel *InterfaceModel) any {
+			return interfaceModel.ResponseModelObject
+		})
+		objMap := dgcoll.Trans2Map(objs, func(obj any) string {
+			tpe := reflect.TypeOf(obj)
+			if tpe.Kind() == reflect.Ptr {
+				return tpe.Elem().Name()
+			} else {
+				return tpe.Name()
+			}
+		})
+
+		m.Responses = BatchReflectToResponseModelData(dgcoll.ExtractMapValues(objMap))
+	}
+
 	if m.Enums == nil {
 		m.Enums = []*EnumModelData{}
-	}
-	if m.Requests == nil {
-		m.Requests = []*RequestModelData{}
-	}
-	if m.Responses == nil {
-		m.Responses = []*ResponseModelData{}
 	}
 	if m.Interfaces == nil {
 		m.Interfaces = []*InterfaceModelData{}
 	}
+
 	m.HasModel = len(m.Requests) > 0 || len(m.Responses) > 0
 
 	m.FillEnums()
@@ -377,7 +412,14 @@ func (m *EntireModel) FillInterfaces() {
 				inter.HasQuery = true
 			}
 
-			if model.RequestModelName == RequestModelId {
+			if model.RequestModelName == "" && model.RequestModelObject != nil {
+				tpe := reflect.TypeOf(model.RequestModelObject)
+				if tpe.Kind() == reflect.Ptr {
+					model.RequestModelName = tpe.Elem().Name()
+				} else {
+					model.RequestModelName = tpe.Name()
+				}
+			} else if model.RequestModelName == RequestModelId {
 				m.HasId = true
 				inter.HasId = true
 				model.RequestModelNameExp = "cm.IdReq"
@@ -408,7 +450,14 @@ func (m *EntireModel) FillInterfaces() {
 				}
 			}
 
-			if model.ResponseModelName != "" {
+			if model.ResponseModelName == "" && model.ResponseModelObject != nil {
+				tpe := reflect.TypeOf(model.ResponseModelObject)
+				if tpe.Kind() == reflect.Ptr {
+					model.ResponseModelName = tpe.Elem().Name()
+				} else {
+					model.ResponseModelName = tpe.Name()
+				}
+			} else if model.ResponseModelName != "" {
 				model.ResponseModelNameExp = model.ResponseModelName
 				for _, response := range m.Responses {
 					if model.ResponseModelName == response.Name {

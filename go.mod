@@ -8,7 +8,7 @@ require (
 	github.com/darwinOrg/go-config v0.0.14
 	github.com/darwinOrg/go-httpclient v0.1.25
 	github.com/darwinOrg/go-logger v0.0.10
-	github.com/darwinOrg/go-swagger v0.0.17
+	github.com/darwinOrg/go-swagger v0.0.18
 	github.com/darwinOrg/go-web v0.1.44
 	github.com/gin-gonic/gin v1.10.0
 	github.com/go-openapi/spec v0.21.0
@@ -46,7 +46,6 @@ require (
 	github.com/jinzhu/copier v0.4.0 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
-	github.com/klauspost/compress v1.18.0 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.10 // indirect
 	github.com/leodido/go-urn v1.4.0 // indirect
 	github.com/mailru/easyjson v0.9.0 // indirect
