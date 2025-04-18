@@ -93,7 +93,7 @@ func (d *{{.LowerCamelName}}ExtDao) DeleteById(ctx *dgctx.DgContext, tc *daog.Tr
 }
 
 func (d *{{.LowerCamelName}}ExtDao) Page(ctx *dgctx.DgContext, tc *daog.TransContext, param *Query{{.GoTable}}Param) (*page.PageList[{{.GoTable}}], error) {
-	matcher := d.BuildMatcher(param)
+	matcher := d.buildMatcher(param)
 	
 	count, err := {{.GoTable}}Dao.Count(tc, matcher)
 	if err != nil {
@@ -117,7 +117,7 @@ func (d *{{.LowerCamelName}}ExtDao) Page(ctx *dgctx.DgContext, tc *daog.TransCon
 }
 
 func (d *{{.LowerCamelName}}ExtDao) List(ctx *dgctx.DgContext, tc *daog.TransContext, param *Query{{.GoTable}}Param) ([]*{{.GoTable}}, error) {
-	matcher := d.BuildMatcher(param)
+	matcher := d.buildMatcher(param)
 
 	{{.LowerCamelName}}List, err := {{.GoTable}}Dao.QueryListMatcher(tc, matcher, daog.NewDescOrder({{$.GoTable}}Fields.CreatedAt))
 	if err != nil {
@@ -128,7 +128,7 @@ func (d *{{.LowerCamelName}}ExtDao) List(ctx *dgctx.DgContext, tc *daog.TransCon
 	return {{.LowerCamelName}}List, nil
 }
 
-func (d *{{.LowerCamelName}}ExtDao) BuildMatcher(param *Query{{.GoTable}}Param) daog.Matcher {
+func (d *{{.LowerCamelName}}ExtDao) buildMatcher(param *Query{{.GoTable}}Param) daog.Matcher {
 	matcher := daog.NewMatcher()
 	{{range .QueryColumns}}
 	{{- if eq .DbType "string"}}
