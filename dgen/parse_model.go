@@ -136,6 +136,7 @@ type InterfaceModel struct {
 	RequestModelObject  any      `json:"requestModelObject,omitempty"`
 	ResponseModelName   string   `json:"responseModelName,omitempty"`
 	ResponseModelObject any      `json:"responseModelObject,omitempty"`
+	ResponseApiObject   any      `json:"responseApiObject,omitempty"`
 	NonLogin            bool     `json:"nonLogin,omitempty"`
 	AllowRoles          []string `json:"allowRoles,omitempty"`
 	LogLevel            string   `json:"logLevel,omitempty"`

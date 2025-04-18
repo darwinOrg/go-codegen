@@ -46,7 +46,7 @@ func BuildSwaggerProps(entireModel *EntireModel) spec.SwaggerProps {
 				RelativePath:   im.RelativePath,
 				Remark:         im.Remark,
 				RequestObject:  im.RequestModelObject,
-				ResponseObject: im.ResponseModelObject,
+				ResponseObject: im.ResponseApiObject,
 			}
 		})
 	})
