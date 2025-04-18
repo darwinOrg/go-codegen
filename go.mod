@@ -4,11 +4,11 @@ go 1.23.1
 
 require (
 	github.com/darwinOrg/daog-ext v0.0.10
-	github.com/darwinOrg/go-common v0.1.84
+	github.com/darwinOrg/go-common v0.1.86
 	github.com/darwinOrg/go-config v0.0.14
 	github.com/darwinOrg/go-httpclient v0.1.25
-	github.com/darwinOrg/go-logger v0.0.9
-	github.com/darwinOrg/go-swagger v0.0.14
+	github.com/darwinOrg/go-logger v0.0.10
+	github.com/darwinOrg/go-swagger v0.0.17
 	github.com/darwinOrg/go-web v0.1.44
 	github.com/gin-gonic/gin v1.10.0
 	github.com/go-openapi/spec v0.21.0
@@ -30,7 +30,7 @@ require (
 	github.com/darwinOrg/go-monitor v0.0.7 // indirect
 	github.com/darwinOrg/go-validator-ext v0.0.9 // indirect
 	github.com/fsnotify/fsnotify v1.9.0 // indirect
-	github.com/gabriel-vasile/mimetype v1.4.8 // indirect
+	github.com/gabriel-vasile/mimetype v1.4.9 // indirect
 	github.com/gin-contrib/cors v1.7.5 // indirect
 	github.com/gin-contrib/sse v1.1.0 // indirect
 	github.com/go-openapi/jsonpointer v0.21.1 // indirect
@@ -59,8 +59,8 @@ require (
 	github.com/pingcap/errors v0.11.5-0.20210425183316-da1aaba5fb63 // indirect
 	github.com/pingcap/failpoint v0.0.0-20240528011301-b51a646c7c86 // indirect
 	github.com/pingcap/log v1.1.0 // indirect
-	github.com/prometheus/client_golang v1.21.1 // indirect
-	github.com/prometheus/client_model v0.6.1 // indirect
+	github.com/prometheus/client_golang v1.22.0 // indirect
+	github.com/prometheus/client_model v0.6.2 // indirect
 	github.com/prometheus/common v0.63.0 // indirect
 	github.com/prometheus/procfs v0.16.0 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect

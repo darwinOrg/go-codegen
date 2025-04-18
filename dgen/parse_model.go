@@ -127,18 +127,20 @@ type ResponseModelData struct {
 }
 
 type InterfaceModel struct {
-	InterfaceType     string   `json:"interfaceType,omitempty"`
-	MethodType        string   `json:"methodType,omitempty"`
-	RelativePath      string   `json:"relativePath,omitempty"`
-	MethodName        string   `json:"methodName,omitempty"`
-	DbModelName       string   `json:"dbModelName,omitempty"`
-	RequestModelName  string   `json:"requestModelName,omitempty"`
-	ResponseModelName string   `json:"responseModelName,omitempty"`
-	NonLogin          bool     `json:"nonLogin,omitempty"`
-	AllowRoles        []string `json:"allowRoles,omitempty"`
-	LogLevel          string   `json:"logLevel,omitempty"`
-	NotLogSQL         bool     `json:"notLogSQL,omitempty"`
-	Remark            string   `json:"remark,omitempty"`
+	InterfaceType       string   `json:"interfaceType,omitempty"`
+	MethodType          string   `json:"methodType,omitempty"`
+	RelativePath        string   `json:"relativePath,omitempty"`
+	MethodName          string   `json:"methodName,omitempty"`
+	DbModelName         string   `json:"dbModelName,omitempty"`
+	RequestModelName    string   `json:"requestModelName,omitempty"`
+	RequestModelObject  any      `json:"requestModelObject,omitempty"`
+	ResponseModelName   string   `json:"responseModelName,omitempty"`
+	ResponseModelObject any      `json:"responseModelObject,omitempty"`
+	NonLogin            bool     `json:"nonLogin,omitempty"`
+	AllowRoles          []string `json:"allowRoles,omitempty"`
+	LogLevel            string   `json:"logLevel,omitempty"`
+	NotLogSQL           bool     `json:"notLogSQL,omitempty"`
+	Remark              string   `json:"remark,omitempty"`
 
 	DbTableUpperCamel       string             `json:"dbTableUpperCamel,omitempty"`
 	DbTableLowerCamel       string             `json:"dbTableLowerCamel,omitempty"`
@@ -554,8 +556,7 @@ func ReflectToRequestModelData(obj any) *RequestModelData {
 	cnt := tpe.NumField()
 
 	rmd := &RequestModelData{
-		Name:           tpe.Name(),
-		UpperCamelName: strcase.ToCamel(tpe.Name()),
+		Name: tpe.Name(),
 	}
 
 	for i := 0; i < cnt; i++ {
@@ -594,8 +595,7 @@ func ReflectToResponseModelData(obj any) *ResponseModelData {
 	cnt := tpe.NumField()
 
 	rmd := &ResponseModelData{
-		Name:           tpe.Name(),
-		UpperCamelName: strcase.ToCamel(tpe.Name()),
+		Name: tpe.Name(),
 	}
 
 	for i := 0; i < cnt; i++ {
