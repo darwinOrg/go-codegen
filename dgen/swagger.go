@@ -59,10 +59,12 @@ func BuildSwaggerProps(entireModel *EntireModel) spec.SwaggerProps {
 
 			if im.ResponseApiObject != nil {
 				ra.ResponseObject = im.ResponseApiObject
-			} else if im.ResponseApiObject == nil && im.ResponseModelObject != nil {
+			} else if im.ResponseModelObject != nil {
 				ra.ResponseObject = result.Success(&AnotherPageList{
 					List: []any{im.ResponseModelObject},
 				})
+			} else {
+				ra.ResponseObject = result.SimpleSuccess()
 			}
 
 			return ra
