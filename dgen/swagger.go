@@ -11,7 +11,7 @@ import (
 	"os"
 )
 
-type pageList struct {
+type AnotherPageList struct {
 	PageNo     int   `json:"pageNo" binding:"required" remark:"页码"`
 	PageSize   int   `json:"pageSize" binding:"required" remark:"每页记录数"`
 	TotalCount int   `json:"totalCount" remark:"总记录数"`
@@ -60,7 +60,7 @@ func BuildSwaggerProps(entireModel *EntireModel) spec.SwaggerProps {
 			if im.ResponseApiObject != nil {
 				ra.ResponseObject = im.ResponseApiObject
 			} else if im.ResponseApiObject == nil && im.ResponseModelObject != nil {
-				ra.ResponseObject = result.Success(&pageList{
+				ra.ResponseObject = result.Success(&AnotherPageList{
 					List: []any{im.ResponseModelObject},
 				})
 			}
