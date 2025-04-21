@@ -3,9 +3,19 @@ package dgen
 import (
 	"os"
 	"path/filepath"
+	"strings"
 )
 
-func BuildPackagePrefixSimply() string {
+func GetCurrentPackageNameSimply() string {
+	currentDir, err := os.Getwd()
+	if err != nil {
+		panic(err)
+	}
+	dirs := strings.Split(currentDir, "/")
+	return dirs[len(dirs)-1]
+}
+
+func GetPackagePrefixSimply() string {
 	currentDir, err := os.Getwd()
 	if err != nil {
 		panic(err)
