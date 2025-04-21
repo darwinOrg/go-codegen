@@ -406,7 +406,9 @@ func (m *EntireModel) FillInterfaces() {
 				} else {
 					model.RequestModelName = tpe.Name()
 				}
-			} else if model.RequestModelName == RequestModelId {
+			}
+
+			if model.RequestModelName == RequestModelId {
 				m.HasId = true
 				inter.HasId = true
 				model.RequestModelNameExp = "cm.IdReq"
@@ -444,7 +446,9 @@ func (m *EntireModel) FillInterfaces() {
 				} else {
 					model.ResponseModelName = tpe.Name()
 				}
-			} else if model.ResponseModelName != "" {
+			}
+
+			if model.ResponseModelName != "" {
 				model.ResponseModelNameExp = model.ResponseModelName
 				for _, response := range m.Responses {
 					if model.ResponseModelName == response.Name {
