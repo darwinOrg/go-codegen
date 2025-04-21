@@ -79,10 +79,9 @@ type RequestModel struct {
 	EnumModel   string `json:"enumModel,omitempty"`
 	Remark      string `json:"remark,omitempty"`
 
-	UpperCamelName   string            `json:"upperCamelName,omitempty"`
-	LowerCamelName   string            `json:"lowerCamelName,omitempty"`
-	NullableString   bool              `json:"nullableString,omitempty"`
-	RequestModelData *RequestModelData `json:"requestModelData,omitempty"`
+	UpperCamelName string `json:"upperCamelName,omitempty"`
+	LowerCamelName string `json:"lowerCamelName,omitempty"`
+	NullableString bool   `json:"nullableString,omitempty"`
 }
 
 type RequestModelData struct {
@@ -107,13 +106,12 @@ type ResponseModel struct {
 	EnumModel  string `json:"enumModel,omitempty"`
 	Remark     string `json:"remark,omitempty"`
 
-	UpperCamelName    string             `json:"upperCamelName,omitempty"`
-	LowerCamelName    string             `json:"lowerCamelName,omitempty"`
-	EnumTitle         string             `json:"enumTitle,omitempty"`
-	EnumRemark        string             `json:"enumRemark,omitempty"`
-	EnumFieldName     string             `json:"enumFieldName,omitempty"`
-	NullableString    bool               `json:"nullableString,omitempty"`
-	ResponseModelData *ResponseModelData `json:"responseModelData,omitempty"`
+	UpperCamelName string `json:"upperCamelName,omitempty"`
+	LowerCamelName string `json:"lowerCamelName,omitempty"`
+	EnumTitle      string `json:"enumTitle,omitempty"`
+	EnumRemark     string `json:"enumRemark,omitempty"`
+	EnumFieldName  string `json:"enumFieldName,omitempty"`
+	NullableString bool   `json:"nullableString,omitempty"`
 }
 
 type ResponseModelData struct {
@@ -326,12 +324,6 @@ func (m *EntireModel) FillRequests() {
 			if model.DataType == RequestModelId || model.DataType == RequestModelIds {
 				m.HasId = true
 			}
-
-			for _, req := range m.Requests {
-				if req.Name == model.DataType {
-					model.RequestModelData = request
-				}
-			}
 		}
 
 		if request.ExtendName != "" {
@@ -369,12 +361,6 @@ func (m *EntireModel) FillResponses() {
 
 			if model.DataType == "decimal.Decimal" {
 				m.HasDecimal = true
-			}
-
-			for _, resp := range m.Responses {
-				if resp.Name == model.DataType {
-					model.ResponseModelData = resp
-				}
 			}
 		}
 
@@ -614,15 +600,14 @@ func ReflectToRequestModelData(obj any) *RequestModelData {
 		tag := field.Tag
 
 		rm := &RequestModel{
-			FieldName:        field.Name,
-			DataType:         field.Type.Name(),
-			IsPointer:        field.Type.Kind() == reflect.Pointer,
-			IsArray:          field.Type.Kind() == reflect.Slice,
-			Nullable:         !strings.Contains(tag.Get("binding"), "required"),
-			VerifyRules:      tag.Get("binding"),
-			EnumModel:        tag.Get("enum"),
-			Remark:           tag.Get("remark"),
-			RequestModelData: rmd,
+			FieldName:   field.Name,
+			DataType:    field.Type.Name(),
+			IsPointer:   field.Type.Kind() == reflect.Pointer,
+			IsArray:     field.Type.Kind() == reflect.Slice,
+			Nullable:    !strings.Contains(tag.Get("binding"), "required"),
+			VerifyRules: tag.Get("binding"),
+			EnumModel:   tag.Get("enum"),
+			Remark:      tag.Get("remark"),
 		}
 
 		rmd.Models = append(rmd.Models, rm)
@@ -653,15 +638,14 @@ func ReflectToResponseModelData(obj any) *ResponseModelData {
 		tag := field.Tag
 
 		rm := &ResponseModel{
-			FieldName:         field.Name,
-			DataType:          field.Type.Name(),
-			IsPointer:         field.Type.Kind() == reflect.Pointer,
-			IsArray:           field.Type.Kind() == reflect.Slice,
-			Nullable:          !strings.Contains(tag.Get("binding"), "required"),
-			IsMediaUrl:        tag.Get("appendUid") != "",
-			EnumModel:         tag.Get("enum"),
-			Remark:            tag.Get("remark"),
-			ResponseModelData: rmd,
+			FieldName:  field.Name,
+			DataType:   field.Type.Name(),
+			IsPointer:  field.Type.Kind() == reflect.Pointer,
+			IsArray:    field.Type.Kind() == reflect.Slice,
+			Nullable:   !strings.Contains(tag.Get("binding"), "required"),
+			IsMediaUrl: tag.Get("appendUid") != "",
+			EnumModel:  tag.Get("enum"),
+			Remark:     tag.Get("remark"),
 		}
 
 		rmd.Models = append(rmd.Models, rm)
