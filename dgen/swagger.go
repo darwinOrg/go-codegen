@@ -11,7 +11,7 @@ import (
 	"os"
 )
 
-type AnotherPageList[T any, E any] struct {
+type PageList[T any, E any] struct {
 	PageNo     int `json:"pageNo" binding:"required" remark:"页码"`
 	PageSize   int `json:"pageSize" binding:"required" remark:"每页记录数"`
 	TotalCount int `json:"totalCount" remark:"总记录数"`
