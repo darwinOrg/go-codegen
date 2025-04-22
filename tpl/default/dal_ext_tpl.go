@@ -135,7 +135,7 @@ func (d *{{.LowerCamelName}}ExtDao) buildMatcher(param *Query{{.GoTable}}Param) 
 	if param.{{.GoName}} != "" {
 		matcher.Eq({{$.GoTable}}Fields.{{.GoName}}, param.{{.GoName}})
 	}
-	{{- else if contains .DbType "int"}}
+	{{- else if stringContains .DbType "int"}}
 	if param.{{.GoName}} != 0 {
 		matcher.Eq({{$.GoTable}}Fields.{{.GoName}}, param.{{.GoName}})
 	}

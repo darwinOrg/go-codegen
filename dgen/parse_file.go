@@ -3,13 +3,15 @@ package dgen
 import (
 	"os"
 	"os/exec"
+	"slices"
 	"strings"
 	"text/template"
 )
 
 var (
 	customFuncMap = template.FuncMap{
-		"contains": strings.Contains,
+		"stringContains": strings.Contains,
+		"sliceContains":  slices.Contains,
 	}
 )
 
