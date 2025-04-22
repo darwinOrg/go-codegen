@@ -11,12 +11,13 @@ import (
 	"os"
 )
 
-type AnotherPageList struct {
-	PageNo     int   `json:"pageNo" binding:"required" remark:"页码"`
-	PageSize   int   `json:"pageSize" binding:"required" remark:"每页记录数"`
-	TotalCount int   `json:"totalCount" remark:"总记录数"`
-	TotalPages int   `json:"totalPages" remark:"总页数"`
-	List       []any `json:"list" remark:"列表记录"`
+type AnotherPageList[T any, E any] struct {
+	PageNo     int `json:"pageNo" binding:"required" remark:"页码"`
+	PageSize   int `json:"pageSize" binding:"required" remark:"每页记录数"`
+	TotalCount int `json:"totalCount" remark:"总记录数"`
+	TotalPages int `json:"totalPages" remark:"总页数"`
+	List       []T `json:"list" remark:"列表记录"`
+	Extra      E   `json:"extra" remark:"额外数据"`
 }
 
 func SyncToApifoxDefault(entireModel *EntireModel) {
@@ -60,9 +61,15 @@ func BuildSwaggerProps(entireModel *EntireModel) spec.SwaggerProps {
 			if im.ResponseApiObject != nil {
 				ra.ResponseObject = im.ResponseApiObject
 			} else if im.ResponseModelObject != nil {
-				ra.ResponseObject = result.Success(&AnotherPageList{
-					List: []any{im.ResponseModelObject},
-				})
+				if im.InterfaceType == InterfaceTypeList {
+					ra.ResponseObject = result.Success([]any{im.ResponseModelObject})
+				} else if im.InterfaceType == InterfaceTypePage {
+					ra.ResponseObject = result.Success(&AnotherPageList[any, any]{
+						List: []any{im.ResponseModelObject},
+					})
+				} else {
+					ra.ResponseObject = result.Success(im.ResponseModelObject)
+				}
 			} else {
 				ra.ResponseObject = result.SimpleSuccess()
 			}
