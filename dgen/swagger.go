@@ -60,16 +60,6 @@ func BuildSwaggerProps(entireModel *EntireModel) spec.SwaggerProps {
 
 			if im.ResponseApiObject != nil {
 				ra.ResponseObject = im.ResponseApiObject
-			} else if im.ResponseModelObject != nil {
-				if im.InterfaceType == InterfaceTypeList {
-					ra.ResponseObject = result.Success([]any{im.ResponseModelObject})
-				} else if im.InterfaceType == InterfaceTypePage {
-					ra.ResponseObject = result.Success(&AnotherPageList[any, any]{
-						List: []any{im.ResponseModelObject},
-					})
-				} else {
-					ra.ResponseObject = result.Success(im.ResponseModelObject)
-				}
 			} else {
 				ra.ResponseObject = result.SimpleSuccess()
 			}
