@@ -10,8 +10,8 @@ import (
 
 var (
 	customFuncMap = template.FuncMap{
-		"stringContains": strings.Contains,
-		"sliceContains":  slices.Contains,
+		"string_contains": strings.Contains,
+		"slice_contains":  slices.Contains,
 	}
 )
 
