@@ -30,7 +30,7 @@ func (c *{{$.DbTableLowerCamel}}Converter) {{.UpperCamelName}}2Entity(req *model
 
 	return {{$.DbTableLowerCamel}}
 }
-{{else if eq .InterfaceType "修改"}}
+{{else if or (eq .InterfaceType "修改") (eq .InterfaceType "保存")}}
 func (c *{{$.DbTableLowerCamel}}Converter) FillEntityWith{{.UpperCamelName}}({{$.DbTableLowerCamel}} *dal.{{$.DbTableUpperCamel}}, req *model.{{.UpperCamelName}}) {
 	if req == nil {
 		return

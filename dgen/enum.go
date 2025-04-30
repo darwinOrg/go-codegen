@@ -7,6 +7,7 @@ const (
 	InterfaceTypeList     = "列表"
 	InterfaceTypeCreate   = "新建"
 	InterfaceTypeModify   = "修改"
+	InterfaceTypeSave     = "保存"
 	InterfaceTypeDelete   = "删除"
 	InterfaceTypeDetail   = "详情"
 	InterfaceTypeReadOnly = "只读"

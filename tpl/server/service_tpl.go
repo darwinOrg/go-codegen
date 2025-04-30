@@ -42,6 +42,21 @@ func (s *{{$.GroupLowerCamel}}Service) {{.MethodNameExp}}(ctx *dgctx.DgContext, 
 		converter.{{.DbTableUpperCamel}}Converter.FillEntityWith{{.RequestModelName}}({{.DbTableLowerCamel}}, req)
 		return dal.{{.DbTableUpperCamel}}ExtDao.Modify(ctx, tc, {{.DbTableLowerCamel}})
 	})
+	{{- else if eq .InterfaceType "保存"}}
+	return daogext.Write{{if ne .ResponseModelName ""}}WithResult{{end}}(ctx, func(tc *daog.TransContext) {{if ne .ResponseModelName ""}}({{.ResponseModelNameExp}}, error){{else}}error{{end}} {
+		if req.Id > 0 {
+			{{.DbTableLowerCamel}}, err := dal.{{.DbTableUpperCamel}}ExtDao.MustGetById(ctx, tc, req.Id)
+			if err != nil {
+				return err
+			}
+	
+			converter.{{.DbTableUpperCamel}}Converter.FillEntityWith{{.RequestModelName}}({{.DbTableLowerCamel}}, req)
+			return dal.{{.DbTableUpperCamel}}ExtDao.Modify(ctx, tc, {{.DbTableLowerCamel}})
+		} else {
+			{{.DbTableLowerCamel}} := converter.{{.DbTableUpperCamel}}Converter.{{.RequestModelName}}2Entity(req)
+			return dal.{{.DbTableUpperCamel}}ExtDao.Create(ctx, tc, {{.DbTableLowerCamel}})
+		}
+	})
 	{{- else if eq .InterfaceType "删除"}}
 	return daogext.Write{{if ne .ResponseModelName ""}}WithResult{{end}}(ctx, func(tc *daog.TransContext) {{if ne .ResponseModelName ""}}({{.ResponseModelNameExp}}, error){{else}}error{{end}} {
 		return dal.{{.DbTableUpperCamel}}ExtDao.DeleteById(ctx, tc, req.Id)
