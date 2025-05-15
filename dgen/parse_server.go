@@ -15,7 +15,11 @@ import (
 )
 
 var (
-	ForceOverwriteHandler = true // 是否强制覆盖处理器
+	ForceOverwriteHandler   = true  // 是否强制覆盖处理器
+	ForceOverwriteService   = false // 是否强制覆盖服务
+	ForceOverwriteDal       = false // 是否强制覆盖数据访问
+	ForceOverwriteEnum      = false // 是否强制覆盖枚举
+	ForceOverwriteConverter = false // 是否强制覆盖转换器
 
 	EnableParseConverter = true // 是否启用生成转换器
 )
@@ -99,7 +103,7 @@ func (g *serverParser) ParseDal(entireModel *EntireModel) error {
 		}
 
 		dalExt := filepath.Join(dalDir, meta.GoTable+"-ext.go")
-		if utils.ExistsFile(dalExt) {
+		if !ForceOverwriteDal && utils.ExistsFile(dalExt) {
 			continue
 		}
 
@@ -122,7 +126,7 @@ func (g *serverParser) ParseEnum(entireModel *EntireModel) error {
 	_ = os.MkdirAll(enumDir, fs.ModeDir|fs.ModePerm)
 
 	enum := filepath.Join(enumDir, entireModel.Export.FilePrefix+"_enum.go")
-	if utils.ExistsFile(enum) {
+	if !ForceOverwriteEnum && utils.ExistsFile(enum) {
 		fileBytes, err := os.ReadFile(enum)
 		if err != nil {
 			return err
@@ -178,7 +182,7 @@ func (g *serverParser) ParseConverter(entireModel *EntireModel) error {
 
 	for _, c := range entireModel.Converters {
 		converter := filepath.Join(converterDir, strcase.ToSnake(c.DbTableUpperCamel)+"_converter.go")
-		if utils.ExistsFile(converter) {
+		if !ForceOverwriteConverter && utils.ExistsFile(converter) {
 			fileBytes, err := os.ReadFile(converter)
 			if err != nil {
 				return err
@@ -249,7 +253,7 @@ func (g *serverParser) ParseService(entireModel *EntireModel) error {
 
 	for _, inter := range entireModel.Interfaces {
 		service := filepath.Join(serviceDir, strcase.ToSnake(inter.Group)+"_service.go")
-		if utils.ExistsFile(service) {
+		if !ForceOverwriteService && utils.ExistsFile(service) {
 			fileBytes, err := os.ReadFile(service)
 			if err != nil {
 				return err
