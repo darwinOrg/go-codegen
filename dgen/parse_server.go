@@ -14,6 +14,12 @@ import (
 	"strings"
 )
 
+var (
+	ForceOverwriteHandler = true // 是否强制覆盖处理器
+
+	EnableParseConverter = true // 是否启用生成转换器
+)
+
 var ServerParser = &serverParser{}
 
 type serverParser struct {
@@ -54,9 +60,11 @@ func (p *serverParser) Parse(entireModel *EntireModel) error {
 		return err
 	}
 
-	err = p.ParseConverter(entireModel)
-	if err != nil {
-		return err
+	if EnableParseConverter {
+		err = p.ParseConverter(entireModel)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -285,7 +293,7 @@ func (g *serverParser) ParseHandler(entireModel *EntireModel) error {
 
 	for _, inter := range entireModel.Interfaces {
 		handler := filepath.Join(handlerDir, strcase.ToSnake(inter.Group)+"_handler.go")
-		if utils.ExistsFile(handler) {
+		if !ForceOverwriteHandler && utils.ExistsFile(handler) {
 			fileBytes, err := os.ReadFile(handler)
 			if err != nil {
 				return err
