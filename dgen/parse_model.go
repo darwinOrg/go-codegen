@@ -36,6 +36,10 @@ type EntireModel struct {
 	HasId          bool   `json:"hasId,omitempty"`
 	HasModel       bool   `json:"hasModel,omitempty"`
 	UpperCamelName string `json:"upperCamelName,omitempty"`
+
+	ForceOverwriteDal       bool `json:"forceOverwriteDal" remark:"是否强制覆盖数据访问"`
+	ForceOverwriteEnum      bool `json:"forceOverwriteEnum" remark:"是否强制覆盖枚举"`
+	ForceOverwriteConverter bool `json:"forceOverwriteConverter" remark:"是否强制覆盖转换器"`
 }
 
 type DbModel struct {
@@ -151,6 +155,8 @@ type InterfaceModel struct {
 	AllowProductsExp        string             `json:"allowProductsExp,omitempty"`
 	LogLevelExp             string             `json:"logLevelExp,omitempty"`
 	MethodNameExp           string             `json:"methodNameExp,omitempty"`
+
+	DisableParseConverter bool `json:"disableParseConverter" remark:"是否禁用转换器"`
 }
 
 type InterfaceModelData struct {
@@ -167,6 +173,12 @@ type InterfaceModelData struct {
 	HasId           bool   `json:"hasId,omitempty"`
 	HasModel        bool   `json:"hasModel,omitempty"`
 	HasDbTable      bool   `json:"hasDbTable,omitempty"`
+
+	ForceOverwriteHandler   bool `json:"forceOverwriteHandler" remark:"是否强制覆盖处理器"`
+	ForceOverwriteService   bool `json:"forceOverwriteService" remark:"是否强制覆盖服务"`
+	ForceOverwriteDal       bool `json:"forceOverwriteDal" remark:"是否强制覆盖数据访问"`
+	ForceOverwriteEnum      bool `json:"forceOverwriteEnum" remark:"是否强制覆盖枚举"`
+	ForceOverwriteConverter bool `json:"forceOverwriteConverter" remark:"是否强制覆盖转换器"`
 }
 
 type ExportConfigData struct {
@@ -495,6 +507,13 @@ func (m *EntireModel) FillConverters() {
 	interfaceModels := dgcoll.FlatMapToList(m.Interfaces, func(inter *InterfaceModelData) []*InterfaceModel {
 		return inter.Models
 	})
+	interfaceModels = dgcoll.FilterList(interfaceModels, func(interfaceModel *InterfaceModel) bool {
+		return !interfaceModel.DisableParseConverter
+	})
+	if len(interfaceModels) == 0 {
+		return
+	}
+
 	dbTableNames := dgcoll.FilterAndMapToSet(interfaceModels, func(interfaceModel *InterfaceModel) bool {
 		return interfaceModel.DbModelName != ""
 	}, func(interfaceModel *InterfaceModel) string {
@@ -503,6 +522,7 @@ func (m *EntireModel) FillConverters() {
 	if len(dbTableNames) == 0 {
 		return
 	}
+
 	dbTableName2RequestsMap := dgcoll.Extract2KeySetMap(interfaceModels, func(interfaceModel *InterfaceModel) string {
 		return interfaceModel.DbModelName
 	}, func(interfaceModel *InterfaceModel) *RequestModelData {
@@ -517,6 +537,7 @@ func (m *EntireModel) FillConverters() {
 
 		return nil
 	})
+
 	dbTableName2ResponsesMap := dgcoll.Extract2KeySetMap(interfaceModels, func(interfaceModel *InterfaceModel) string {
 		return interfaceModel.DbModelName
 	}, func(interfaceModel *InterfaceModel) *ResponseModelData {

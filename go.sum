@@ -26,8 +26,8 @@ github.com/darwinOrg/go-common v0.1.87 h1:ctDCQX0ZWOI8WByPt4VGGKQKqLOjnd1iM6jWig
 github.com/darwinOrg/go-common v0.1.87/go.mod h1:pItL/4ZV0bU64N2qD9ACpvDlYjeomAbheIzPXKqbb88=
 github.com/darwinOrg/go-config v0.0.14 h1:8qCOBZqAfVgR55NcHn7oV8ZmpBD83rw8OmoHfhpVjKE=
 github.com/darwinOrg/go-config v0.0.14/go.mod h1:8dIWdcsNkhRwgC75W3D/MrsVDvdPv2edCu4Pxh2Cs94=
-github.com/darwinOrg/go-httpclient v0.1.25 h1:7FQ0ohAcRNN6NZqSJi2xPam6HjnMT+DarnuD51SleDE=
-github.com/darwinOrg/go-httpclient v0.1.25/go.mod h1:kW3XcUg/AorM9IBmpvvpy4eP1tVGyFOlSDEhNi3IPf8=
+github.com/darwinOrg/go-httpclient v0.1.27 h1:vDJvDd5IABvFPe+Ie603vJRlAt23tZ2JahaHXidM7NY=
+github.com/darwinOrg/go-httpclient v0.1.27/go.mod h1:LskaEeEEryvlGwBqj8HxpnjjLRIzw4BmiwYxJEEhsXk=
 github.com/darwinOrg/go-logger v0.0.12 h1:zaH74lUadHmzo/+90/DRASo4XTmdeIgnwYR54iJMGzM=
 github.com/darwinOrg/go-logger v0.0.12/go.mod h1:cP/99H+q2U9jXhpFIWlvNpHvBk0CPQmsDlkvaE7yUy8=
 github.com/darwinOrg/go-monitor v0.0.9 h1:UKG3ci4MoWu4P/56XmXuUYbFyu9++mGzczNFOSZy5C4=
@@ -36,8 +36,8 @@ github.com/darwinOrg/go-swagger v0.0.24 h1:kWV0Hhbf6odkheNqLGqbKygy0jPRF/b8ovF2P
 github.com/darwinOrg/go-swagger v0.0.24/go.mod h1:V2EBJTq/SAntlflE1AMADHIIDJ9cnGTc/St0Gx3UYi8=
 github.com/darwinOrg/go-validator-ext v0.0.10 h1:kQfxkIj7r33MNmZnYE6e7rfM7JRjluywmCJ/OFi/VsI=
 github.com/darwinOrg/go-validator-ext v0.0.10/go.mod h1:sccDH4swCAK9igdcwONPrgd8v78i4honqYTFeZ/tfCk=
-github.com/darwinOrg/go-web v0.1.58 h1:XmIFWx25SWHDoGz7gIvHj7DYtbtKYR3sfxrgxt6ZSVE=
-github.com/darwinOrg/go-web v0.1.58/go.mod h1:fiAFcc31hXc3AEY3UsdIckrPECV47u948T6JxZU0u34=
+github.com/darwinOrg/go-web v0.1.70 h1:eoNnpa8SQKGPRRbwYHqbaeo9xswb9XTghtRRPW8EgDc=
+github.com/darwinOrg/go-web v0.1.70/go.mod h1:W5VgO7glE4NDTEbJ5eHXfSIJ3MsXxgeYIixnGkvDqok=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
@@ -138,8 +138,8 @@ github.com/prometheus/client_golang v1.22.0 h1:rb93p9lokFEsctTys46VnV1kLCDpVZ0a/
 github.com/prometheus/client_golang v1.22.0/go.mod h1:R7ljNsLXhuQXYZYtw6GAE9AZg8Y7vEW5scdCXrWRXC0=
 github.com/prometheus/client_model v0.6.2 h1:oBsgwpGs7iVziMvrGhE53c/GrLUsZdHnqNwqPLxwZyk=
 github.com/prometheus/client_model v0.6.2/go.mod h1:y3m2F6Gdpfy6Ut/GBsUqTWZqCUvMVzSfMLjcu6wAwpE=
-github.com/prometheus/common v0.63.0 h1:YR/EIY1o3mEFP/kZCD7iDMnLPlGyuU2Gb3HIcXnA98k=
-github.com/prometheus/common v0.63.0/go.mod h1:VVFF/fBIoToEnWRVkYoXEkq3R3paCoxG9PXP74SnV18=
+github.com/prometheus/common v0.64.0 h1:pdZeA+g617P7oGv1CzdTzyeShxAGrTBsolKNOLQPGO4=
+github.com/prometheus/common v0.64.0/go.mod h1:0gZns+BLRQ3V6NdaerOhMbwwRbNh9hkGINtQAsP5GS8=
 github.com/prometheus/procfs v0.16.1 h1:hZ15bTNuirocR6u0JZ6BAHHmwS1p8B4P6MRqxtzMyRg=
 github.com/prometheus/procfs v0.16.1/go.mod h1:teAbpZRB1iIAJYREa1LsoWUXykVXA1KlTmWl8x/U+Is=
 github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec h1:W09IVJc94icq4NjY3clb7Lk8O1qJ8BdBEF8z0ibU0rE=

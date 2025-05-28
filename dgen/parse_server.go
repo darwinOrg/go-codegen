@@ -14,16 +14,6 @@ import (
 	"strings"
 )
 
-var (
-	ForceOverwriteHandler   = true  // 是否强制覆盖处理器
-	ForceOverwriteService   = false // 是否强制覆盖服务
-	ForceOverwriteDal       = false // 是否强制覆盖数据访问
-	ForceOverwriteEnum      = false // 是否强制覆盖枚举
-	ForceOverwriteConverter = false // 是否强制覆盖转换器
-
-	EnableParseConverter = true // 是否启用生成转换器
-)
-
 var ServerParser = &serverParser{}
 
 type serverParser struct {
@@ -64,17 +54,15 @@ func (p *serverParser) Parse(entireModel *EntireModel) error {
 		return err
 	}
 
-	if EnableParseConverter {
-		err = p.ParseConverter(entireModel)
-		if err != nil {
-			return err
-		}
+	err = p.ParseConverter(entireModel)
+	if err != nil {
+		return err
 	}
 
 	return nil
 }
 
-func (g *serverParser) ParseDal(entireModel *EntireModel) error {
+func (p *serverParser) ParseDal(entireModel *EntireModel) error {
 	if len(entireModel.Dbs) == 0 {
 		return nil
 	}
@@ -103,7 +91,7 @@ func (g *serverParser) ParseDal(entireModel *EntireModel) error {
 		}
 
 		dalExt := filepath.Join(dalDir, meta.GoTable+"-ext.go")
-		if !ForceOverwriteDal && utils.ExistsFile(dalExt) {
+		if !entireModel.ForceOverwriteDal && utils.ExistsFile(dalExt) {
 			continue
 		}
 
@@ -117,7 +105,7 @@ func (g *serverParser) ParseDal(entireModel *EntireModel) error {
 	return nil
 }
 
-func (g *serverParser) ParseEnum(entireModel *EntireModel) error {
+func (p *serverParser) ParseEnum(entireModel *EntireModel) error {
 	if len(entireModel.Enums) == 0 {
 		return nil
 	}
@@ -126,7 +114,7 @@ func (g *serverParser) ParseEnum(entireModel *EntireModel) error {
 	_ = os.MkdirAll(enumDir, fs.ModeDir|fs.ModePerm)
 
 	enum := filepath.Join(enumDir, entireModel.Export.FilePrefix+"_enum.go")
-	if !ForceOverwriteEnum && utils.ExistsFile(enum) {
+	if !entireModel.ForceOverwriteEnum && utils.ExistsFile(enum) {
 		fileBytes, err := os.ReadFile(enum)
 		if err != nil {
 			return err
@@ -155,7 +143,7 @@ func (g *serverParser) ParseEnum(entireModel *EntireModel) error {
 	return nil
 }
 
-func (g *serverParser) ParseModel(entireModel *EntireModel) error {
+func (p *serverParser) ParseModel(entireModel *EntireModel) error {
 	if len(entireModel.Requests) == 0 && len(entireModel.Responses) == 0 {
 		return nil
 	}
@@ -172,7 +160,7 @@ func (g *serverParser) ParseModel(entireModel *EntireModel) error {
 	return nil
 }
 
-func (g *serverParser) ParseConverter(entireModel *EntireModel) error {
+func (p *serverParser) ParseConverter(entireModel *EntireModel) error {
 	if len(entireModel.Converters) == 0 {
 		return nil
 	}
@@ -182,7 +170,7 @@ func (g *serverParser) ParseConverter(entireModel *EntireModel) error {
 
 	for _, c := range entireModel.Converters {
 		converter := filepath.Join(converterDir, strcase.ToSnake(c.DbTableUpperCamel)+"_converter.go")
-		if !ForceOverwriteConverter && utils.ExistsFile(converter) {
+		if !entireModel.ForceOverwriteConverter && utils.ExistsFile(converter) {
 			fileBytes, err := os.ReadFile(converter)
 			if err != nil {
 				return err
@@ -243,7 +231,7 @@ func (g *serverParser) ParseConverter(entireModel *EntireModel) error {
 	return nil
 }
 
-func (g *serverParser) ParseService(entireModel *EntireModel) error {
+func (p *serverParser) ParseService(entireModel *EntireModel) error {
 	if len(entireModel.Interfaces) == 0 {
 		return nil
 	}
@@ -253,7 +241,7 @@ func (g *serverParser) ParseService(entireModel *EntireModel) error {
 
 	for _, inter := range entireModel.Interfaces {
 		service := filepath.Join(serviceDir, strcase.ToSnake(inter.Group)+"_service.go")
-		if !ForceOverwriteService && utils.ExistsFile(service) {
+		if !inter.ForceOverwriteService && utils.ExistsFile(service) {
 			fileBytes, err := os.ReadFile(service)
 			if err != nil {
 				return err
@@ -287,7 +275,7 @@ func (g *serverParser) ParseService(entireModel *EntireModel) error {
 	return nil
 }
 
-func (g *serverParser) ParseHandler(entireModel *EntireModel) error {
+func (p *serverParser) ParseHandler(entireModel *EntireModel) error {
 	if len(entireModel.Interfaces) == 0 {
 		return nil
 	}
@@ -297,7 +285,7 @@ func (g *serverParser) ParseHandler(entireModel *EntireModel) error {
 
 	for _, inter := range entireModel.Interfaces {
 		handler := filepath.Join(handlerDir, strcase.ToSnake(inter.Group)+"_handler.go")
-		if !ForceOverwriteHandler && utils.ExistsFile(handler) {
+		if !inter.ForceOverwriteHandler && utils.ExistsFile(handler) {
 			fileBytes, err := os.ReadFile(handler)
 			if err != nil {
 				return err
@@ -331,7 +319,7 @@ func (g *serverParser) ParseHandler(entireModel *EntireModel) error {
 	return nil
 }
 
-func (g *serverParser) ParseRouter(entireModel *EntireModel) error {
+func (p *serverParser) ParseRouter(entireModel *EntireModel) error {
 	if len(entireModel.Interfaces) == 0 {
 		return nil
 	}
