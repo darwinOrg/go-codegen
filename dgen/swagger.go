@@ -71,9 +71,9 @@ func BuildSwaggerProps(entireModel *EntireModel) spec.SwaggerProps {
 			} else if im.ResponseModelObject != nil {
 				ra.ResponseObject = result.Success(im.ResponseModelObject)
 			} else if im.ResponseModelName == RequestModelId {
-				ra.ResponseObject = result.Success(&model.IdReq{})
+				ra.ResponseObject = result.Success[*model.IdReq](&model.IdReq{})
 			} else if im.ResponseModelName == RequestModelIds {
-				ra.ResponseObject = result.Success(&model.IdsReq{})
+				ra.ResponseObject = result.Success[*model.IdsReq](&model.IdsReq{})
 			} else {
 				ra.ResponseObject = result.SimpleSuccess()
 			}
