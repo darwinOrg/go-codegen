@@ -29,6 +29,8 @@ const (
 const (
 	RequestModelId  = "Id"
 	RequestModelIds = "Ids"
+
+	ResponseModelId = "Id"
 )
 
 var enumRegexp = regexp.MustCompile(`\(([^)]+)\)`)

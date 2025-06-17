@@ -470,6 +470,8 @@ func (m *EntireModel) FillInterfaces() {
 							model.ResponseModelNameExp = "*page.PageList[model." + model.ResponseModelName + "]"
 						} else if model.InterfaceType == InterfaceTypeList {
 							model.ResponseModelNameExp = "[]*model." + model.ResponseModelName
+						} else if model.ResponseModelName == ResponseModelId {
+							model.ResponseModelNameExp = "int64"
 						} else {
 							model.ResponseModelNameExp = "*model." + model.ResponseModelName
 						}
