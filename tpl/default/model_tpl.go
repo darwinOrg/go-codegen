@@ -31,7 +31,7 @@ type Query{{.GoTable}}Req struct {
 	*page.PageParam
 }
 
-type {{.GoTable}}ListResp struct {
+type {{.GoTable}}ListVo struct {
     {{range .QueryColumns}}{{.GoName}} {{.DbType}} ###json:"{{.LowerCamelName}}"
 	{{- if ne .Comment ""}} remark:"{{.Comment}}"{{end}}###
 	{{end}}
