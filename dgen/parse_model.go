@@ -461,21 +461,23 @@ func (m *EntireModel) FillInterfaces() {
 			}
 
 			if model.ResponseModelName != "" {
-				model.ResponseModelNameExp = model.ResponseModelName
-				for _, response := range m.Responses {
-					if model.ResponseModelName == response.Name {
-						model.ResponseModelData = response
-						model.ResponseModelHasPointer = true
-						if model.InterfaceType == InterfaceTypePage {
-							model.ResponseModelNameExp = "*page.PageList[model." + model.ResponseModelName + "]"
-						} else if model.InterfaceType == InterfaceTypeList {
-							model.ResponseModelNameExp = "[]*model." + model.ResponseModelName
-						} else if model.ResponseModelName == ResponseModelId {
-							model.ResponseModelNameExp = "int64"
-						} else {
-							model.ResponseModelNameExp = "*model." + model.ResponseModelName
+				if model.ResponseModelName == ResponseModelId {
+					model.ResponseModelNameExp = "int64"
+				} else {
+					model.ResponseModelNameExp = model.ResponseModelName
+					for _, response := range m.Responses {
+						if model.ResponseModelName == response.Name {
+							model.ResponseModelData = response
+							model.ResponseModelHasPointer = true
+							if model.InterfaceType == InterfaceTypePage {
+								model.ResponseModelNameExp = "*page.PageList[model." + model.ResponseModelName + "]"
+							} else if model.InterfaceType == InterfaceTypeList {
+								model.ResponseModelNameExp = "[]*model." + model.ResponseModelName
+							} else {
+								model.ResponseModelNameExp = "*model." + model.ResponseModelName
+							}
+							break
 						}
-						break
 					}
 				}
 			} else {
