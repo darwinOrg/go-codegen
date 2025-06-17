@@ -2,6 +2,7 @@ package dgen
 
 import (
 	dgcoll "github.com/darwinOrg/go-common/collection"
+	"github.com/darwinOrg/go-common/model"
 	"github.com/darwinOrg/go-common/result"
 	"github.com/darwinOrg/go-common/utils"
 	dgcfg "github.com/darwinOrg/go-config"
@@ -51,15 +52,28 @@ func BuildSwaggerProps(entireModel *EntireModel) spec.SwaggerProps {
 	req.RequestApis = dgcoll.FlatMapToList(entireModel.Interfaces, func(imd *InterfaceModelData) []*wrapper.RequestApi {
 		return dgcoll.MapToList(imd.Models, func(im *InterfaceModel) *wrapper.RequestApi {
 			ra := &wrapper.RequestApi{
-				Method:        im.MethodType,
-				BasePath:      imd.RoutePrefix,
-				RelativePath:  im.RelativePath,
-				Remark:        im.Remark,
-				RequestObject: im.RequestModelObject,
+				Method:       im.MethodType,
+				BasePath:     imd.RoutePrefix,
+				RelativePath: im.RelativePath,
+				Remark:       im.Remark,
+			}
+
+			if im.RequestModelObject != nil {
+				ra.RequestObject = im.RequestModelObject
+			} else if im.RequestModelName == RequestModelId {
+				ra.RequestObject = &model.IdReq{}
+			} else if im.RequestModelName == RequestModelIds {
+				ra.RequestObject = &model.IdsReq{}
 			}
 
 			if im.ResponseApiObject != nil {
 				ra.ResponseObject = im.ResponseApiObject
+			} else if im.ResponseModelObject != nil {
+				ra.ResponseObject = result.Success(im.ResponseModelObject)
+			} else if im.ResponseModelName == RequestModelId {
+				ra.ResponseObject = result.Success(&model.IdReq{})
+			} else if im.ResponseModelName == RequestModelIds {
+				ra.ResponseObject = result.Success(&model.IdsReq{})
 			} else {
 				ra.ResponseObject = result.SimpleSuccess()
 			}
