@@ -69,7 +69,15 @@ func BuildSwaggerProps(entireModel *EntireModel) spec.SwaggerProps {
 			if im.ResponseApiObject != nil {
 				ra.ResponseObject = im.ResponseApiObject
 			} else if im.ResponseModelObject != nil {
-				ra.ResponseObject = result.Success(im.ResponseModelObject)
+				if im.InterfaceType == InterfaceTypeList {
+					ra.ResponseObject = result.Success([]any{im.ResponseModelObject})
+				} else if im.InterfaceType == InterfaceTypePage {
+					ra.ResponseObject = result.Success(&PageList[any, any]{
+						List: []any{im.ResponseModelObject},
+					})
+				} else {
+					ra.ResponseObject = result.Success(im.ResponseModelObject)
+				}
 			} else if im.ResponseModelName == RequestModelId {
 				ra.ResponseObject = result.Success[*model.IdReq](&model.IdReq{})
 			} else if im.ResponseModelName == RequestModelIds {
