@@ -399,7 +399,11 @@ func (m *EntireModel) FillInterfaces() {
 			model.RelativePath = strings.TrimPrefix(model.RelativePath, "/")
 
 			if model.MethodType == "" {
-				model.MethodType = MethodTypePost
+				if model.RequestModelName == "" && model.RequestModelObject == nil {
+					model.MethodType = MethodTypeGet
+				} else {
+					model.MethodType = MethodTypePost
+				}
 			}
 
 			if model.InterfaceType == InterfaceTypePage {
