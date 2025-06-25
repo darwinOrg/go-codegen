@@ -38,10 +38,9 @@ func (d *{{.LowerCamelName}}ExtDao) GetById(ctx *dgctx.DgContext, tc *daog.Trans
 }
 
 func (d *{{.LowerCamelName}}ExtDao) MustGetById(ctx *dgctx.DgContext, tc *daog.TransContext, id int64) (*{{.GoTable}}, error) {
-	{{.LowerCamelName}}, err := {{.GoTable}}Dao.GetById(tc, id)
+	{{.LowerCamelName}}, err := d.GetById(ctx, tc, id)
 	if err != nil {
-		dglogger.Errorf(ctx, "{{.GoTable}}Dao.GetById error: %v", err)
-		return nil, dgerr.SYSTEM_ERROR
+		return nil, err
 	}
 	if {{.LowerCamelName}} == nil {
 		return nil, dgerr.RECORD_NOT_EXISTS
