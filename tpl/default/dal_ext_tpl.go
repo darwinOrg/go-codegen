@@ -21,8 +21,7 @@ type {{.LowerCamelName}}ExtDao struct {
 }
 
 type Query{{.GoTable}}Param struct {
-    {{range .QueryColumns}}{{.GoName}} {{.ModelType}} ###json:"{{.LowerCamelName}}"
-	{{- if ne .Comment ""}} remark:"{{.Comment}}"{{end}}###
+    {{range .QueryColumns}}{{.GoName}} {{.ModelType}} ###remark:"{{.Comment}}"###
 	{{end}}
 	*page.PageParam
 }
