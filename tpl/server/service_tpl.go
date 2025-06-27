@@ -69,8 +69,8 @@ func (s *{{$.GroupLowerCamel}}Service) {{.MethodNameExp}}(ctx *dgctx.DgContext, 
 			return nil, err
 		}
 
-		listModels := dgcoll.MapToList(pl.List, converter.{{.DbTableUpperCamel}}Converter.Entity2{{.ResponseModelName}})
-		return page.ListOf(pl.PageNo, pl.PageSize, pl.TotalCount, listModels), nil
+		listVos := dgcoll.MapToList(pl.List, converter.{{.DbTableUpperCamel}}Converter.Entity2{{.ResponseModelName}})
+		return page.ListOf(pl.PageNo, pl.PageSize, pl.TotalCount, listVos), nil
 	})
 	{{- else if eq .InterfaceType "列表"}}
 	return daogext.ReadonlyWithResult(ctx, func(tc *daog.TransContext) {{if ne .ResponseModelName ""}}({{.ResponseModelNameExp}}, error){{else}}error{{end}} {
@@ -80,8 +80,8 @@ func (s *{{$.GroupLowerCamel}}Service) {{.MethodNameExp}}(ctx *dgctx.DgContext, 
 			return nil, err
 		}
 
-		listModels := dgcoll.MapToList(list, converter.{{.DbTableUpperCamel}}Converter.Entity2{{.ResponseModelName}})
-		return listModels, nil
+		listVos := dgcoll.MapToList(list, converter.{{.DbTableUpperCamel}}Converter.Entity2{{.ResponseModelName}})
+		return listVos, nil
 	})
 	{{- else if eq .InterfaceType "详情"}}
 	return daogext.ReadonlyWithResult(ctx, func(tc *daog.TransContext) {{if ne .ResponseModelName ""}}({{.ResponseModelNameExp}}, error){{else}}error{{end}} {
@@ -90,8 +90,8 @@ func (s *{{$.GroupLowerCamel}}Service) {{.MethodNameExp}}(ctx *dgctx.DgContext, 
 			return nil, err
 		}
 
-		detailModel := converter.{{.DbTableUpperCamel}}Converter.Entity2{{.ResponseModelName}}({{.DbTableLowerCamel}})
-		return detailModel, nil
+		detailResp := converter.{{.DbTableUpperCamel}}Converter.Entity2{{.ResponseModelName}}({{.DbTableLowerCamel}})
+		return detailResp, nil
 	})
 	{{- else if eq .InterfaceType "只读"}}
 	return daogext.Readonly{{if ne .ResponseModelName ""}}WithResult{{end}}(ctx, func(tc *daog.TransContext) {{if ne .ResponseModelName ""}}({{.ResponseModelNameExp}}, error){{else}}error{{end}} {

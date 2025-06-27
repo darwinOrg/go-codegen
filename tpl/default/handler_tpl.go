@@ -41,20 +41,20 @@ func (h *{{.LowerCamelName}}Handler) Delete(_ *gin.Context, ctx *dgctx.DgContext
 	return result.SimpleSuccess()
 }
 
-func (h *{{.LowerCamelName}}Handler) Page(_ *gin.Context, ctx *dgctx.DgContext, req *model.Query{{.GoTable}}Req) *result.Result[*page.PageList[model.{{.GoTable}}ListResp]] {
+func (h *{{.LowerCamelName}}Handler) Page(_ *gin.Context, ctx *dgctx.DgContext, req *model.Query{{.GoTable}}Req) *result.Result[*page.PageList[model.{{.GoTable}}ListVo]] {
 	pageList, err := service.{{.GoTable}}Service.Page(ctx, req)
 	if err != nil {
-		return result.FailByError[*page.PageList[model.{{.GoTable}}ListResp]](err)
+		return result.FailByError[*page.PageList[model.{{.GoTable}}ListVo]](err)
 	}
-	return result.Success[*page.PageList[model.{{.GoTable}}ListResp]](pageList)
+	return result.Success[*page.PageList[model.{{.GoTable}}ListVo]](pageList)
 }
 
-func (h *{{.LowerCamelName}}Handler) List(_ *gin.Context, ctx *dgctx.DgContext, req *model.Query{{.GoTable}}Req) *result.Result[[]*model.{{.GoTable}}ListResp] {
+func (h *{{.LowerCamelName}}Handler) List(_ *gin.Context, ctx *dgctx.DgContext, req *model.Query{{.GoTable}}Req) *result.Result[[]*model.{{.GoTable}}ListVo] {
 	list, err := service.{{.GoTable}}Service.List(ctx, req)
 	if err != nil {
-		return result.FailByError[[]*model.{{.GoTable}}ListResp](err)
+		return result.FailByError[[]*model.{{.GoTable}}ListVo](err)
 	}
-	return result.Success[[]*model.{{.GoTable}}ListResp](list)
+	return result.Success[[]*model.{{.GoTable}}ListVo](list)
 }
 
 func (h *{{.LowerCamelName}}Handler) Detail(_ *gin.Context, ctx *dgctx.DgContext, req *cm.IdReq) *result.Result[*model.{{.GoTable}}DetailResp] {

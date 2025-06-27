@@ -111,7 +111,7 @@ func main() {
 		})
 
 		entireModel.Responses = append(entireModel.Responses, &dgen.ResponseModelData{
-			Name: meta.GoTable + "ListResp",
+			Name: meta.GoTable + "ListVo",
 			Models: dgcoll.FlatMapToList(meta.QueryColumns, func(column *dgen.Column) []*dgen.ResponseModel {
 				requestModel := &dgen.ResponseModel{
 					FieldName: column.GoName,
@@ -198,7 +198,7 @@ func main() {
 					MethodName:        "page",
 					DbModelName:       meta.TableName,
 					RequestModelName:  "Query" + meta.GoTable + "Req",
-					ResponseModelName: meta.GoTable + "ListResp",
+					ResponseModelName: meta.GoTable + "ListVo",
 					LogLevel:          dgen.LogLevelParam,
 					Remark:            meta.TableComment + " - " + dgen.InterfaceTypePage,
 				},
@@ -209,7 +209,7 @@ func main() {
 					MethodName:        "list",
 					DbModelName:       meta.TableName,
 					RequestModelName:  "Query" + meta.GoTable + "Req",
-					ResponseModelName: meta.GoTable + "ListResp",
+					ResponseModelName: meta.GoTable + "ListVo",
 					LogLevel:          dgen.LogLevelParam,
 					Remark:            meta.TableComment + " - " + dgen.InterfaceTypeList,
 				},

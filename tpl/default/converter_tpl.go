@@ -13,59 +13,37 @@ var {{.GoTable}}Converter = &{{.LowerCamelName}}Converter{}
 type {{.LowerCamelName}}Converter struct {
 }
 
-func (c *{{.LowerCamelName}}Converter) CreateModel2Entity(req *model.Create{{.GoTable}}Req) *dal.{{.GoTable}} {
-	if req == nil {
-		return nil
-	}
-
-	{{.LowerCamelName}} := &dal.{{.GoTable}}{
+func (c *{{.LowerCamelName}}Converter) CreateReq2Entity(req *model.Create{{.GoTable}}Req) *dal.{{.GoTable}} {
+	return &dal.{{.GoTable}}{
 		{{range .CreateColumns}}{{.GoName}}: req.{{.GoName}},
 		{{end}}
 	}
-
-	return {{.LowerCamelName}}
 }
 
-func (c *{{.LowerCamelName}}Converter) FillEntityWithModifyModel({{.LowerCamelName}} *dal.{{.GoTable}}, req *model.Modify{{.GoTable}}Req) {
-	if {{.LowerCamelName}} == nil {
-		return
-	}
-
+func (c *{{.LowerCamelName}}Converter) FillEntityWithModifyReq({{.LowerCamelName}} *dal.{{.GoTable}}, req *model.Modify{{.GoTable}}Req) {
 	{{range .ModifyColumns}}{{$.LowerCamelName}}.{{.GoName}} = req.{{.GoName}}
 	{{end}}
 }
 
-func (c *{{.LowerCamelName}}Converter) Entity2ListModel({{.LowerCamelName}} *dal.{{.GoTable}}) *model.{{.GoTable}}ListResp {
-	if {{.LowerCamelName}} == nil {
-		return nil
-	}
-
-	listVo := &model.{{.GoTable}}ListResp{
+func (c *{{.LowerCamelName}}Converter) Entity2ListVo({{.LowerCamelName}} *dal.{{.GoTable}}) *model.{{.GoTable}}ListVo {
+	return &model.{{.GoTable}}ListVo{
 		{{range .QueryColumns}}{{.GoName}}: {{$.LowerCamelName}}.{{.GoName}},
 		{{end}}
 		{{range .QueryColumns}}{{if .HasEnum}}{{.GoName}}Name: enum.{{$.GoTable}}{{.GoName}}Map[{{$.LowerCamelName}}.{{.GoName}}],{{end}}
 		{{end}}
 	}
-
-	return listVo
 }
 
-func (c *{{.LowerCamelName}}Converter) Entity2DetailModel({{.LowerCamelName}} *dal.{{.GoTable}}) *model.{{.GoTable}}DetailResp {
-	if {{.LowerCamelName}} == nil {
-		return nil
-	}
-
-	detailVo := &model.{{.GoTable}}DetailResp{
+func (c *{{.LowerCamelName}}Converter) Entity2DetailResp({{.LowerCamelName}} *dal.{{.GoTable}}) *model.{{.GoTable}}DetailResp {
+	return &model.{{.GoTable}}DetailResp{
 		{{range .QueryColumns}}{{.GoName}}: {{$.LowerCamelName}}.{{.GoName}},
 		{{end}}
 		{{range .QueryColumns}}{{if .HasEnum}}{{.GoName}}Name: enum.{{$.GoTable}}{{.GoName}}Map[{{$.LowerCamelName}}.{{.GoName}}],{{end}}
 		{{end}}
 	}
-
-	return detailVo
 }
 
-func (c *{{.LowerCamelName}}Converter) QueryModel2Param(req *model.Query{{.GoTable}}Req) *dal.Query{{.GoTable}}Param {
+func (c *{{.LowerCamelName}}Converter) QueryReq2Param(req *model.Query{{.GoTable}}Req) *dal.Query{{.GoTable}}Param {
 	return &dal.Query{{.GoTable}}Param {
 		{{range .QueryColumns}}{{.GoName}}: req.{{.GoName}},
 		{{end}}

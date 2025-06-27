@@ -36,14 +36,14 @@ func Bind{{.GoTable}}Router(rg *gin.RouterGroup) {
 		BizHandler:   handler.{{.GoTable}}Handler.Delete,
 	})
 
-	wrapper.Post(&wrapper.RequestHolder[model.Query{{.GoTable}}Req, *result.Result[*page.PageList[model.{{.GoTable}}ListResp]]]{
+	wrapper.Post(&wrapper.RequestHolder[model.Query{{.GoTable}}Req, *result.Result[*page.PageList[model.{{.GoTable}}ListVo]]]{
 		Remark:       "{{.TableComment}} - 分页",
 		RouterGroup:  g,
 		RelativePath: "page",
 		BizHandler:   handler.{{.GoTable}}Handler.Page,
 	})
 
-	wrapper.Post(&wrapper.RequestHolder[model.Query{{.GoTable}}Req, *result.Result[[]*model.{{.GoTable}}ListResp]]{
+	wrapper.Post(&wrapper.RequestHolder[model.Query{{.GoTable}}Req, *result.Result[[]*model.{{.GoTable}}ListVo]]{
 		Remark:       "{{.TableComment}} - 列表",
 		RouterGroup:  g,
 		RelativePath: "list",

@@ -152,7 +152,6 @@ type InterfaceModel struct {
 	ResponseModelData       *ResponseModelData `json:"responseModelData,omitempty"`
 	ResponseModelNameExp    string             `json:"responseModelNameExp,omitempty"`
 	ResponseModelHasPointer bool               `json:"responseModelHasPointer,omitempty"`
-	AllowProductsExp        string             `json:"allowProductsExp,omitempty"`
 	LogLevelExp             string             `json:"logLevelExp,omitempty"`
 	MethodNameExp           string             `json:"methodNameExp,omitempty"`
 

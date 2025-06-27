@@ -20,7 +20,7 @@ type {{.LowerCamelName}}Service struct {
 }
 
 func (s *{{.LowerCamelName}}Service) Create(ctx *dgctx.DgContext, req *model.Create{{.GoTable}}Req) (int64, error) {
-	{{.LowerCamelName}} := converter.{{.GoTable}}Converter.CreateModel2Entity(req)
+	{{.LowerCamelName}} := converter.{{.GoTable}}Converter.CreateReq2Entity(req)
 
 	return daogext.WriteWithResult(ctx, func(tc *daog.TransContext) (int64, error) {
 		return dal.{{.GoTable}}ExtDao.Create(ctx, tc, {{.LowerCamelName}})
@@ -34,7 +34,7 @@ func (s *{{.LowerCamelName}}Service) Modify(ctx *dgctx.DgContext, req *model.Mod
 			return err
 		}
 
-		converter.{{.GoTable}}Converter.FillEntityWithModifyModel({{.LowerCamelName}}, req)
+		converter.{{.GoTable}}Converter.FillEntityWithModifyReq({{.LowerCamelName}}, req)
 
 		return dal.{{.GoTable}}ExtDao.Modify(ctx, tc, {{.LowerCamelName}})
 	})
@@ -46,31 +46,31 @@ func (s *{{.LowerCamelName}}Service) Delete(ctx *dgctx.DgContext, req *cm.IdReq)
 	})
 }
 
-func (s *{{.LowerCamelName}}Service) Page(ctx *dgctx.DgContext, req *model.Query{{.GoTable}}Req) (*page.PageList[model.{{.GoTable}}ListResp], error) {
-	return daogext.ReadonlyWithResult(ctx, func(tc *daog.TransContext) (*page.PageList[model.{{.GoTable}}ListResp], error) {
-		queryParam := converter.{{.GoTable}}Converter.QueryModel2Param(req)
+func (s *{{.LowerCamelName}}Service) Page(ctx *dgctx.DgContext, req *model.Query{{.GoTable}}Req) (*page.PageList[model.{{.GoTable}}ListVo], error) {
+	return daogext.ReadonlyWithResult(ctx, func(tc *daog.TransContext) (*page.PageList[model.{{.GoTable}}ListVo], error) {
+		queryParam := converter.{{.GoTable}}Converter.QueryReq2Param(req)
 		pl, err := dal.{{.GoTable}}ExtDao.Page(ctx, tc, queryParam)
 		if err != nil {
 			return nil, err
 		}
 
-		listModels := dgcoll.MapToList(pl.List, converter.{{.GoTable}}Converter.Entity2ListModel)
+		listVos := dgcoll.MapToList(pl.List, converter.{{.GoTable}}Converter.Entity2ListVo)
 
-		return page.ListOf[model.{{.GoTable}}ListResp](pl.PageNo, pl.PageSize, pl.TotalCount, listModels), nil
+		return page.ListOf[model.{{.GoTable}}ListVo](pl.PageNo, pl.PageSize, pl.TotalCount, listVos), nil
 	})
 }
 
-func (s *{{.LowerCamelName}}Service) List(ctx *dgctx.DgContext, req *model.Query{{.GoTable}}Req) ([]*model.{{.GoTable}}ListResp, error) {
-	return daogext.ReadonlyWithResult(ctx, func(tc *daog.TransContext) ([]*model.{{.GoTable}}ListResp, error) {
-		queryParam := converter.{{.GoTable}}Converter.QueryModel2Param(req)
+func (s *{{.LowerCamelName}}Service) List(ctx *dgctx.DgContext, req *model.Query{{.GoTable}}Req) ([]*model.{{.GoTable}}ListVo, error) {
+	return daogext.ReadonlyWithResult(ctx, func(tc *daog.TransContext) ([]*model.{{.GoTable}}ListVo, error) {
+		queryParam := converter.{{.GoTable}}Converter.QueryReq2Param(req)
 		{{.LowerCamelName}}List, err := dal.{{.GoTable}}ExtDao.List(ctx, tc, queryParam)
 		if err != nil {
 			return nil, err
 		}
 
-		listModels := dgcoll.MapToList({{.LowerCamelName}}List, converter.{{.GoTable}}Converter.Entity2ListModel)
+		listVos := dgcoll.MapToList({{.LowerCamelName}}List, converter.{{.GoTable}}Converter.Entity2ListVo)
 
-		return listModels, nil
+		return listVos, nil
 	})
 }
 
@@ -81,9 +81,9 @@ func (s *{{.LowerCamelName}}Service) Detail(ctx *dgctx.DgContext, id int64) (*mo
 			return nil, err
 		}
 
-		detailModel := converter.{{.GoTable}}Converter.Entity2DetailModel({{.LowerCamelName}})
+		detailResp := converter.{{.GoTable}}Converter.Entity2DetailResp({{.LowerCamelName}})
 
-		return detailModel, nil
+		return detailResp, nil
 	})
 }
 

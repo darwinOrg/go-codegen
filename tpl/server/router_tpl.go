@@ -19,7 +19,6 @@ func Bind{{.GroupUpperCamel}}Router(rg *gin.RouterGroup) {
 		Remark: "{{.Remark}}", RouterGroup: g, RelativePath: "{{.RelativePath}}",
 		{{if .NonLogin}}NonLogin: true, {{- end -}}
 		{{if .NotLogSQL}}NotLogSQL: true, {{- end -}}
-		{{if ne .AllowProductsExp ""}}AllowProducts: {{.AllowProductsExp}}, {{- end -}}
 		{{if ne .LogLevelExp ""}}LogLevel: {{.LogLevelExp}}, {{- end}}
 		BizHandler: handler.{{$.GroupUpperCamel}}Handler.{{.MethodNameExp}},
 	})
