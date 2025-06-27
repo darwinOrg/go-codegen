@@ -103,11 +103,5 @@
     "decimal.Decimal",
     "bool",
     "any"
-  ],
-  "allowRoles": [
-    "",
-    "超管",
-    "部门管理员",
-    "员工"
   ]
 }
