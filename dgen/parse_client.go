@@ -10,8 +10,7 @@ import (
 
 var ClientParser = &clientParser{}
 
-type clientParser struct {
-}
+type clientParser struct{}
 
 func (p *clientParser) Parse(entireModel *EntireModel) error {
 	err := p.ParseModel(entireModel)

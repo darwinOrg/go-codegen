@@ -11,8 +11,7 @@ import (
 
 var {{.DbTableUpperCamel}}Converter = &{{.DbTableLowerCamel}}Converter{}
 
-type {{.DbTableLowerCamel}}Converter struct {
-}
+type {{.DbTableLowerCamel}}Converter struct{}
 `
 
 var ConverterAppendTpl = `

@@ -17,8 +17,7 @@ import (
 )
 
 var {{.GroupUpperCamel}}Service = &{{.GroupLowerCamel}}Service{}
-type {{.GroupLowerCamel}}Service struct {
-}
+type {{.GroupLowerCamel}}Service struct{}
 `
 
 var ServiceAppendTpl = `

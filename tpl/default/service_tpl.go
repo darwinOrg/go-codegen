@@ -16,8 +16,7 @@ import (
 
 var {{.GoTable}}Service = &{{.LowerCamelName}}Service{}
 
-type {{.LowerCamelName}}Service struct {
-}
+type {{.LowerCamelName}}Service struct{}
 
 func (s *{{.LowerCamelName}}Service) Create(ctx *dgctx.DgContext, req *model.Create{{.GoTable}}Req) (int64, error) {
 	{{.LowerCamelName}} := converter.{{.GoTable}}Converter.CreateReq2Entity(req)

@@ -17,8 +17,7 @@ import (
 
 var {{.GoTable}}ExtDao = &{{.LowerCamelName}}ExtDao{}
 
-type {{.LowerCamelName}}ExtDao struct {
-}
+type {{.LowerCamelName}}ExtDao struct{}
 
 type Query{{.GoTable}}Param struct {
     {{range .QueryColumns}}{{.GoName}} {{.ModelType}} ###remark:"{{.Comment}}"###

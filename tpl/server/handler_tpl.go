@@ -12,8 +12,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 var {{.GroupUpperCamel}}Handler = &{{.GroupLowerCamel}}Handler{}
-type {{.GroupLowerCamel}}Handler struct {
-}
+type {{.GroupLowerCamel}}Handler struct{}
 `
 
 var HandlerAppendTpl = `

@@ -14,8 +14,7 @@ import (
 
 var {{.GoTable}}Handler = &{{.LowerCamelName}}Handler{}
 
-type {{.LowerCamelName}}Handler struct {
-}
+type {{.LowerCamelName}}Handler struct{}
 
 func (h *{{.LowerCamelName}}Handler) Create(_ *gin.Context, ctx *dgctx.DgContext, req *model.Create{{.GoTable}}Req) *result.Result[int64] {
 	{{.LowerCamelName}}Id, err := service.{{.GoTable}}Service.Create(ctx, req)

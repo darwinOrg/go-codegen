@@ -10,8 +10,7 @@ import (
 
 var {{.GoTable}}Converter = &{{.LowerCamelName}}Converter{}
 
-type {{.LowerCamelName}}Converter struct {
-}
+type {{.LowerCamelName}}Converter struct{}
 
 func (c *{{.LowerCamelName}}Converter) CreateReq2Entity(req *model.Create{{.GoTable}}Req) *dal.{{.GoTable}} {
 	return &dal.{{.GoTable}}{

@@ -16,8 +16,7 @@ import (
 
 var ServerParser = &serverParser{}
 
-type serverParser struct {
-}
+type serverParser struct{}
 
 func (p *serverParser) ParseAll(entireModel *EntireModel) error {
 	err := p.Parse(entireModel)
