@@ -432,7 +432,7 @@ func (m *EntireModel) FillInterfaces() {
 				inter.HasId = true
 				model.RequestModelNameExp = "cm.IdsReq"
 			} else if model.RequestModelName != "" {
-				model.RequestModelNameExp = "model." + strcase.ToCamel(model.RequestModelName)
+				model.RequestModelNameExp = "model." + model.RequestModelName
 			} else {
 				model.RequestModelNameExp = "wrapper.EmptyRequest"
 			}
