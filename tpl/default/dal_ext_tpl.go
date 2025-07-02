@@ -47,6 +47,16 @@ func (d *{{.LowerCamelName}}ExtDao) MustGetById(ctx *dgctx.DgContext, tc *daog.T
 	return {{.LowerCamelName}}, nil
 }
 
+func (d *{{.LowerCamelName}}ExtDao) GetByIds(ctx *dgctx.DgContext, tc *daog.TransContext, ids []int64) ([]*{{.GoTable}}, error) {
+	{{.LowerCamelName}}s, err := {{.GoTable}}Dao.GetByIds(tc, ids)
+	if err != nil {
+		dglogger.Errorf(ctx, "{{.GoTable}}Dao.GetByIds error: %v", err)
+		return nil, dgerr.SYSTEM_ERROR
+	}
+
+	return {{.LowerCamelName}}s, nil
+}
+
 func (d *{{.LowerCamelName}}ExtDao) Create(ctx *dgctx.DgContext, tc *daog.TransContext, {{.LowerCamelName}} *{{.GoTable}}) (int64, error) {
 	now := ttypes.NormalDatetime(time.Now())
 	{{$.LowerCamelName}}.CreatedAt = now
