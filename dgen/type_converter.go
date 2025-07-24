@@ -122,5 +122,9 @@ func AdjustDbType(dbType string) string {
 		return "string"
 	}
 
+	if strings.HasPrefix(dbType, "decimal") {
+		return "float64"
+	}
+
 	return dbType
 }

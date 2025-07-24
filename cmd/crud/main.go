@@ -13,7 +13,6 @@ import (
 	_ "github.com/rolandhe/daog"
 	_ "github.com/shopspring/decimal"
 	"os"
-	"strings"
 )
 
 func main() {
@@ -43,7 +42,7 @@ func main() {
 		for column, keyValues := range enumMap {
 			entireModel.Enums = append(entireModel.Enums, &dgen.EnumModelData{
 				Name:     column.GoName,
-				DataType: adjustDbType(column.DbType),
+				DataType: dgen.AdjustDbType(column.DbType),
 				Models: dgcoll.MapToList(keyValues, func(keyValue *model.KeyValuePair[string, string]) *dgen.EnumModel {
 					return &dgen.EnumModel{
 						Code:  column.GoName + keyValue.Key,
@@ -59,7 +58,7 @@ func main() {
 			Models: dgcoll.MapToList(meta.CreateColumns, func(column *dgen.Column) *dgen.RequestModel {
 				md := &dgen.RequestModel{
 					FieldName: column.GoName,
-					DataType:  adjustDbType(column.DbType),
+					DataType:  dgen.AdjustDbType(column.DbType),
 					Nullable:  column.IsNull,
 					Remark:    column.Comment,
 				}
@@ -77,7 +76,7 @@ func main() {
 			Models: dgcoll.MapToList(meta.ModifyColumns, func(column *dgen.Column) *dgen.RequestModel {
 				requestModel := &dgen.RequestModel{
 					FieldName: column.GoName,
-					DataType:  adjustDbType(column.DbType),
+					DataType:  dgen.AdjustDbType(column.DbType),
 					Nullable:  column.IsNull,
 					Remark:    column.Comment,
 				}
@@ -97,7 +96,7 @@ func main() {
 			}, func(column *dgen.Column) *dgen.RequestModel {
 				requestModel := &dgen.RequestModel{
 					FieldName: column.GoName,
-					DataType:  adjustDbType(column.DbType),
+					DataType:  dgen.AdjustDbType(column.DbType),
 					Nullable:  true,
 					Remark:    column.Comment,
 				}
@@ -115,7 +114,7 @@ func main() {
 			Models: dgcoll.FlatMapToList(meta.QueryColumns, func(column *dgen.Column) []*dgen.ResponseModel {
 				requestModel := &dgen.ResponseModel{
 					FieldName: column.GoName,
-					DataType:  adjustDbType(column.DbType),
+					DataType:  dgen.AdjustDbType(column.DbType),
 					Nullable:  column.IsNull,
 					Remark:    column.Comment,
 				}
@@ -139,7 +138,7 @@ func main() {
 			Models: dgcoll.FlatMapToList(meta.QueryColumns, func(column *dgen.Column) []*dgen.ResponseModel {
 				requestModel := &dgen.ResponseModel{
 					FieldName: column.GoName,
-					DataType:  adjustDbType(column.DbType),
+					DataType:  dgen.AdjustDbType(column.DbType),
 					Nullable:  column.IsNull,
 					Remark:    column.Comment,
 				}
@@ -231,12 +230,4 @@ func main() {
 
 	outputJson := utils.MustConvertBeanToJsonString(entireModel)
 	fmt.Print(outputJson)
-}
-
-func adjustDbType(dbType string) string {
-	if strings.HasPrefix(dbType, "ttypes") {
-		return "string"
-	}
-
-	return dbType
 }
