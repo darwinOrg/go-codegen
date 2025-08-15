@@ -3,13 +3,13 @@ module github.com/darwinOrg/go-codegen
 go 1.23.1
 
 require (
-	github.com/darwinOrg/daog-ext v0.0.13
-	github.com/darwinOrg/go-common v0.1.97
+	github.com/darwinOrg/daog-ext v0.0.14
+	github.com/darwinOrg/go-common v0.2.5
 	github.com/darwinOrg/go-config v0.0.14
 	github.com/darwinOrg/go-httpclient v0.1.31
 	github.com/darwinOrg/go-logger v0.0.12
 	github.com/darwinOrg/go-swagger v0.0.26
-	github.com/darwinOrg/go-web v0.1.75
+	github.com/darwinOrg/go-web v0.1.77
 	github.com/gin-gonic/gin v1.10.1
 	github.com/go-openapi/spec v0.21.0
 	github.com/iancoleman/strcase v0.3.0
@@ -28,7 +28,7 @@ require (
 	github.com/cloudwego/base64x v0.1.5 // indirect
 	github.com/cznic/mathutil v0.0.0-20181122101859-297441e03548 // indirect
 	github.com/darwinOrg/go-monitor v0.0.9 // indirect
-	github.com/darwinOrg/go-validator-ext v0.0.10 // indirect
+	github.com/darwinOrg/go-validator-ext v0.0.11 // indirect
 	github.com/fsnotify/fsnotify v1.9.0 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.9 // indirect
 	github.com/gin-contrib/cors v1.7.6 // indirect
@@ -82,7 +82,7 @@ require (
 	golang.org/x/arch v0.18.0 // indirect
 	golang.org/x/crypto v0.39.0 // indirect
 	golang.org/x/net v0.41.0 // indirect
-	golang.org/x/sys v0.33.0 // indirect
+	golang.org/x/sys v0.34.0 // indirect
 	golang.org/x/text v0.26.0 // indirect
 	golang.org/x/tools v0.34.0 // indirect
 	google.golang.org/protobuf v1.36.6 // indirect

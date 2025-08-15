@@ -20,16 +20,10 @@ var HandlerAppendTpl = `
 func (h *{{$.GroupLowerCamel}}Handler) {{.MethodNameExp}}(_ *gin.Context, ctx *dgctx.DgContext, req *{{.RequestModelNameExp}}) *result.Result[{{.ResponseModelNameExp}}] {
 	{{- if ne .ResponseModelName ""}}
 	resp, err := service.{{$.GroupUpperCamel}}Service.{{.MethodNameExp}}(ctx, req)
-	if err != nil {
-		return result.FailByError[{{.ResponseModelNameExp}}](err)
-	}
-	return result.Success[{{.ResponseModelNameExp}}](resp)
+	return result.ToResult[{{.ResponseModelNameExp}}](resp, err)
 	{{- else}}
 	err := service.{{$.GroupUpperCamel}}Service.{{.MethodNameExp}}(ctx, req)
-	if err != nil {
-		return result.SimpleFailByError(err)
-	}
-	return result.SimpleSuccess(){{end}}
+	return result.SimpleToResult(err){{end}}
 }
 {{end}}
 `
