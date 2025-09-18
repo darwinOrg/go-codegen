@@ -30,14 +30,13 @@ type EntireModel struct {
 	Interfaces []*InterfaceModelData `json:"interfaces,omitempty"`
 	Export     *ExportConfigData     `json:"export,omitempty"`
 
-	PackagePrefix   string `json:"packagePrefix,omitempty"`
-	HasDecimal      bool   `json:"hasDecimal,omitempty"`
-	HasPage         bool   `json:"hasPage,omitempty"`
-	HasQuery        bool   `json:"hasQuery,omitempty"`
-	HasId           bool   `json:"hasId,omitempty"`
-	HasModel        bool   `json:"hasModel,omitempty"`
-	HasEmptyRequest bool   `json:"hasEmptyRequest,omitempty"`
-	UpperCamelName  string `json:"upperCamelName,omitempty"`
+	PackagePrefix  string `json:"packagePrefix,omitempty"`
+	HasDecimal     bool   `json:"hasDecimal,omitempty"`
+	HasPage        bool   `json:"hasPage,omitempty"`
+	HasQuery       bool   `json:"hasQuery,omitempty"`
+	HasId          bool   `json:"hasId,omitempty"`
+	HasModel       bool   `json:"hasModel,omitempty"`
+	UpperCamelName string `json:"upperCamelName,omitempty"`
 
 	ForceOverwriteDal       bool `json:"forceOverwriteDal" remark:"是否强制覆盖数据访问"`
 	ForceOverwriteEnum      bool `json:"forceOverwriteEnum" remark:"是否强制覆盖枚举"`
@@ -175,6 +174,7 @@ type InterfaceModelData struct {
 	HasId           bool   `json:"hasId,omitempty"`
 	HasModel        bool   `json:"hasModel,omitempty"`
 	HasDbTable      bool   `json:"hasDbTable,omitempty"`
+	HasEmptyRequest bool   `json:"hasEmptyRequest,omitempty"`
 
 	ForceOverwriteHandler   bool `json:"forceOverwriteHandler" remark:"是否强制覆盖处理器"`
 	ForceOverwriteService   bool `json:"forceOverwriteService" remark:"是否强制覆盖服务"`
@@ -438,7 +438,7 @@ func (m *EntireModel) FillInterfaces() {
 				model.RequestModelNameExp = "model." + model.RequestModelName
 			} else {
 				model.RequestModelNameExp = "wrapper.EmptyRequest"
-				m.HasEmptyRequest = true
+				inter.HasEmptyRequest = true
 			}
 
 			if model.RequestModelName != "" {
