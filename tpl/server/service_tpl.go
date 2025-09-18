@@ -7,7 +7,7 @@ import (
 	{{if .HasModel}}"{{.PackagePrefix}}/model"{{end}}
 	{{if .HasId}}cm "github.com/darwinOrg/go-common/model"{{end}}
 	{{if .HasPage}}"github.com/darwinOrg/go-common/page"{{end}}
-	{{if .HasEmptyRequest}"github.com/darwinOrg/go-web/wrapper"{{end}}
+	{{if .HasEmptyRequest}}"github.com/darwinOrg/go-web/wrapper"{{end}}
 	{{if .HasDbTable}}
 		{{if .HasModel}}"{{.PackagePrefix}}/converter"{{end}}
 		{{if .HasQuery}}dgcoll "github.com/darwinOrg/go-common/collection"{{end}}

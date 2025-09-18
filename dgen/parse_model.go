@@ -2,13 +2,14 @@ package dgen
 
 import (
 	"fmt"
-	dgcoll "github.com/darwinOrg/go-common/collection"
-	"github.com/darwinOrg/go-common/utils"
-	"github.com/iancoleman/strcase"
 	"os"
 	"path/filepath"
 	"reflect"
 	"strings"
+
+	dgcoll "github.com/darwinOrg/go-common/collection"
+	"github.com/darwinOrg/go-common/utils"
+	"github.com/iancoleman/strcase"
 )
 
 var (
@@ -145,6 +146,7 @@ type InterfaceModel struct {
 	LogLevel            string   `json:"logLevel,omitempty"`
 	NotLogSQL           bool     `json:"notLogSQL,omitempty"`
 	Remark              string   `json:"remark,omitempty"`
+	SlowThreshold       string   `json:"slowThreshold,omitempty"`
 
 	DbTableUpperCamel       string             `json:"dbTableUpperCamel,omitempty"`
 	DbTableLowerCamel       string             `json:"dbTableLowerCamel,omitempty"`

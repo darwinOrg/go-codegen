@@ -20,6 +20,7 @@ func Bind{{.GroupUpperCamel}}Router(rg *gin.RouterGroup) {
 		{{if .NonLogin}}NonLogin: true, {{- end -}}
 		{{if .NotLogSQL}}NotLogSQL: true, {{- end -}}
 		{{if ne .LogLevelExp ""}}LogLevel: {{.LogLevelExp}}, {{- end}}
+		{{if ne .SlowThreshold ""}}SlowThreshold: {{.SlowThreshold}}, {{- end}}
 		BizHandler: handler.{{$.GroupUpperCamel}}Handler.{{.MethodNameExp}},
 	})
 	{{end}}
