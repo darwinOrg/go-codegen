@@ -1,6 +1,8 @@
 package dgen
 
 import (
+	"os"
+
 	dgcoll "github.com/darwinOrg/go-common/collection"
 	"github.com/darwinOrg/go-common/model"
 	"github.com/darwinOrg/go-common/result"
@@ -9,7 +11,6 @@ import (
 	"github.com/darwinOrg/go-swagger"
 	"github.com/darwinOrg/go-web/wrapper"
 	"github.com/go-openapi/spec"
-	"os"
 )
 
 type PageList[T any, E any] struct {

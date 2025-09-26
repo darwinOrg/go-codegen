@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"os"
+
 	_ "github.com/darwinOrg/daog-ext"
 	"github.com/darwinOrg/go-codegen/dgen"
 	dgcoll "github.com/darwinOrg/go-common/collection"
@@ -12,7 +14,6 @@ import (
 	_ "github.com/gin-gonic/gin"
 	_ "github.com/rolandhe/daog"
 	_ "github.com/shopspring/decimal"
-	"os"
 )
 
 func main() {

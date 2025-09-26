@@ -1,11 +1,12 @@
 package dgen
 
 import (
-	_default "github.com/darwinOrg/go-codegen/tpl/default"
-	"github.com/iancoleman/strcase"
 	"io/fs"
 	"os"
 	"path/filepath"
+
+	_default "github.com/darwinOrg/go-codegen/tpl/default"
+	"github.com/iancoleman/strcase"
 )
 
 func parseMeta(targetPath string, meta *Meta) error {

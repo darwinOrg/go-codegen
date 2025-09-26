@@ -3,6 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
+	"os"
+
 	_ "github.com/darwinOrg/daog-ext"
 	"github.com/darwinOrg/go-codegen/dgen"
 	_ "github.com/darwinOrg/go-httpclient"
@@ -11,7 +13,6 @@ import (
 	_ "github.com/gin-gonic/gin"
 	_ "github.com/rolandhe/daog"
 	_ "github.com/shopspring/decimal"
-	"os"
 )
 
 var (

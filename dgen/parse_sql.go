@@ -2,15 +2,16 @@ package dgen
 
 import (
 	"fmt"
+	"io/fs"
+	"os"
+	"strings"
+
 	dgcoll "github.com/darwinOrg/go-common/collection"
 	"github.com/darwinOrg/go-common/model"
 	"github.com/darwinOrg/go-common/utils"
 	"github.com/pingcap/tidb/parser"
 	"github.com/pingcap/tidb/parser/ast"
 	_ "github.com/pingcap/tidb/parser/test_driver"
-	"io/fs"
-	"os"
-	"strings"
 )
 
 func ParseSql(sql string, packagePrefix string, outputPath string) error {

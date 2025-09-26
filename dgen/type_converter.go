@@ -1,8 +1,9 @@
 package dgen
 
 import (
-	"github.com/pingcap/tidb/parser/mysql"
 	"strings"
+
+	"github.com/pingcap/tidb/parser/mysql"
 )
 
 func ToDbTypeString(tp byte, flag uint, isNull bool) string {

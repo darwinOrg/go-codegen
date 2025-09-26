@@ -5,6 +5,7 @@ import "strings"
 var DalMainTpl = `package dal
 
 import (
+	daogext "github.com/darwinOrg/daog-ext"
     "github.com/rolandhe/daog"
     {{if .HasType}}"github.com/rolandhe/daog/ttypes"{{end}}
     {{if .HasDecimal}}"github.com/shopspring/decimal"{{end}}
@@ -40,7 +41,7 @@ var  {{.GoTable}}Meta = &daog.TableMeta[{{.GoTable}}]{
 var {{.GoTable}}Dao daog.QuickDao[{{.GoTable}}] = &struct {
 	daog.QuickDao[{{.GoTable}}]
 }{
-	daog.NewBaseQuickDao({{.GoTable}}Meta),
+	daogext.NewBaseQuickDao({{.GoTable}}Meta),
 }
 
 type {{.GoTable}} struct {

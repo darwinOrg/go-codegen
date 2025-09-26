@@ -2,16 +2,17 @@ package dgen
 
 import (
 	"fmt"
-	_default "github.com/darwinOrg/go-codegen/tpl/default"
-	_server "github.com/darwinOrg/go-codegen/tpl/server"
-	dgcoll "github.com/darwinOrg/go-common/collection"
-	"github.com/darwinOrg/go-common/utils"
-	"github.com/iancoleman/strcase"
 	"io/fs"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
+
+	_default "github.com/darwinOrg/go-codegen/tpl/default"
+	_server "github.com/darwinOrg/go-codegen/tpl/server"
+	dgcoll "github.com/darwinOrg/go-common/collection"
+	"github.com/darwinOrg/go-common/utils"
+	"github.com/iancoleman/strcase"
 )
 
 var ServerParser = &serverParser{}

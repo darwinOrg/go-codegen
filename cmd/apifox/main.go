@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
+	"os"
+
 	"github.com/darwinOrg/go-codegen/dgen"
 	dglogger "github.com/darwinOrg/go-logger"
-	"os"
 )
 
 func main() {

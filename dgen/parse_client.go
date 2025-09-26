@@ -1,11 +1,12 @@
 package dgen
 
 import (
-	_client "github.com/darwinOrg/go-codegen/tpl/client"
-	_server "github.com/darwinOrg/go-codegen/tpl/server"
 	"io/fs"
 	"os"
 	"path/filepath"
+
+	_client "github.com/darwinOrg/go-codegen/tpl/client"
+	_server "github.com/darwinOrg/go-codegen/tpl/server"
 )
 
 var ClientParser = &clientParser{}
