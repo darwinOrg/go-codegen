@@ -11,7 +11,6 @@ import (
 	dglogger "github.com/darwinOrg/go-logger"
 	"github.com/rolandhe/daog"
 	{{if .HasType}}"github.com/rolandhe/daog/ttypes"{{end}}
-	{{if .HasDecimal}}"github.com/shopspring/decimal"{{end}}
 	"time"
 )
 
@@ -153,7 +152,7 @@ func (d *{{.LowerCamelName}}ExtDao) buildMatcher(param *Query{{.GoTable}}Param) 
 }
 
 func (d *{{.LowerCamelName}}ExtDao) updateById(ctx *dgctx.DgContext, tc *daog.TransContext, id int64, modifier daog.Modifier) error {
-	modifier.Add(dal.{{.GoTable}}Fields.ModifiedBy, ctx.UserId).Add(dal.{{.GoTable}}Fields.ModifiedAt, time.Now())
+	modifier.Add({{.GoTable}}Fields.ModifiedBy, ctx.UserId).Add({{.GoTable}}Fields.ModifiedAt, time.Now())
 	_, err := {{.GoTable}}Dao.UpdateById(tc, modifier, id)
 	if err != nil {
 		dglogger.Errorf(ctx, "{{.GoTable}}Dao.UpdateById error: %v", err)
@@ -164,7 +163,7 @@ func (d *{{.LowerCamelName}}ExtDao) updateById(ctx *dgctx.DgContext, tc *daog.Tr
 }
 
 func (d *{{.LowerCamelName}}ExtDao) updateByMatcher(ctx *dgctx.DgContext, tc *daog.TransContext, matcher daog.Matcher, modifier daog.Modifier) error {
-	modifier.Add(dal.{{.GoTable}}Fields.ModifiedBy, ctx.UserId).Add(dal.{{.GoTable}}Fields.ModifiedAt, time.Now())
+	modifier.Add({{.GoTable}}Fields.ModifiedBy, ctx.UserId).Add({{.GoTable}}Fields.ModifiedAt, time.Now())
 	_, err := {{.GoTable}}Dao.UpdateByModifier(tc, modifier, matcher)
 	if err != nil {
 		dglogger.Errorf(ctx, "{{.GoTable}}Dao.UpdateByModifier error: %v", err)
