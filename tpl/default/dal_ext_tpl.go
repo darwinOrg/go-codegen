@@ -10,7 +10,7 @@ import (
 	"github.com/darwinOrg/go-common/page"
 	dglogger "github.com/darwinOrg/go-logger"
 	"github.com/rolandhe/daog"
-	"github.com/rolandhe/daog/ttypes"
+	{{if .HasType}}"github.com/rolandhe/daog/ttypes"{{end}}
 	{{if .HasDecimal}}"github.com/shopspring/decimal"{{end}}
 	"time"
 )
@@ -57,7 +57,7 @@ func (d *{{.LowerCamelName}}ExtDao) GetByIds(ctx *dgctx.DgContext, tc *daog.Tran
 	return {{.LowerCamelName}}s, nil
 }
 
-func (d *{{.LowerCamelName}}ExtDao) Create(ctx *dgctx.DgContext, tc *daog.TransContext, {{.LowerCamelName}} *{{.GoTable}}) (int64, error) {
+func (d *{{.LowerCamelName}}ExtDao) Create(ctx *dgctx.DgContext, tc *daog.TransContext, {{.LowerCamelName}} *{{.GoTable}}) error {
 	now := ttypes.NormalDatetime(time.Now())
 	{{$.LowerCamelName}}.CreatedAt = now
 	{{$.LowerCamelName}}.CreatedBy = ctx.UserId
@@ -67,10 +67,10 @@ func (d *{{.LowerCamelName}}ExtDao) Create(ctx *dgctx.DgContext, tc *daog.TransC
 	_, err := {{.GoTable}}Dao.Insert(tc, {{.LowerCamelName}})
 	if err != nil {
 		dglogger.Errorf(ctx, "{{.GoTable}}Dao.Insert error: %v", err)
-		return 0, dgerr.SYSTEM_ERROR
+		return dgerr.SYSTEM_ERROR
 	}
 
-	return {{.LowerCamelName}}.Id, nil
+	return nil
 }
 
 func (d *{{.LowerCamelName}}ExtDao) Modify(ctx *dgctx.DgContext, tc *daog.TransContext, {{.LowerCamelName}} *{{.GoTable}}) error {
@@ -152,10 +152,22 @@ func (d *{{.LowerCamelName}}ExtDao) buildMatcher(param *Query{{.GoTable}}Param) 
 	return matcher
 }
 
-func (d *{{.LowerCamelName}}ExtDao) updateById(ctx *dgctx.DgContext, tc *daog.TransContext, {{.LowerCamelName}} *{{.GoTable}}, modifier daog.Modifier) error {
-	_, err := {{.GoTable}}Dao.UpdateById(tc, modifier, {{.LowerCamelName}}.Id)
+func (d *{{.LowerCamelName}}ExtDao) updateById(ctx *dgctx.DgContext, tc *daog.TransContext, id int64, modifier daog.Modifier) error {
+	modifier.Add(dal.{{.GoTable}}Fields.ModifiedBy, ctx.UserId).Add(dal.{{.GoTable}}Fields.ModifiedAt, time.Now())
+	_, err := {{.GoTable}}Dao.UpdateById(tc, modifier, id)
 	if err != nil {
 		dglogger.Errorf(ctx, "{{.GoTable}}Dao.UpdateById error: %v", err)
+		return dgerr.SYSTEM_ERROR
+	}
+
+	return nil
+}
+
+func (d *{{.LowerCamelName}}ExtDao) updateByMatcher(ctx *dgctx.DgContext, tc *daog.TransContext, matcher daog.Matcher, modifier daog.Modifier) error {
+	modifier.Add(dal.{{.GoTable}}Fields.ModifiedBy, ctx.UserId).Add(dal.{{.GoTable}}Fields.ModifiedAt, time.Now())
+	_, err := {{.GoTable}}Dao.UpdateByModifier(tc, modifier, matcher)
+	if err != nil {
+		dglogger.Errorf(ctx, "{{.GoTable}}Dao.UpdateByModifier error: %v", err)
 		return dgerr.SYSTEM_ERROR
 	}
 
