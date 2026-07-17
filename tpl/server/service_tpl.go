@@ -3,18 +3,18 @@ package _server
 var ServiceTpl = `package service
 
 import (
-	dgctx "github.com/darwinOrg/go-common/context"
 	{{if .HasModel}}"{{.PackagePrefix}}/model"{{end}}
-	{{if .HasId}}cm "github.com/darwinOrg/go-common/model"{{end}}
-	{{if .HasPage}}"github.com/darwinOrg/go-common/page"{{end}}
-	{{if .HasEmptyRequest}}"github.com/darwinOrg/go-web/wrapper"{{end}}
 	{{if .HasDbTable}}
+		"{{.PackagePrefix}}/dal"
 		{{if .HasModel}}"{{.PackagePrefix}}/converter"{{end}}
 		{{if .HasQuery}}dgcoll "github.com/darwinOrg/go-common/collection"{{end}}
-		"{{.PackagePrefix}}/dal"
 		daogext "github.com/darwinOrg/daog-ext"
 		"github.com/rolandhe/daog"
 	{{end}}
+	dgctx "github.com/darwinOrg/go-common/context"
+	{{if .HasId}}cm "github.com/darwinOrg/go-common/model"{{end}}
+	{{if .HasPage}}"github.com/darwinOrg/go-common/page"{{end}}
+	{{if .HasEmptyRequest}}"github.com/darwinOrg/go-web/wrapper"{{end}}
 )
 
 var {{.GroupUpperCamel}}Service = &{{.GroupLowerCamel}}Service{}
