@@ -14,7 +14,10 @@ import (
 	"time"
 )
 
-var {{.GoTable}}ExtDao = &{{.LowerCamelName}}ExtDao{}
+var (
+	{{.GoTable}}ExtDao = &{{.LowerCamelName}}ExtDao{}
+	{{.GoTable}}NotFound = &dgerr.DgError{Code: dgerr.RECORD_NOT_EXISTS.Code, Message: "{{.TableComment}}不存在"}
+)
 
 type {{.LowerCamelName}}ExtDao struct{}
 
@@ -40,7 +43,7 @@ func (d *{{.LowerCamelName}}ExtDao) MustGetById(ctx *dgctx.DgContext, tc *daog.T
 		return nil, err
 	}
 	if {{.LowerCamelName}} == nil {
-		return nil, dgerr.RECORD_NOT_EXISTS
+		return nil, {{.GoTable}}NotFound
 	}
 
 	return {{.LowerCamelName}}, nil
@@ -92,7 +95,7 @@ func (d *{{.LowerCamelName}}ExtDao) DeleteById(ctx *dgctx.DgContext, tc *daog.Tr
 		return err
 	}
 	if count == 0 {
-		return dgerr.RECORD_NOT_EXISTS
+		return {{.GoTable}}NotFound
 	}
 
 	return nil
