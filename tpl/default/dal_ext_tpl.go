@@ -28,7 +28,7 @@ func (d *{{.LowerCamelName}}ExtDao) GetById(ctx *dgctx.DgContext, tc *daog.Trans
 	{{.LowerCamelName}}, err := {{.GoTable}}Dao.GetById(tc, id)
 	if err != nil {
 		dglogger.Errorf(ctx, "{{.GoTable}}Dao.GetById error: %v", err)
-		return nil, dgerr.SYSTEM_ERROR
+		return nil, err
 	}
 
 	return {{.LowerCamelName}}, nil
@@ -50,7 +50,7 @@ func (d *{{.LowerCamelName}}ExtDao) GetByIds(ctx *dgctx.DgContext, tc *daog.Tran
 	{{.LowerCamelName}}s, err := {{.GoTable}}Dao.GetByIds(tc, ids)
 	if err != nil {
 		dglogger.Errorf(ctx, "{{.GoTable}}Dao.GetByIds error: %v", err)
-		return nil, dgerr.SYSTEM_ERROR
+		return nil, err
 	}
 
 	return {{.LowerCamelName}}s, nil
@@ -66,7 +66,7 @@ func (d *{{.LowerCamelName}}ExtDao) Create(ctx *dgctx.DgContext, tc *daog.TransC
 	_, err := {{.GoTable}}Dao.Insert(tc, {{.LowerCamelName}})
 	if err != nil {
 		dglogger.Errorf(ctx, "{{.GoTable}}Dao.Insert error: %v", err)
-		return dgerr.SYSTEM_ERROR
+		return err
 	}
 
 	return nil
@@ -79,7 +79,7 @@ func (d *{{.LowerCamelName}}ExtDao) Modify(ctx *dgctx.DgContext, tc *daog.TransC
 	_, err := {{.GoTable}}Dao.Update(tc, {{.LowerCamelName}})
 	if err != nil {
 		dglogger.Errorf(ctx, "{{.GoTable}}Dao.Update error: %v", err)
-		return dgerr.SYSTEM_ERROR
+		return err
 	}
 
 	return nil
@@ -89,7 +89,7 @@ func (d *{{.LowerCamelName}}ExtDao) DeleteById(ctx *dgctx.DgContext, tc *daog.Tr
 	count, err := {{$.GoTable}}Dao.DeleteById(tc, id)
 	if err != nil {
 		dglogger.Errorf(ctx, "{{.GoTable}}Dao.DeleteById error: %v", err)
-		return dgerr.SYSTEM_ERROR
+		return err
 	}
 	if count == 0 {
 		return dgerr.RECORD_NOT_EXISTS
@@ -104,16 +104,16 @@ func (d *{{.LowerCamelName}}ExtDao) Page(ctx *dgctx.DgContext, tc *daog.TransCon
 	count, err := {{.GoTable}}Dao.Count(tc, matcher)
 	if err != nil {
 		dglogger.Errorf(ctx, "{{.GoTable}}Dao.Count error: %v", err)
-		return nil, dgerr.SYSTEM_ERROR
+		return nil, err
 	}
 	if count == 0 {
 		return page.EmptyPageList[{{.GoTable}}](param.PageNo, param.PageSize), nil
 	}
 	
-	{{.LowerCamelName}}List, err := {{.GoTable}}Dao.QueryPageListMatcher(tc, matcher, daog.NewPager(param.PageSize, param.PageNo), daog.NewDescOrder({{$.GoTable}}Fields.CreatedAt))
+	{{.LowerCamelName}}List, err := {{.GoTable}}Dao.QueryPageListMatcher(tc, matcher, daog.NewPager(param.PageSize, param.PageNo), daogext.IdOrderDesc)
 	if err != nil {
 		dglogger.Errorf(ctx, "{{.GoTable}}Dao.QueryPageListMatcher error: %v", err)
-		return nil, dgerr.SYSTEM_ERROR
+		return nil, err
 	}
 	if len({{.LowerCamelName}}List) == 0 {
 		return page.EmptyPageList[{{.GoTable}}](param.PageNo, param.PageSize), nil
@@ -125,10 +125,10 @@ func (d *{{.LowerCamelName}}ExtDao) Page(ctx *dgctx.DgContext, tc *daog.TransCon
 func (d *{{.LowerCamelName}}ExtDao) List(ctx *dgctx.DgContext, tc *daog.TransContext, param *Query{{.GoTable}}Param) ([]*{{.GoTable}}, error) {
 	matcher := d.buildMatcher(param)
 
-	{{.LowerCamelName}}List, err := {{.GoTable}}Dao.QueryListMatcher(tc, matcher, daog.NewDescOrder({{$.GoTable}}Fields.CreatedAt))
+	{{.LowerCamelName}}List, err := {{.GoTable}}Dao.QueryListMatcher(tc, matcher, daogext.IdOrderDesc)
 	if err != nil {
 		dglogger.Errorf(ctx, "{{.GoTable}}Dao.QueryListMatcher error: %v", err)
-		return nil, dgerr.SYSTEM_ERROR
+		return nil, err
 	}
 	
 	return {{.LowerCamelName}}List, nil
@@ -156,7 +156,7 @@ func (d *{{.LowerCamelName}}ExtDao) updateById(ctx *dgctx.DgContext, tc *daog.Tr
 	_, err := {{.GoTable}}Dao.UpdateById(tc, modifier, id)
 	if err != nil {
 		dglogger.Errorf(ctx, "{{.GoTable}}Dao.UpdateById error: %v", err)
-		return dgerr.SYSTEM_ERROR
+		return err
 	}
 
 	return nil
@@ -167,7 +167,7 @@ func (d *{{.LowerCamelName}}ExtDao) updateByMatcher(ctx *dgctx.DgContext, tc *da
 	_, err := {{.GoTable}}Dao.UpdateByModifier(tc, modifier, matcher)
 	if err != nil {
 		dglogger.Errorf(ctx, "{{.GoTable}}Dao.UpdateByModifier error: %v", err)
-		return dgerr.SYSTEM_ERROR
+		return err
 	}
 
 	return nil
