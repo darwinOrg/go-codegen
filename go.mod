@@ -8,7 +8,7 @@ require (
 	github.com/darwinOrg/go-config v0.0.17
 	github.com/darwinOrg/go-httpclient v0.1.79
 	github.com/darwinOrg/go-logger v0.0.20
-	github.com/darwinOrg/go-swagger v0.0.28
+	github.com/darwinOrg/go-swagger v0.0.29
 	github.com/darwinOrg/go-web v0.1.107
 	github.com/gin-gonic/gin v1.12.0
 	github.com/go-openapi/spec v0.22.9

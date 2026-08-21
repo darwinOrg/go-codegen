@@ -32,8 +32,8 @@ github.com/darwinOrg/go-logger v0.0.20 h1:Fen+tUyuUbamB2oo9MHbJN2gbxmE+m1X2FFqmu
 github.com/darwinOrg/go-logger v0.0.20/go.mod h1:z4le16kJO1AWSgpczNdnoPfJTH2Ye3EYmn8vQAWq8Bc=
 github.com/darwinOrg/go-monitor v0.0.13 h1:n4RGgvJY5cbYr1l2NaWixbDtLq3jr6QHGKOds0++0Ls=
 github.com/darwinOrg/go-monitor v0.0.13/go.mod h1:kxdfpvIHcjV1DhlxBy6GmIBgLJ8d99u9wlRVe/S8bow=
-github.com/darwinOrg/go-swagger v0.0.28 h1:5fLZuAkYc8GHp8CToKGCLOFN5p61Yik2iZLrsjH8Bo0=
-github.com/darwinOrg/go-swagger v0.0.28/go.mod h1:ceVw9jrTmLCpr78wzSxtJdyemkGEJtINUBdwuA65HMM=
+github.com/darwinOrg/go-swagger v0.0.29 h1:COWzOvw+oyjHtxFjWG3tXfagfo4l+msEEcznNBaQQTQ=
+github.com/darwinOrg/go-swagger v0.0.29/go.mod h1:ceVw9jrTmLCpr78wzSxtJdyemkGEJtINUBdwuA65HMM=
 github.com/darwinOrg/go-validator-ext v0.0.12 h1:Rr+cnMNx/Qz13TUvF0n0Ann0oGKVfCylLc5LVR+CaTs=
 github.com/darwinOrg/go-validator-ext v0.0.12/go.mod h1:DCxyhYa4JSQpJChZhyQDCCQSVRQN/In5704udjmLeY0=
 github.com/darwinOrg/go-web v0.1.107 h1:mYDhmy9s0FQiogg0QORodri3/OdvRdvdCDQBDOfwLDM=
